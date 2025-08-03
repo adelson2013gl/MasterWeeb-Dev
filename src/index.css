@@ -1,0 +1,409 @@
+/* Import modern login styles */
+@import './styles/mobile-login.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 217.2 91.2% 59.8%;
+    --radius: 0.75rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted/20;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+}
+
+@layer components {
+  /* Glassmorphism Effects */
+  .glass-card {
+    @apply backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 border border-white/20 dark:border-gray-700/20 shadow-xl;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .glass-card-hover {
+    @apply backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border border-white/30 dark:border-gray-700/30 shadow-2xl;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .glass-nav {
+    @apply backdrop-blur-md bg-white/60 dark:bg-gray-950/60 border-b border-white/20 dark:border-gray-800/20;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .border-glass {
+    @apply border-white/20 dark:border-gray-700/20;
+  }
+
+  /* Gradient Backgrounds */
+  .gradient-bg {
+    background: linear-gradient(135deg, 
+      rgb(99, 102, 241) 0%, 
+      rgb(139, 92, 246) 25%, 
+      rgb(219, 39, 119) 50%, 
+      rgb(239, 68, 68) 75%, 
+      rgb(245, 158, 11) 100%);
+  }
+
+  .gradient-bg-light {
+    background: linear-gradient(135deg, 
+      rgb(239, 246, 255) 0%, 
+      rgb(243, 244, 246) 25%, 
+      rgb(249, 250, 251) 50%, 
+      rgb(255, 255, 255) 75%, 
+      rgb(248, 250, 252) 100%);
+  }
+
+  .gradient-bg-dark {
+    background: linear-gradient(135deg, 
+      rgb(15, 23, 42) 0%, 
+      rgb(30, 41, 59) 25%, 
+      rgb(51, 65, 85) 50%, 
+      rgb(71, 85, 105) 75%, 
+      rgb(100, 116, 139) 100%);
+  }
+
+  /* Modern Button Styles */
+  .btn-floating {
+    @apply fixed bottom-6 right-6 w-14 h-14 rounded-full glass-card hover:glass-card-hover shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center;
+    z-index: 50;
+  }
+
+  /* Skeleton Loading */
+  .skeleton {
+    @apply animate-pulse bg-muted/20 rounded;
+  }
+
+  /* Safe Area for Mobile */
+  .safe-area {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Touch Target Size */
+  .touch-target {
+    @apply min-h-[48px] min-w-[48px];
+  }
+
+  /* Text overflow protection for cards */
+  .card-text-safe {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+
+  .card-text-multiline-safe {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.2;
+    max-height: 2.4em;
+  }
+
+  /* Floating Labels */
+  .floating-label {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-all duration-200 pointer-events-none;
+  }
+
+  .floating-label.active {
+    @apply text-xs top-2 translate-y-0 text-primary;
+  }
+
+  /* Micro Interactions */
+  .micro-bounce {
+    @apply transition-transform duration-150;
+  }
+
+  .micro-bounce:active {
+    @apply scale-95;
+  }
+
+  .micro-glow:hover {
+    @apply shadow-lg;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+
+  /* Card Hover Effects */
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-lg;
+  }
+
+  /* Modern Form Styles */
+  .form-floating {
+    @apply relative;
+  }
+
+  .form-floating input {
+    @apply peer placeholder-transparent;
+  }
+
+  .form-floating label {
+    @apply absolute left-3 -top-2.5 bg-background px-1 text-xs font-medium text-muted-foreground transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-muted-foreground peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary;
+  }
+}
+
+@layer utilities {
+  /* Animation Utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  /* Responsive Text Sizes */
+  .text-responsive-xs {
+    @apply text-xs sm:text-sm;
+  }
+
+  .text-responsive-sm {
+    @apply text-sm sm:text-base;
+  }
+
+  .text-responsive-base {
+    @apply text-base sm:text-lg;
+  }
+
+  .text-responsive-lg {
+    @apply text-lg sm:text-xl;
+  }
+
+  .text-responsive-xl {
+    @apply text-xl sm:text-2xl;
+  }
+
+  .text-responsive-2xl {
+    @apply text-2xl sm:text-3xl;
+  }
+
+  /* Spacing Utilities */
+  .space-responsive {
+    @apply space-y-4 sm:space-y-6;
+  }
+
+  .gap-responsive {
+    @apply gap-4 sm:gap-6;
+  }
+
+  .p-responsive {
+    @apply p-4 sm:p-6;
+  }
+
+  .px-responsive {
+    @apply px-4 sm:px-6;
+  }
+
+  .py-responsive {
+    @apply py-4 sm:py-6;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Otimizações para telas extra pequenas (iPhone SE, etc.) */
+@media (max-width: 360px) {
+  .quickaction-card-grid {
+    gap: 6px !important;
+  }
+  
+  .quickaction-card-title {
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    font-weight: 600 !important;
+  }
+  
+  .quickaction-card-subtitle {
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+    margin-top: 1px !important;
+  }
+  
+  .quickaction-card-content {
+    padding: 6px !important;
+  }
+  
+  .quickaction-card-icon {
+    width: 20px !important;
+    height: 20px !important;
+    margin-right: 6px !important;
+  }
+  
+  .quickaction-card-icon svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
+}
+
+/* Otimizações para telas pequenas (361px - 400px) */
+@media (max-width: 400px) and (min-width: 361px) {
+  .quickaction-card-grid {
+    gap: 8px !important;
+  }
+  
+  .quickaction-card-title {
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+  }
+  
+  .quickaction-card-subtitle {
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+  }
+}
+
+/* Adicione estas regras ao seu CSS global */
+html, body, #root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}

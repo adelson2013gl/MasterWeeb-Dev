@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Slot Master - Offline</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(to bottom right, #f0f4f8, #d9e2ec);
+      color: #334e68;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      max-width: 90%;
+      width: 400px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #102a43;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #3182ce;
+    }
+
+    .button {
+      background-color: #3182ce;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .button:hover {
+      background-color: #2c5282;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: linear-gradient(to bottom right, #1a202c, #2d3748);
+        color: #e2e8f0;
+      }
+
+      .container {
+        background-color: #2d3748;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      h1 {
+        color: #f7fafc;
+      }
+
+      .icon {
+        color: #63b3ed;
+      }
+
+      .button {
+        background-color: #4299e1;
+      }
+
+      .button:hover {
+        background-color: #3182ce;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">📶</div>
+    <h1>Você está offline</h1>
+    <p>Não foi possível conectar à internet. Algumas funcionalidades do SlotMaster podem estar indisponíveis até que a conexão seja restabelecida.</p>
+    <p>Seus dados salvos localmente ainda estão disponíveis.</p>
+    <button class="button" onclick="window.location.reload()">Tentar novamente</button>
+  </div>
+
+  <script>
+    // Verificar periodicamente se a conexão foi restabelecida
+    window.addEventListener('online', () => {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+
+project_id = "xuuvxxlaaqjbcoklxrrv"
+
+[functions.cadastro-admin-empresa]
+verify_jwt = false
+
+[functions.abacatepay-create-pix]
+verify_jwt = true
+
+[functions.abacatepay-check-pix]
+verify_jwt = true
+
+[functions.abacatepay-list-billings]
+verify_jwt = true
