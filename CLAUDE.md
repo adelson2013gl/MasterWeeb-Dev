@@ -35,32 +35,13 @@ npm run preview
 
 # Run database migrations (IUGU specific)
 npm run migrate:iugu
+
+# Bootstrap super admin user (one-time setup)
+npm run bootstrap:admin
 ```
 
-### PIX Payment Service
-The application includes a separate PIX payment service that must be running for payment processing:
-
-**Service Location**: `/mercadopagoPix-main/`
-**Port**: 8085
-**Endpoint**: `http://localhost:8085/pagar`
-
-**To start PIX service:**
-```bash
-# Option 1: Start PIX service only
-npm run dev:pix
-
-# Option 2: Start from PIX directory
-cd mercadopagoPix-main
-npm run dev
-
-# Option 3: Start both frontend and PIX service (requires concurrently)
-npm run dev:full
-```
-
-**Configuration**: 
-- PIX service requires `accessToken` in `/mercadopagoPix-main/.env`
-- Token is already configured for development
-- Service auto-validates configuration on startup
+### Payment Integration
+The application uses AbacatePay for PIX payments through Supabase Edge Functions. No separate payment service is required - all payment processing is handled via secure edge functions.
 
 ### Testing
 - No specific test script found in package.json
