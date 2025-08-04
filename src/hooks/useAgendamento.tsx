@@ -177,7 +177,7 @@ export function useAgendamento() {
           status: statusValidado,
           data_agendamento: new Date().toISOString(),
           observacoes: tipoValidado === 'entrega' ? 'Agendamento de entrega - processamento normal' : null,
-          // Campos obrigatórios do SlotMaster com valores padrão
+          // Campos obrigatórios do Master Web com valores padrão
           cliente_nome: 'Agendamento Simples',
           cliente_telefone: '(00) 00000-0000',
           endereco_coleta: 'Não se aplica',

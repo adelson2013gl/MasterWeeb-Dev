@@ -123,7 +123,7 @@ CREATE TABLE iugu_customers (
 ```
 
 **Finalidade:**
-- 🔄 Sincronização automática de clientes entre SlotMaster e Iugu
+- 🔄 Sincronização automática de clientes entre Master Web e Iugu
 - 📊 Cache local para performance
 - 🎯 Dados customizados por empresa
 
@@ -151,7 +151,7 @@ CREATE TABLE iugu_plans (
 ```
 
 **Finalidade:**
-- 📋 Sincronização de planos entre SlotMaster e Iugu
+- 📋 Sincronização de planos entre Master Web e Iugu
 - 🎛️ Cache local para interface administrativa
 - 🔄 Controle de sincronização
 

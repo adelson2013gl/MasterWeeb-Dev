@@ -64,7 +64,7 @@ export function ConfiguracoesPage() {
                   Integrações Disponíveis
                 </CardTitle>
                 <CardDescription>
-                  Gerencie todas as integrações externas do SlotMaster
+                  Gerencie todas as integrações externas do Master Web
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">

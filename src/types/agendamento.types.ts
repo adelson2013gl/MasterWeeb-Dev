@@ -1,6 +1,6 @@
 /**
- * Tipos TypeScript rigorosos para agendamentos - ESTRUTURA SLOTMASTER RESTAURADA
- * Este arquivo define interfaces para a estrutura original SlotMaster
+ * Tipos TypeScript rigorosos para agendamentos - ESTRUTURA MASTER WEB RESTAURADA
+ * Este arquivo define interfaces para a estrutura original Master Web
  */
 
 // Status possíveis para um agendamento - ATUALIZADO PARA BANCO
@@ -174,7 +174,7 @@ export function isValidAgendamentoRaw(obj: any): obj is AgendamentoRawFromAPI {
 // Função para transformar dados raw da API em AgendamentoCompleto - SLOTMASTER
 export function transformAgendamentoFromAPI(raw: AgendamentoRawFromAPI): AgendamentoCompleto {
   if (!isValidAgendamentoRaw(raw)) {
-    throw new Error('Dados de agendamento inválidos recebidos da API - estrutura SlotMaster');
+    throw new Error('Dados de agendamento inválidos recebidos da API - estrutura Master Web');
   }
 
   if (!isValidStatusAgendamento(raw.status)) {

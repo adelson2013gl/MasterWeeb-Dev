@@ -90,7 +90,7 @@ export function useMeusAgendamentos() {
         return;
       }
 
-      console.log('Agendamentos encontrados com estrutura SlotMaster:', data);
+      console.log('Agendamentos encontrados com estrutura Master Web:', data);
 
       // Transformar os dados usando a função de transformação com validação
       const agendamentosFormatted = data?.filter(agendamento => {
@@ -112,17 +112,17 @@ export function useMeusAgendamentos() {
           try {
             return transformAgendamentoFromAPI(agendamento as AgendamentoRawFromAPI);
           } catch (error) {
-            console.error('Erro ao transformar agendamento SlotMaster:', error);
+            console.error('Erro ao transformar agendamento Master Web:', error);
             return null;
           }
         })
         .filter((agendamento): agendamento is AgendamentoCompleto => agendamento !== null) || [];
 
-      console.log('Agendamentos SlotMaster formatados:', agendamentosFormatted);
+      console.log('Agendamentos Master Web formatados:', agendamentosFormatted);
       
-      // Log específico para estrutura SlotMaster
+      // Log específico para estrutura Master Web
       agendamentosFormatted.forEach(agendamento => {
-        console.log(`SlotMaster Agendamento ${agendamento.id}:`, {
+        console.log(`Master Web Agendamento ${agendamento.id}:`, {
           agenda_id: agendamento.agenda_id,
           cliente_nome: agendamento.cliente_nome,
           data_agenda: agendamento.data_agenda,

@@ -1,8 +1,8 @@
-# 📚 DOCUMENTAÇÃO COMPLETA - MIGRAÇÃO SLOTMASTER-21 → MASTERWEEB
+# 📚 DOCUMENTAÇÃO COMPLETA - MIGRAÇÃO MASTER WEB → MASTERWEEB
 
 ## 🎯 RESUMO EXECUTIVO
 
-**Projeto:** Migração completa do sistema SlotMaster-21 para novo repositório MasterWeeb  
+**Projeto:** Migração completa do sistema Master Web para novo repositório MasterWeeb  
 **Período:** Julho 2025  
 **Status:** ✅ **CONCLUÍDO COM SUCESSO**  
 **Resultado:** Sistema 100% funcional com melhorias de segurança
@@ -26,7 +26,7 @@
 
 ### 🎯 Objetivos Alcançados
 
-- ✅ **Fork completo** do repositório SlotMaster-21 → MasterWeeb
+- ✅ **Fork completo** do repositório Master Web → MasterWeeb
 - ✅ **Migração total** do banco de dados Supabase
 - ✅ **Deploy de Edge Functions** funcionais
 - ✅ **Sistema de autenticação** robusto
@@ -106,7 +106,7 @@ cd MasterWeeb
 
 # 3. Configuração de remotes
 git remote rename origin masterweeb
-git remote add slotmaster https://github.com/username/SlotMaster-21.git
+git remote add master-web https://github.com/username/Master-Web.git
 ```
 
 ### 🗄️ Etapa 2: Migração do Banco de Dados

@@ -1,9 +1,9 @@
 
-# Componentes - SlotMaster
+# Componentes - Master Web
 
 ## 🎯 Visão Geral
 
-Este documento descreve a arquitetura de componentes React do SlotMaster, organizados por funcionalidade e responsabilidade.
+Este documento descreve a arquitetura de componentes React do Master Web, organizados por funcionalidade e responsabilidade.
 
 ## 📁 Estrutura de Componentes
 

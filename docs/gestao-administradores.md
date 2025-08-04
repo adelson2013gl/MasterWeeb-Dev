@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-O sistema de gestão de administradores do SlotMaster permite o controle completo de usuários administrativos com diferentes níveis de permissão, auditoria detalhada e validações de segurança robustas.
+O sistema de gestão de administradores do Master Web permite o controle completo de usuários administrativos com diferentes níveis de permissão, auditoria detalhada e validações de segurança robustas.
 
 ## Arquitetura
 
@@ -429,4 +429,4 @@ npm run test:e2e
 
 **Última atualização**: Janeiro 2025
 **Versão**: 1.0.0
-**Responsável**: Equipe de Desenvolvimento SlotMaster
+**Responsável**: Equipe de Desenvolvimento Master Web

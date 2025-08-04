@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este documento detalha os cenários de teste para as funcionalidades de gestão de administradores do SlotMaster, incluindo testes manuais, automatizados e de segurança.
+Este documento detalha os cenários de teste para as funcionalidades de gestão de administradores do Master Web, incluindo testes manuais, automatizados e de segurança.
 
 ## Cenários de Teste
 
@@ -520,4 +520,4 @@ process.env.DEBUG = 'true';
 
 **Última atualização**: Janeiro 2025
 **Versão**: 1.0.0
-**Responsável**: Equipe de QA SlotMaster
+**Responsável**: Equipe de QA Master Web

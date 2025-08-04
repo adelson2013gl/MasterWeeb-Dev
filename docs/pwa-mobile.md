@@ -1,8 +1,8 @@
-# PWA e Funcionalidades Mobile - SlotMaster
+# PWA e Funcionalidades Mobile - Master Web
 
 ## 🎯 Visão Geral
 
-O SlotMaster é uma Progressive Web App (PWA) completa com funcionalidades mobile nativas, oferecendo uma experiência de aplicativo nativo através do navegador.
+O Master Web é uma Progressive Web App (PWA) completa com funcionalidades mobile nativas, oferecendo uma experiência de aplicativo nativo através do navegador.
 
 ## 📱 Funcionalidades PWA Implementadas
 
@@ -61,8 +61,8 @@ const ASSETS_TO_CACHE = [
 **Configurações PWA:**
 ```json
 {
-  "name": "SlotMaster",
-  "short_name": "SlotMaster",
+  "name": "Master Web",
+  "short_name": "Master Web",
   "description": "Sistema de agendamento para entregadores",
   "start_url": "/",
   "display": "standalone",

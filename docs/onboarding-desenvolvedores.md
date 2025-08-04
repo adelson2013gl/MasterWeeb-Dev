@@ -1,14 +1,14 @@
 # Guia de Onboarding - Desenvolvedores
 
-## Bem-vindo ao SlotMaster! 🚀
+## Bem-vindo ao Master Web! 🚀
 
-Este guia foi criado para facilitar sua integração ao projeto SlotMaster e acelerar sua produtividade como desenvolvedor.
+Este guia foi criado para facilitar sua integração ao projeto Master Web e acelerar sua produtividade como desenvolvedor.
 
 ## Visão Geral do Projeto
 
-### O que é o SlotMaster?
+### O que é o Master Web?
 
-O SlotMaster é um sistema completo de gestão de agendamentos para empresas, com funcionalidades avançadas de:
+O Master Web é um sistema completo de gestão de agendamentos para empresas, com funcionalidades avançadas de:
 - **Gestão de Administradores**: CRUD completo com controle de permissões
 - **Sistema de Agendamentos**: Criação e gestão de agendas e horários
 - **Auditoria e Segurança**: Log detalhado de todas as operações
@@ -58,7 +58,7 @@ Git: 2.x ou superior
 ```bash
 # Clone o projeto
 git clone <REPOSITORY_URL>
-cd slotmaster-21
+cd master-web
 
 # Instale as dependências
 npm install
@@ -621,8 +621,8 @@ if (process.env.NODE_ENV === 'development') {
 
 ### Canais de Comunicação
 
-- **Slack**: #slotmaster-dev
-- **Email**: dev-team@slotmaster.com
+- **Slack**: #master-web-dev
+- **Email**: dev-team@master-web.com
 - **Issues**: GitHub Issues
 - **Documentação**: Confluence/Notion
 
@@ -682,4 +682,4 @@ Este guia é um documento vivo. Sinta-se à vontade para sugerir melhorias e atu
 
 **Última atualização**: Janeiro 2025
 **Versão**: 1.0.0
-**Responsável**: Equipe de Desenvolvimento SlotMaster
+**Responsável**: Equipe de Desenvolvimento Master Web

@@ -59,7 +59,7 @@ export function AdminSidebar({ onMenuClick, activeMenu }: AdminSidebarProps) {
   return (
     <div className="flex flex-col w-64 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 h-full">
       <div className="flex items-center justify-center h-16 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-bold text-gray-800 dark:text-white">SlotMaster</h2>
+        <h2 className="text-xl font-bold text-gray-800 dark:text-white">Master Web</h2>
       </div>
       
       <div className="flex-1 overflow-y-auto p-4">

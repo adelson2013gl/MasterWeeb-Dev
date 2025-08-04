@@ -1,8 +1,8 @@
 
 {
-  "name": "SlotMaster",
-  "short_name": "SlotMaster",
-  "description": "Sistema de agendamento para entregadores",
+  "name": "Master Web",
+  "short_name": "SlMaster Web",
+  "description": "Sistema de agendamento",
   "id": "/",
   "start_url": "/",
   "display": "standalone",

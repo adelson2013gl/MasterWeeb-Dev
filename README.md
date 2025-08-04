@@ -1,4 +1,4 @@
-# SlotMaster - Sistema de Gestão de Agendamentos
+# Master Web - Sistema de Gestão de Agendamentos
 
 Sistema completo de gestão de agendamentos para empresas, com funcionalidades avançadas de administração, controle de permissões e auditoria.
 
@@ -94,7 +94,7 @@ src/
 git clone <YOUR_GIT_URL>
 
 # Navegue para o diretório
-cd slotmaster-21
+cd master-web
 
 # Instale as dependências
 npm install

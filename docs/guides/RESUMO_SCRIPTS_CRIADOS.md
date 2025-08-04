@@ -84,7 +84,7 @@
 ## 📁 ORGANIZAÇÃO DOS ARQUIVOS
 
 ```
-/slotmaster-21/
+/master-web/
 ├── DOCUMENTACAO_COMPLETA_MIGRACAO_MASTERWEEB.md
 ├── RESUMO_SCRIPTS_CRIADOS.md (este arquivo)
 ├── CLAUDE.md (instruções do projeto)

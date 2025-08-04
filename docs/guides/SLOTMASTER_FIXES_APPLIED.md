@@ -1,4 +1,4 @@
-# 🔧 Correções Aplicadas - Estrutura SlotMaster
+# 🔧 Correções Aplicadas - Estrutura Master Web
 
 ## 🚨 Problema Original Identificado
 **Erro:** `column ag.permite_reserva does not exist`  
@@ -7,7 +7,7 @@
 ## ✅ Correções Implementadas
 
 ### 1. **Migração Corrigida**
-**Arquivo:** `supabase/migrations/20250720000000-restore-slotmaster-agendamentos-structure.sql`
+**Arquivo:** `supabase/migrations/20250720000000-restore-master-web-agendamentos-structure.sql`
 
 **Problemas Corrigidos:**
 - ❌ **Removido:** `ag.permite_reserva` (campo não existe)
@@ -131,7 +131,7 @@ typeof obj.agendas.vagas_disponiveis === 'number' &&
 - ✅ `agenda_id` (UUID FK) - **Já existia no banco**
 - ✅ `cliente_nome`, `cliente_telefone`
 - ✅ `endereco_coleta`, `endereco_entrega`
-- ✅ Todos os campos SlotMaster estão presentes
+- ✅ Todos os campos Master Web estão presentes
 
 ## 🎯 Status da Migração
 
@@ -162,8 +162,8 @@ npx supabase db push --local
 2. **Testar Hook Frontend:**
    ```javascript
    // Logs no console devem mostrar:
-   "Agendamentos encontrados com estrutura SlotMaster"
-   "SlotMaster Agendamento [id]: { agenda_id, cliente_nome, data_agenda }"
+   "Agendamentos encontrados com estrutura Master Web"
+   "Master Web Agendamento [id]: { agenda_id, cliente_nome, data_agenda }"
    ```
 
 3. **Verificar Relacionamentos:**
@@ -183,13 +183,13 @@ npx supabase db push --local
 ### **Funcionalidades Restauradas:**
 - ✅ JOIN adequado entre agendamentos ↔ agendas
 - ✅ Acesso a dados completos do cliente
-- ✅ Estrutura SlotMaster funcionando
+- ✅ Estrutura Master Web funcionando
 - ✅ Compatibilidade com campos MasterWeeb
 
 ---
 
 ## ⚡ **Status Final: PRONTO PARA TESTE**
 
-A migração e o código foram corrigidos para usar **apenas campos que realmente existem** no banco de dados. A estrutura SlotMaster foi restaurada usando a arquitetura real do sistema.
+A migração e o código foram corrigidos para usar **apenas campos que realmente existem** no banco de dados. A estrutura Master Web foi restaurada usando a arquitetura real do sistema.
 
 **Próximo Passo:** Executar a migração e testar a funcionalidade completa.

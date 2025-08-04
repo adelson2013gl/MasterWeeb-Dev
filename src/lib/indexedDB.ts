@@ -3,7 +3,7 @@
  */
 
 // Nome do banco de dados e versão
-const DB_NAME = 'slotmaster-offline-db';
+const DB_NAME = 'master-web-offline-db';
 const DB_VERSION = 1;
 
 // Nomes das stores (tabelas)

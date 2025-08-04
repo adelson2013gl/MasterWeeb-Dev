@@ -1,8 +1,8 @@
-# 🔄 Restauração da Estrutura SlotMaster - Resumo Completo
+# 🔄 Restauração da Estrutura Master Web - Resumo Completo
 
 ## 📋 Visão Geral
 
-Este documento descreve as mudanças implementadas para **restaurar a funcionalidade SlotMaster** conforme solicitado pelo usuário. O problema crítico identificado foi que a estrutura do banco de dados havia sido alterada incorretamente do SlotMaster para MasterWeeb, quebrando relacionamentos essenciais.
+Este documento descreve as mudanças implementadas para **restaurar a funcionalidade Master Web** conforme solicitado pelo usuário. O problema crítico identificado foi que a estrutura do banco de dados havia sido alterada incorretamente do Master Web para MasterWeeb, quebrando relacionamentos essenciais.
 
 ## 🚨 Problema Identificado
 
@@ -11,12 +11,12 @@ Este documento descreve as mudanças implementadas para **restaurar a funcionali
 - Ausência da coluna `agenda_id` em `agendamentos`
 - Queries tentavam fazer JOINs que falhavam
 - Erros 400 Bad Request constantes
-- Funcionalidade SlotMaster completamente quebrada
+- Funcionalidade Master Web completamente quebrada
 
 ## ✅ Solução Implementada
 
 ### 1. **Migração de Banco de Dados**
-**Arquivo:** `supabase/migrations/20250720000000-restore-slotmaster-agendamentos-structure.sql`
+**Arquivo:** `supabase/migrations/20250720000000-restore-master-web-agendamentos-structure.sql`
 
 **Mudanças:**
 - ✅ Adicionou coluna `agenda_id UUID` na tabela `agendamentos`
@@ -28,15 +28,15 @@ Este documento descreve as mudanças implementadas para **restaurar a funcionali
 ### 2. **Interfaces TypeScript Atualizadas**
 **Arquivo:** `src/types/agendamento.types.ts`
 
-**Estrutura SlotMaster Restaurada:**
+**Estrutura Master Web Restaurada:**
 ```typescript
 export interface AgendamentoCompleto {
-  // ⭐ CAMPOS RESTAURADOS SLOTMASTER
+  // ⭐ CAMPOS RESTAURADOS MASTER WEB
   id: string;
   agenda_id: string;           // 🔑 CHAVE ESTRANGEIRA RESTAURADA
   entregador_id: string;
   
-  // 📋 DADOS DO CLIENTE (SLOTMASTER)
+  // 📋 DADOS DO CLIENTE (MASTER WEB)
   cliente_nome: string;
   cliente_telefone: string;
   endereco_coleta: string;
@@ -54,7 +54,7 @@ export interface AgendamentoCompleto {
 ```
 
 **Melhorias Implementadas:**
-- ✅ Validação rigorosa de estrutura SlotMaster
+- ✅ Validação rigorosa de estrutura Master Web
 - ✅ Função de transformação atualizada
 - ✅ Type guards para runtime safety
 - ✅ Campos flattened para facilitar acesso
@@ -63,7 +63,7 @@ export interface AgendamentoCompleto {
 ### 3. **Hook Principal Corrigido**
 **Arquivo:** `src/hooks/useMeusAgendamentos.tsx`
 
-**Query SlotMaster Restaurada:**
+**Query Master Web Restaurada:**
 ```sql
 SELECT 
   id, agenda_id, entregador_id, status, tipo,
@@ -82,7 +82,7 @@ WHERE entregador_id = ?
 - ✅ JOIN adequado entre `agendamentos` e `agendas`
 - ✅ Acesso a dados do cliente (nome, telefone, endereços)
 - ✅ Informações completas de turno e região
-- ✅ Validação de estrutura SlotMaster
+- ✅ Validação de estrutura Master Web
 - ✅ Logs detalhados para debugging
 
 ### 4. **Serviços Atualizados**
@@ -90,7 +90,7 @@ WHERE entregador_id = ?
 
 **Melhorias:**
 - ✅ Query de conflitos usando relacionamento `agenda_id`
-- ✅ Logs específicos para estrutura SlotMaster
+- ✅ Logs específicos para estrutura Master Web
 - ✅ Validação de dados de cliente nos conflitos
 - ✅ Performance otimizada com JOINs adequados
 
@@ -103,7 +103,7 @@ Todos os novos campos do MasterWeeb foram **mantidos** conforme solicitado:
 - ✅ Funcionalidades de pagamento (AbacatePay)
 - ✅ Políticas RLS existentes
 
-### **Funcionalidades SlotMaster Restauradas**
+### **Funcionalidades Master Web Restauradas**
 - ✅ Relacionamento adequado agendamentos ↔ agendas
 - ✅ Dados completos do cliente em cada agendamento
 - ✅ Informações de endereço de coleta e entrega
@@ -114,7 +114,7 @@ Todos os novos campos do MasterWeeb foram **mantidos** conforme solicitado:
 
 ### **Verificações Implementadas**
 1. **Estrutura de Dados:**
-   - ✅ Validação de schema SlotMaster
+   - ✅ Validação de schema Master Web
    - ✅ Type safety em runtime
    - ✅ Logs detalhados de transformação
 
@@ -132,15 +132,15 @@ Todos os novos campos do MasterWeeb foram **mantidos** conforme solicitado:
 
 ### **Console Logs Implementados**
 ```javascript
-// Estrutura SlotMaster identificada
-"Agendamentos encontrados com estrutura SlotMaster"
-"Transformando agendamento SlotMaster: [id]"
-"SlotMaster Agendamento [id]: { agenda_id, cliente_nome, data_agenda }"
+// Estrutura Master Web identificada
+"Agendamentos encontrados com estrutura Master Web"
+"Transformando agendamento Master Web: [id]"
+"Master Web Agendamento [id]: { agenda_id, cliente_nome, data_agenda }"
 
 // Validações
 "Agendamento sem agenda associada (JOIN falhou)"
 "Agendamento sem dados de cliente/endereços"
-"Conflitos SlotMaster encontrados"
+"Conflitos Master Web encontrados"
 ```
 
 ## 🚀 Próximos Passos
@@ -160,12 +160,12 @@ npx supabase db reset --local
 npm run dev
 
 # Verificar logs no console do navegador
-# Procurar por "SlotMaster" nos logs
+# Procurar por "Master Web" nos logs
 ```
 
 ## 📈 Benefícios Alcançados
 
-✅ **Funcionalidade SlotMaster 100% Restaurada**  
+✅ **Funcionalidade Master Web 100% Restaurada**  
 ✅ **Compatibilidade Total com MasterWeeb**  
 ✅ **Performance Otimizada com Índices**  
 ✅ **Type Safety Garantida**  
@@ -178,7 +178,7 @@ npm run dev
 ## ⚠️ Observações Importantes
 
 - **Migração Criada:** Pronta para execução quando Docker estiver disponível
-- **Estrutura Híbrida:** SlotMaster + MasterWeeb funcionando juntos
+- **Estrutura Híbrida:** Master Web + MasterWeeb funcionando juntos
 - **Logs Detalhados:** Facilitam identificação de problemas
 - **Backward Compatibility:** Código antigo continuará funcionando
 

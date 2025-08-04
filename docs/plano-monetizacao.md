@@ -1,8 +1,8 @@
-# Plano de Monetização - SlotMaster
+# Plano de Monetização - Master Web
 
 ## Visão Geral
 
-Este documento apresenta o plano de implementação do modelo de monetização por assinatura para o SlotMaster, um sistema de gestão de agendamentos para empresas de entrega.
+Este documento apresenta o plano de implementação do modelo de monetização por assinatura para o Master Web, um sistema de gestão de agendamentos para empresas de entrega.
 
 ## Análise da Estrutura Atual
 

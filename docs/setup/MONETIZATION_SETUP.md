@@ -1,6 +1,6 @@
 # 🚀 Guia de Implementação da Monetização
 
-Este guia contém todas as instruções para implementar o sistema de monetização com Mercado Pago no SlotMaster.
+Este guia contém todas as instruções para implementar o sistema de monetização com Mercado Pago no Master Web.
 
 ## 📋 Status da Implementação
 

@@ -25,7 +25,7 @@ export interface CriarAgendamentoPayload {
   status: StatusAgendamento;
   data_agendamento: string;
   observacoes?: string | null;
-  // Campos obrigatórios do SlotMaster (NOT NULL no banco)
+  // Campos obrigatórios do Master Web (NOT NULL no banco)
   cliente_nome?: string;
   cliente_telefone?: string;
   endereco_coleta?: string;

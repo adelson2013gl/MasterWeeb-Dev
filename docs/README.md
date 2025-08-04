@@ -1,5 +1,5 @@
 
-# 📚 Documentação do Projeto SlotMaster-21
+# 📚 Documentação do Projeto Master Web
 
 Esta pasta contém toda a documentação técnica do projeto, **reorganizada e organizada por categorias**.
 
@@ -15,8 +15,8 @@ Esta pasta contém toda a documentação técnica do projeto, **reorganizada e o
 ### 📖 **Guias e Tutoriais**
 - [`guides/ORGANIZACAO_ARQUIVOS_CONCLUIDA.md`](guides/ORGANIZACAO_ARQUIVOS_CONCLUIDA.md) - Organização de arquivos
 - [`guides/RESUMO_SCRIPTS_CRIADOS.md`](guides/RESUMO_SCRIPTS_CRIADOS.md) - Resumo dos scripts criados
-- [`guides/SLOTMASTER_FIXES_APPLIED.md`](guides/SLOTMASTER_FIXES_APPLIED.md) - Correções aplicadas
-- [`guides/SLOTMASTER_RESTORATION_SUMMARY.md`](guides/SLOTMASTER_RESTORATION_SUMMARY.md) - Resumo da restauração
+- [`guides/SLOTMASTER_FIXES_APPLIED.md`](guides/SLOTMASTER_FIXES_APPLIED.md) - Correções aplicadas no Master Web
+- [`guides/SLOTMASTER_RESTORATION_SUMMARY.md`](guides/SLOTMASTER_RESTORATION_SUMMARY.md) - Resumo da restauração do Master Web
 
 ### 🔄 **Migração e Setup**
 - [`migration/MIGRATION_GUIDE_MASTERWEEB.md`](migration/MIGRATION_GUIDE_MASTERWEEB.md) - Guia de migração

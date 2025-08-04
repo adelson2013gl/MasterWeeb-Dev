@@ -1,6 +1,6 @@
 # 📁 Estrutura Organizacional do Projeto
 
-Este documento descreve a nova estrutura organizacional do projeto SlotMaster-21.
+Este documento descreve a nova estrutura organizacional do projeto Master Web.
 
 ## 🎯 Objetivos da Reorganização
 
@@ -108,7 +108,7 @@ Arquivos essenciais que permanecem na raiz:
 - ✅ `AGENDAMENTO_REFACTOR.md` → `docs/architecture/`
 - ✅ `MIGRATION_GUIDE_MASTERWEEB.md` → `docs/migration/`
 - ✅ `IUGU_INTEGRATION_GUIDE.md` → `docs/setup/`
-- ✅ `SLOTMASTER_FIXES_APPLIED.md` → `docs/guides/`
+- ✅ `SLOTMASTER_FIXES_APPLIED.md` (Master Web fixes) → `docs/guides/`
 - ✅ E mais 15+ arquivos organizados
 
 ### Scripts SQL (Movidos para `/sql/diagnostics/temporary/`)

@@ -36,7 +36,7 @@ export const buscarEntregador = async (userId: string) => {
 
 export const buscarAgendamentosConflitantes = async (entregadorId: string, data: string) => {
   try {
-    logger.debug('Verificando conflitos de horário - SlotMaster', { entregadorId, data }, 'AGENDAMENTO');
+    logger.debug('Verificando conflitos de horário - Master Web', { entregadorId, data }, 'AGENDAMENTO');
     
     const { data: agendamentosExistentes, error: conflitosError } = await supabase
       .from('agendamentos')
@@ -69,7 +69,7 @@ export const buscarAgendamentosConflitantes = async (entregadorId: string, data:
       .eq('agendas.data_agenda', data);
 
     if (conflitosError) {
-      logger.error('Erro ao verificar conflitos de horário SlotMaster', { 
+      logger.error('Erro ao verificar conflitos de horário Master Web', { 
         entregadorId, 
         data, 
         error: conflitosError.message 
@@ -79,7 +79,7 @@ export const buscarAgendamentosConflitantes = async (entregadorId: string, data:
 
     const conflitos = agendamentosExistentes || [];
     if (conflitos.length > 0) {
-      logger.warn('Conflitos SlotMaster encontrados', { 
+      logger.warn('Conflitos Master Web encontrados', { 
         entregadorId, 
         data, 
         quantidadeConflitos: conflitos.length,
@@ -94,7 +94,7 @@ export const buscarAgendamentosConflitantes = async (entregadorId: string, data:
 
     return conflitos;
   } catch (error) {
-    logger.error('Erro ao buscar agendamentos conflitantes SlotMaster', { entregadorId, data, error }, 'AGENDAMENTO');
+    logger.error('Erro ao buscar agendamentos conflitantes Master Web', { entregadorId, data, error }, 'AGENDAMENTO');
     throw error;
   }
 };

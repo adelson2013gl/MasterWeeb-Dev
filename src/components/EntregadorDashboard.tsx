@@ -230,7 +230,7 @@ export function EntregadorDashboard() {
               <User className="h-4 w-4 text-white" />
             </button>
             <h1 className="text-sm font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              SlotMaster
+              Master Web
             </h1>
           </div>
           <div className="flex items-center space-x-1">
@@ -271,7 +271,7 @@ export function EntregadorDashboard() {
               </button>
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  SlotMaster
+                  Master Web
                 </h1>
                 <p className="text-sm text-muted-foreground">
                   Sistema de Agendamento de Entregadores

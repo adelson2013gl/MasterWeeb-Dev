@@ -1,6 +1,6 @@
-// Service Worker para SlotMaster PWA
+// Service Worker para Master Web PWA
 
-const CACHE_NAME = 'slotmaster-cache-v2';
+const CACHE_NAME = 'master-web-cache-v2';
 const OFFLINE_URL = '/offline.html';
 const ASSETS_TO_CACHE = [
   '/',
@@ -15,7 +15,7 @@ const ASSETS_TO_CACHE = [
 ];
 
 // Cache para recursos dinâmicos
-const DYNAMIC_CACHE = 'slotmaster-dynamic-v2';
+const DYNAMIC_CACHE = 'master-web-dynamic-v2';
 const MAX_DYNAMIC_CACHE_SIZE = 50;
 
 // Instalação do Service Worker e cache de recursos essenciais
@@ -158,11 +158,11 @@ self.addEventListener('push', (event) => {
   console.log('Push notification recebida:', event);
   
   let notificationData = {
-    title: 'SlotMaster',
+    title: 'Master Web',
     body: 'Você tem uma nova notificação',
     icon: '/icons/icon-192x192.png',
     badge: '/icons/icon-96x96.png',
-    tag: 'slotmaster-notification'
+    tag: 'master-web-notification'
   };
   
   if (event.data) {
@@ -365,7 +365,7 @@ async function markAgendamentoAsSynced(syncItemId) {
 // Função para abrir IndexedDB no service worker
 async function openIndexedDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('slotmaster-offline-db', 1);
+    const request = indexedDB.open('master-web-offline-db', 1);
     
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);

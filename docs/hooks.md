@@ -1,4 +1,4 @@
-# Hooks Customizados - SlotMaster
+# Hooks Customizados - Master Web
 
 ## 📋 Lista de Hooks
 

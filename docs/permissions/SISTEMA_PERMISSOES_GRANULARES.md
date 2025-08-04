@@ -1,6 +1,6 @@
 # 🏗️ Sistema de Controle de Permissões por Tela/Usuário - Árvore de Privilégios
 
-> **Documento Técnico**: Arquitetura para implementação de controle granular de permissões no SlotMaster  
+> **Documento Técnico**: Arquitetura para implementação de controle granular de permissões no Master Web  
 > **Data**: 22/07/2025  
 > **Status**: Proposta - Aguardando Implementação  
 
@@ -753,7 +753,7 @@ export function AdminSidebar({ onMenuClick, activeMenu }: AdminSidebarProps) {
     <div className="flex flex-col w-64 bg-white border-r">
       {/* Header */}
       <div className="flex items-center justify-center h-16 border-b">
-        <h2 className="text-xl font-bold">SlotMaster</h2>
+        <h2 className="text-xl font-bold">Master Web</h2>
       </div>
       
       {/* Navigation with categories */}
@@ -1288,4 +1288,4 @@ const AuditLogEntry = ({ log }: { log: PermissionAuditEntry }) => {
 
 **Última atualização**: 22/07/2025  
 **Próxima revisão**: Após aprovação para implementação  
-**Responsável**: Equipe de Desenvolvimento SlotMaster
+**Responsável**: Equipe de Desenvolvimento Master Web

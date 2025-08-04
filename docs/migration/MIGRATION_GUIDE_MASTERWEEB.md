@@ -1,14 +1,14 @@
-# 🚀 Guia Completo de Migração: SlotMaster-21 → MasterWeeb
+# 🚀 Guia Completo de Migração: Master Web → MasterWeeb
 
 ## 📋 Resumo da Migração
 
-**Projeto Original**: SlotMaster-21  
+**Projeto Original**: Master Web  
 **Projeto Destino**: MasterWeeb  
 **Data**: 19 de Julho de 2025  
 **Status**: ✅ **MIGRAÇÃO CONCLUÍDA COM SUCESSO**  
 
 ### 🎯 Objetivos Alcançados
-- ✅ Fork completo do repositório SlotMaster-21 para MasterWeeb
+- ✅ Fork completo do repositório Master Web para MasterWeeb
 - ✅ Criação de nova instância Supabase independente
 - ✅ Migração completa da estrutura do banco de dados
 - ✅ Deploy de todas as Edge Functions (AbacatePay)
@@ -419,7 +419,7 @@ Após isso, o sistema estará 100% funcional!
 
 ## 🏆 Conclusão
 
-A migração do **SlotMaster-21** para **MasterWeeb** foi realizada com sucesso total, mantendo 100% da funcionalidade original e criando uma instância completamente independente e funcional.
+A migração do **Master Web** para **MasterWeeb** foi realizada com sucesso total, mantendo 100% da funcionalidade original e criando uma instância completamente independente e funcional.
 
 **Principais conquistas**:
 - Sistema de autenticação robusto com super admin

@@ -29,15 +29,15 @@ https://supabase.com/dashboard/project/nfwdgkjrkmrjsfnbmsrd
 
 ### 5. Fazer Redeploy na Vercel
 1. Acessar: https://vercel.com/dashboard
-2. Encontrar projeto: `slotmaster-21dev`
+2. Encontrar projeto: `master-web-dev`
 3. Ir para: **Deployments**
 4. Clicar: **Redeploy** (para forçar rebuild)
 
 ### 6. Testar Endpoints
 Após redeploy, testar:
-- ✅ `https://slotmaster-21dev.vercel.app/api/test-env`
-- ✅ `https://slotmaster-21dev.vercel.app/api/webhook`
-- ✅ Sistema: `https://slotmaster-21dev.vercel.app/`
+- ✅ `https://master-web-dev.vercel.app/api/test-env`
+- ✅ `https://master-web-dev.vercel.app/api/webhook`
+- ✅ Sistema: `https://master-web-dev.vercel.app/`
 
 ## 🎯 RESULTADO ESPERADO
 Após essas correções, o botão "Assinar Agora" deve:

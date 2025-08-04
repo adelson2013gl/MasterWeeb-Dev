@@ -65,7 +65,7 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
   },
   global: {
     headers: {
-      'x-client-info': 'slotmaster-delivery-management'
+      'x-client-info': 'master-web-delivery-management'
     },
     // SEGURANÇA CRÍTICA: Custom fetch para interceptar logs
     fetch: secureSupabaseFetch
