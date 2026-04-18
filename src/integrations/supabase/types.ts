@@ -12,42 +12,60 @@ export type Database = {
       agendamentos: {
         Row: {
           agenda_id: string | null
+          cliente_nome: string | null
+          cliente_telefone: string | null
           created_at: string | null
           data_agendamento: string | null
           data_cancelamento: string | null
           empresa_id: string
+          endereco_coleta: string | null
+          endereco_entrega: string | null
           entregador_id: string | null
           id: string
+          motivo_cancelamento: string | null
           observacoes: string | null
           status: Database["public"]["Enums"]["status_agendamento"] | null
           tipo: Database["public"]["Enums"]["tipo_agendamento"] | null
           updated_at: string | null
+          valor: number | null
         }
         Insert: {
           agenda_id?: string | null
+          cliente_nome?: string | null
+          cliente_telefone?: string | null
           created_at?: string | null
           data_agendamento?: string | null
           data_cancelamento?: string | null
           empresa_id?: string
+          endereco_coleta?: string | null
+          endereco_entrega?: string | null
           entregador_id?: string | null
           id?: string
+          motivo_cancelamento?: string | null
           observacoes?: string | null
           status?: Database["public"]["Enums"]["status_agendamento"] | null
           tipo?: Database["public"]["Enums"]["tipo_agendamento"] | null
           updated_at?: string | null
+          valor?: number | null
         }
         Update: {
           agenda_id?: string | null
+          cliente_nome?: string | null
+          cliente_telefone?: string | null
           created_at?: string | null
           data_agendamento?: string | null
           data_cancelamento?: string | null
           empresa_id?: string
+          endereco_coleta?: string | null
+          endereco_entrega?: string | null
           entregador_id?: string | null
           id?: string
+          motivo_cancelamento?: string | null
           observacoes?: string | null
           status?: Database["public"]["Enums"]["status_agendamento"] | null
           tipo?: Database["public"]["Enums"]["tipo_agendamento"] | null
           updated_at?: string | null
+          valor?: number | null
         }
         Relationships: [
           {
@@ -600,61 +618,61 @@ export type Database = {
       }
       entregadores: {
         Row: {
+          ativo: boolean | null
           cidade_id: string | null
           cpf: string
           created_at: string | null
-          data_aprovacao: string | null
           data_cadastro: string | null
-          data_rejeicao: string | null
           email: string
           empresa_id: string
           estrelas: number
           id: string
-          motivo_rejeicao: string | null
           nome: string
           perfil: Database["public"]["Enums"]["perfil_usuario"] | null
+          placa: string | null
           status: Database["public"]["Enums"]["status_entregador"]
           telefone: string | null
           updated_at: string | null
           user_id: string | null
+          veiculo: string | null
         }
         Insert: {
+          ativo?: boolean | null
           cidade_id?: string | null
           cpf: string
           created_at?: string | null
-          data_aprovacao?: string | null
           data_cadastro?: string | null
-          data_rejeicao?: string | null
           email: string
           empresa_id?: string
           estrelas?: number
           id?: string
-          motivo_rejeicao?: string | null
           nome: string
           perfil?: Database["public"]["Enums"]["perfil_usuario"] | null
+          placa?: string | null
           status?: Database["public"]["Enums"]["status_entregador"]
           telefone?: string | null
           updated_at?: string | null
           user_id?: string | null
+          veiculo?: string | null
         }
         Update: {
+          ativo?: boolean | null
           cidade_id?: string | null
           cpf?: string
           created_at?: string | null
-          data_aprovacao?: string | null
           data_cadastro?: string | null
-          data_rejeicao?: string | null
           email?: string
           empresa_id?: string
           estrelas?: number
           id?: string
-          motivo_rejeicao?: string | null
           nome?: string
           perfil?: Database["public"]["Enums"]["perfil_usuario"] | null
+          placa?: string | null
           status?: Database["public"]["Enums"]["status_entregador"]
           telefone?: string | null
           updated_at?: string | null
           user_id?: string | null
+          veiculo?: string | null
         }
         Relationships: [
           {

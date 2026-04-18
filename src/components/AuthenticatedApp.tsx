@@ -346,14 +346,9 @@ export function AuthenticatedApp() {
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center">
         <div className="text-center max-w-md">
           <h2 className="text-2xl font-bold mb-4">Cadastro Rejeitado</h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 mb-6">
             Infelizmente seu cadastro na empresa <strong>{empresa.nome}</strong> foi rejeitado.
           </p>
-          {entregador.motivo_rejeicao && (
-            <p className="text-sm text-gray-500 mb-6">
-              Motivo: {entregador.motivo_rejeicao}
-            </p>
-          )}
           <Button onClick={() => handleSignOut()} variant="outline">
             <LogOut className="h-4 w-4 mr-2" />
             Sair

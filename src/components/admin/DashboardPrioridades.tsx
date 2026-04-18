@@ -30,7 +30,6 @@ interface EntregadorEstrelas {
   nome: string;
   estrelas: number;
   status: string;
-  data_aprovacao: string | null;
   cidade: {
     nome: string;
   };
@@ -259,7 +258,7 @@ export function DashboardPrioridades() {
                   <div className="text-right">
                     <p className="text-sm font-medium">{entregador.estrelas} estrelas</p>
                     <p className="text-xs text-gray-600">
-                      Aprovado em {entregador.data_aprovacao ? new Date(entregador.data_aprovacao).toLocaleDateString() : 'N/A'}
+                      Status: {entregador.status}
                     </p>
                   </div>
                 </div>

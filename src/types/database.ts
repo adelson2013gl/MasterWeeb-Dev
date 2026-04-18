@@ -15,10 +15,7 @@ export type Database = {
           updated_at: string;
           estrelas?: number;
           cidade_id?: string;
-          data_aprovacao?: string;
           data_cadastro?: string;
-          data_rejeicao?: string;
-          motivo_rejeicao?: string;
           perfil?: 'entregador' | 'admin';
           user_id?: string;
         };
@@ -34,10 +31,7 @@ export type Database = {
           updated_at?: string;
           estrelas?: number;
           cidade_id?: string;
-          data_aprovacao?: string;
           data_cadastro?: string;
-          data_rejeicao?: string;
-          motivo_rejeicao?: string;
           perfil?: 'entregador' | 'admin';
           user_id?: string;
         };
@@ -53,10 +47,7 @@ export type Database = {
           updated_at?: string;
           estrelas?: number;
           cidade_id?: string;
-          data_aprovacao?: string;
           data_cadastro?: string;
-          data_rejeicao?: string;
-          motivo_rejeicao?: string;
           perfil?: 'entregador' | 'admin';
           user_id?: string;
         };

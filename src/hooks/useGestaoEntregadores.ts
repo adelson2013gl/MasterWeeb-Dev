@@ -68,16 +68,6 @@ export function useGestaoEntregadores() {
         updated_at: new Date().toISOString(),
       };
 
-      if (novoStatus === "aprovado") {
-        updateData.data_aprovacao = new Date().toISOString().split('T')[0];
-        updateData.data_rejeicao = null;
-        updateData.motivo_rejeicao = null;
-      } else {
-        updateData.data_rejeicao = new Date().toISOString().split('T')[0];
-        updateData.data_aprovacao = null;
-        updateData.motivo_rejeicao = "Rejeitado pelo administrador";
-      }
-
       const { error } = await supabase
         .from('entregadores')
         .update(updateData)
