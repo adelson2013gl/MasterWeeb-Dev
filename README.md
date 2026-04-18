@@ -208,4 +208,4 @@ Para suporte técnico ou dúvidas:
 
 ---
 
-**Desenvolvido com ❤️ para otimizar a gestão de agendamentos empresariais**
+**Desenvolvido para otimizar a gestão de agendamentos empresariais**
