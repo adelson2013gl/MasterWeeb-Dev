@@ -95,7 +95,7 @@ export function useUserRoles() {
       return null;
     }
 
-    // Prioridade: super_admin > admin_empresa > entregador
+    // Prioridade: super_admin > admin_empresa > tecnico
     const rolesPriority = ['super_admin', 'admin_empresa', 'tecnico'];
 
     // Primeiro, verificar se existe super_admin (independente da empresa)

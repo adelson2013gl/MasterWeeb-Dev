@@ -100,7 +100,7 @@ export const QueryKeys = {
   dynamic: {
     agendas: (filters?: Record<string, any>) => ['agendas', filters] as const,
     agendamentos: (params?: Record<string, any>) => ['agendamentos', params] as const,
-    entregadores: (status?: string) => ['entregadores', status] as const,
+    tecnicos: (status?: string) => ['tecnicos', status] as const,
     dashboard: ['dashboard'] as const,
     reservas: ['reservas'] as const,
   },

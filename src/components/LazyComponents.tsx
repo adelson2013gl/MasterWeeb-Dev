@@ -5,7 +5,7 @@ import { LazyWrapper } from "@/components/ErrorBoundary/index";
 
 // Lazy loading dos componentes pesados
 export const AdminDashboard = lazy(() => import('@/components/AdminDashboard').then(module => ({ default: module.AdminDashboard })));
-export const EntregadorDashboard = lazy(() => import('@/components/EntregadorDashboard').then(module => ({ default: module.EntregadorDashboard })));
+export const TecnicoDashboard = lazy(() => import('@/components/TecnicoDashboard').then(module => ({ default: module.TecnicoDashboard })));
 export const AuthenticatedApp = lazy(() => import('@/components/AuthenticatedApp').then(module => ({ default: module.AuthenticatedApp })));
 
 // Lazy loading de páginas
@@ -54,33 +54,33 @@ const SimpleLoader = ({ text = "Carregando..." }: { text?: string }) => (
   </div>
 );
 
-// Lazy loading dos componentes do entregador
+// Lazy loading dos componentes do tecnico
 export const LazyAgendamentoCalendar = lazy(() => 
-  import("@/components/entregador/AgendamentoCalendar").then(module => ({ 
+  import("@/components/tecnico/AgendamentoCalendar").then(module => ({ 
     default: module.AgendamentoCalendar 
   }))
 );
 
 export const LazyMeusAgendamentos = lazy(() => 
-  import("@/components/entregador/MeusAgendamentos").then(module => ({ 
+  import("@/components/tecnico/MeusAgendamentos").then(module => ({ 
     default: module.MeusAgendamentos 
   }))
 );
 
 export const LazyStatusReservas = lazy(() => 
-  import("@/components/entregador/StatusReservas").then(module => ({ 
+  import("@/components/tecnico/StatusReservas").then(module => ({ 
     default: module.StatusReservas 
   }))
 );
 
 export const LazyNotificacoesReservas = lazy(() => 
-  import("@/components/entregador/NotificacoesReservas").then(module => ({ 
+  import("@/components/tecnico/NotificacoesReservas").then(module => ({ 
     default: module.NotificacoesReservas 
   }))
 );
 
 export const LazyTimelineAgendamentos = lazy(() => 
-  import("@/components/entregador/TimelineAgendamentos").then(module => ({ 
+  import("@/components/tecnico/TimelineAgendamentos").then(module => ({ 
     default: module.TimelineAgendamentos 
   }))
 );

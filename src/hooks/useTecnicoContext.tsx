@@ -1,88 +1,88 @@
 /**
- * Hook para gerenciar dados do entregador
+ * Hook para gerenciar dados do tecnico
  * Extraído do EmpresaUnificadoContext para melhorar modularidade
  */
 
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
-import { Entregador } from '@/components/admin/gestao-entregadores/types';
+import { Tecnico } from '@/components/admin/gestao-tecnicos/types';
 
-interface EntregadorState {
-  entregador: Entregador | null;
+interface TecnicoState {
+  tecnico: Tecnico | null;
   loading: boolean;
   error: string | null;
 }
 
-export function useEntregadorContext() {
-  const [state, setState] = useState<EntregadorState>({
-    entregador: null,
+export function useTecnicoContext() {
+  const [state, setState] = useState<TecnicoState>({
+    tecnico: null,
     loading: false,
     error: null
   });
 
-  // Buscar dados do entregador por user_id
-  const fetchEntregador = useCallback(async (userId: string): Promise<Entregador | null> => {
+  // Buscar dados do tecnico por user_id
+  const fetchTecnico = useCallback(async (userId: string): Promise<Tecnico | null> => {
     setState(prev => ({ ...prev, loading: true, error: null }));
 
     try {
-      logger.info('Buscando dados do entregador', { userId });
+      logger.info('Buscando dados do tecnico', { userId });
 
-      const { data: entregadorData, error: entregadorError } = await supabase
+      const { data: tecnicoData, error: tecnicoError } = await supabase
         .from('tecnicos')
         .select('*')
         .eq('user_id', userId)
         .maybeSingle();
 
-      if (entregadorError) {
+      if (tecnicoError) {
         // Tratar especificamente erro de RLS (permissões)
-        if (entregadorError.code === '42501') {
-          logger.warn('Erro de permissão RLS ao buscar entregador', { 
+        if (tecnicoError.code === '42501') {
+          logger.warn('Erro de permissão RLS ao buscar tecnico', { 
             userId, 
-            error: entregadorError.message 
+            error: tecnicoError.message 
           });
           
           setState(prev => ({ 
             ...prev, 
             loading: false, 
-            error: 'Permissões insuficientes para acessar dados do entregador' 
+            error: 'Permissões insuficientes para acessar dados do tecnico' 
           }));
           return null;
         }
 
-        logger.error('Erro ao buscar entregador', { 
-          error: entregadorError.message, 
+        logger.error('Erro ao buscar tecnico', { 
+          error: tecnicoError.message, 
           userId 
         });
         
         setState(prev => ({ 
           ...prev, 
           loading: false, 
-          error: entregadorError.message 
+          error: tecnicoError.message 
         }));
         return null;
       }
 
-      if (entregadorData) {
+      if (tecnicoData) {
         setState(prev => ({ 
           ...prev, 
-          entregador: entregadorData, 
+          tecnico: tecnicoData, 
           loading: false 
         }));
 
-        logger.success('Entregador encontrado', { 
-          entregadorId: entregadorData.id,
-          nome: entregadorData.nome,
-          empresaId: entregadorData.empresa_id
+        logger.success('Tecnico encontrado', { 
+          tecnicoId: tecnicoData.id,
+          nome: tecnicoData.nome,
+          empresaId: tecnicoData.empresa_id
         });
 
-        return entregadorData;
+        return tecnicoData;
       } else {
-        logger.info('Nenhum entregador encontrado para o usuário', { userId });
+        logger.info('Nenhum tecnico encontrado para o usuário', { userId });
         
         setState(prev => ({ 
           ...prev, 
-          entregador: null, 
+          tecnico: null, 
           loading: false 
         }));
         return null;
@@ -90,7 +90,7 @@ export function useEntregadorContext() {
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
-      logger.error('Erro inesperado ao buscar entregador', { 
+      logger.error('Erro inesperado ao buscar tecnico', { 
         error: errorMessage, 
         userId 
       });
@@ -104,42 +104,42 @@ export function useEntregadorContext() {
     }
   }, []);
 
-  // Verificar se o entregador tem status aprovado
-  const isEntregadorAprovado = useCallback((entregador: Entregador | null): boolean => {
-    if (!entregador) return false;
-    return entregador.status === 'aprovado';
+  // Verificar se o tecnico tem status aprovado
+  const isTecnicoAprovado = useCallback((tecnico: Tecnico | null): boolean => {
+    if (!tecnico) return false;
+    return tecnico.status === 'aprovado';
   }, []);
 
-  // Verificar se o entregador é admin
-  const isEntregadorAdmin = useCallback((entregador: Entregador | null): boolean => {
-    if (!entregador) return false;
-    return entregador.perfil === 'admin';
+  // Verificar se o tecnico é admin
+  const isTecnicoAdmin = useCallback((tecnico: Tecnico | null): boolean => {
+    if (!tecnico) return false;
+    return tecnico.perfil === 'admin';
   }, []);
 
-  // Obter empresa ID do entregador
-  const getEmpresaId = useCallback((entregador: Entregador | null): string | null => {
-    return entregador?.empresa_id || null;
+  // Obter empresa ID do tecnico
+  const getEmpresaId = useCallback((tecnico: Tecnico | null): string | null => {
+    return tecnico?.empresa_id || null;
   }, []);
 
-  // Atualizar dados do entregador (para uso futuro)
-  const updateEntregador = useCallback(async (
-    entregadorId: string, 
-    updates: Partial<Entregador>
+  // Atualizar dados do tecnico (para uso futuro)
+  const updateTecnico = useCallback(async (
+    tecnicoId: string, 
+    updates: Partial<Tecnico>
   ): Promise<boolean> => {
     setState(prev => ({ ...prev, loading: true, error: null }));
 
     try {
-      logger.info('Atualizando dados do entregador', { entregadorId, updates });
+      logger.info('Atualizando dados do tecnico', { tecnicoId, updates });
 
       const { error } = await supabase
         .from('tecnicos')
         .update(updates)
-        .eq('id', entregadorId);
+        .eq('id', tecnicoId);
 
       if (error) {
-        logger.error('Erro ao atualizar entregador', { 
+        logger.error('Erro ao atualizar tecnico', { 
           error: error.message, 
-          entregadorId 
+          tecnicoId 
         });
         
         setState(prev => ({ 
@@ -150,25 +150,25 @@ export function useEntregadorContext() {
         return false;
       }
 
-      // Atualizar estado local se é o mesmo entregador
-      if (state.entregador?.id === entregadorId) {
+      // Atualizar estado local se é o mesmo tecnico
+      if (state.tecnico?.id === tecnicoId) {
         setState(prev => ({ 
           ...prev, 
-          entregador: prev.entregador ? { ...prev.entregador, ...updates } : null, 
+          tecnico: prev.tecnico ? { ...prev.tecnico, ...updates } : null, 
           loading: false 
         }));
       } else {
         setState(prev => ({ ...prev, loading: false }));
       }
 
-      logger.success('Entregador atualizado com sucesso', { entregadorId });
+      logger.success('Tecnico atualizado com sucesso', { tecnicoId });
       return true;
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
-      logger.error('Erro inesperado ao atualizar entregador', { 
+      logger.error('Erro inesperado ao atualizar tecnico', { 
         error: errorMessage, 
-        entregadorId 
+        tecnicoId 
       });
       
       setState(prev => ({ 
@@ -178,14 +178,14 @@ export function useEntregadorContext() {
       }));
       return false;
     }
-  }, [state.entregador?.id]);
+  }, [state.tecnico?.id]);
 
   // Debug de permissões (apenas em desenvolvimento)
   const debugPermissions = useCallback(async (userId: string) => {
     if (import.meta.env.PROD) return;
 
     try {
-      logger.info('🔍 DEBUG: Verificando permissões do entregador');
+      logger.info('🔍 DEBUG: Verificando permissões do tecnico');
 
       // Testar query simples
       const { data: testData, error: testError } = await supabase
@@ -222,21 +222,21 @@ export function useEntregadorContext() {
   // Resetar estado
   const reset = useCallback(() => {
     setState({
-      entregador: null,
+      tecnico: null,
       loading: false,
       error: null
     });
   }, []);
 
   return {
-    entregador: state.entregador,
+    tecnico: state.tecnico,
     loading: state.loading,
     error: state.error,
-    fetchEntregador,
-    isEntregadorAprovado,
-    isEntregadorAdmin,
+    fetchTecnico,
+    isTecnicoAprovado,
+    isTecnicoAdmin,
     getEmpresaId,
-    updateEntregador,
+    updateTecnico,
     debugPermissions,
     reset
   };

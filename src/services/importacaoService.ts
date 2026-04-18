@@ -4,7 +4,7 @@ import { adminManagementService } from './adminManagementService';
 import { logger } from '@/lib/logger';
 import { supabaseSecurityManager } from '@/lib/supabaseSecurityManager';
 
-export interface EntregadorImport {
+export interface TecnicoImport {
   nome: string;
   email: string;
   telefone: string;
@@ -25,18 +25,18 @@ export interface ValidationError {
 }
 
 export interface ProcessamentoResult {
-  sucesso: EntregadorImport[];
+  sucesso: TecnicoImport[];
   erros: ValidationError[];
-  duplicados: EntregadorImport[];
+  duplicados: TecnicoImport[];
   tempoProcessamento: number;
 }
 
 class ImportacaoService {
   /**
-   * Processa uma lista de entregadores para importação
+   * Processa uma lista de tecnicos para importação
    */
   async processarLote(
-    entregadores: EntregadorImport[], 
+    tecnicos: TecnicoImport[], 
     empresaId: string,
     allowedEmpresaIds: string[]
   ): Promise<ProcessamentoResult> {
@@ -51,7 +51,7 @@ class ImportacaoService {
 
     try {
       logger.info('🚀 IMPORTAÇÃO: Iniciando importação em massa', {
-        totalEntregadores: entregadores.length,
+        totalTecnicos: tecnicos.length,
         empresaId,
         allowedEmpresaIds: allowedEmpresaIds.length,
         debugModeAtivo: supabaseSecurityManager.isDebugMode()
@@ -68,11 +68,11 @@ class ImportacaoService {
       }
 
       // Verificar limite da empresa
-      await this.verificarLimiteEmpresa(empresaId, entregadores.length);
+      await this.verificarLimiteEmpresa(empresaId, tecnicos.length);
 
-      // Log detalhado dos primeiros 3 entregadores SEM MASCARAMENTO
+      // Log detalhado dos primeiros 3 tecnicos SEM MASCARAMENTO
       logger.info('📋 IMPORTAÇÃO: Preview dos dados a serem processados (DEBUG MODE)', {
-        preview: entregadores.slice(0, 3).map(e => ({
+        preview: tecnicos.slice(0, 3).map(e => ({
           linha: e.linha,
           nome: e.nome,
           email: e.email, // AGORA NÃO SERÁ MASCARADO
@@ -84,12 +84,12 @@ class ImportacaoService {
 
       // Processar em lotes de 25 para não sobrecarregar
       const TAMANHO_LOTE = 25;
-      for (let i = 0; i < entregadores.length; i += TAMANHO_LOTE) {
-        const lote = entregadores.slice(i, i + TAMANHO_LOTE);
+      for (let i = 0; i < tecnicos.length; i += TAMANHO_LOTE) {
+        const lote = tecnicos.slice(i, i + TAMANHO_LOTE);
         logger.info(`📦 IMPORTAÇÃO: Processando lote ${Math.floor(i / TAMANHO_LOTE) + 1}`, {
           inicio: i + 1,
-          fim: Math.min(i + TAMANHO_LOTE, entregadores.length),
-          total: entregadores.length
+          fim: Math.min(i + TAMANHO_LOTE, tecnicos.length),
+          total: tecnicos.length
         });
         
         await this.processarLoteSequencial(lote, empresaId, allowedEmpresaIds, resultado);
@@ -118,7 +118,7 @@ class ImportacaoService {
     }
   }
 
-  private async verificarLimiteEmpresa(empresaId: string, novosEntregadores: number): Promise<void> {
+  private async verificarLimiteEmpresa(empresaId: string, novosTecnicos: number): Promise<void> {
     const { data: empresa, error: empresaError } = await supabase
       .from('empresas')
       .select('max_entregadores, nome')
@@ -129,169 +129,169 @@ class ImportacaoService {
       throw new Error('Erro ao verificar dados da empresa');
     }
 
-    const { data: entregadoresExistentes, error: entregadoresError } = await supabase
+    const { data: tecnicosExistentes, error: tecnicosError } = await supabase
       .from('tecnicos')
       .select('id')
       .eq('empresa_id', empresaId);
 
-    if (entregadoresError) {
-      throw new Error('Erro ao verificar entregadores existentes');
+    if (tecnicosError) {
+      throw new Error('Erro ao verificar tecnicos existentes');
     }
 
-    const totalAtual = entregadoresExistentes?.length || 0;
-    const novoTotal = totalAtual + novosEntregadores;
+    const totalAtual = tecnicosExistentes?.length || 0;
+    const novoTotal = totalAtual + novosTecnicos;
 
     if (empresa?.max_entregadores && novoTotal > empresa.max_entregadores) {
       throw new Error(
-        `Limite de ${empresa.max_entregadores} entregadores seria excedido. ` +
-        `Atual: ${totalAtual}, Tentativa: +${novosEntregadores}, ` +
+        `Limite de ${empresa.max_entregadores} tecnicos seria excedido. ` +
+        `Atual: ${totalAtual}, Tentativa: +${novosTecnicos}, ` +
         `Total resultante: ${novoTotal}`
       );
     }
 
     logger.info('✅ IMPORTAÇÃO: Limite verificado', {
       empresa: empresa?.nome,
-      maxEntregadores: empresa?.max_entregadores,
+      maxTecnicos: empresa?.max_entregadores,
       totalAtual,
-      novosEntregadores,
+      novosTecnicos,
       novoTotal
     });
   }
 
   /**
-   * Processa um lote de entregadores sequencialmente
+   * Processa um lote de tecnicos sequencialmente
    */
   private async processarLoteSequencial(
-    lote: EntregadorImport[],
+    lote: TecnicoImport[],
     empresaId: string,
     allowedEmpresaIds: string[],
     resultado: ProcessamentoResult
   ): Promise<void> {
-    for (const entregador of lote) {
+    for (const tecnico of lote) {
       try {
         // LOGS DETALHADOS SEM MASCARAMENTO
-        logger.info(`🔍 IMPORTAÇÃO: Processando linha ${entregador.linha} (DEBUG)`, {
-          nome: entregador.nome,
-          email: entregador.email, // NÃO MASCARADO
-          telefone: entregador.telefone,
-          cpf: entregador.cpf, // NÃO MASCARADO
-          cidade: entregador.cidade || '[CIDADE_VAZIA]', // CRÍTICO: Mostrar se está vazia
-          cidadeTipo: typeof entregador.cidade,
-          cidadeLength: entregador.cidade ? entregador.cidade.length : 'N/A',
-          temSenha: !!(entregador.senha && entregador.senha.trim()) // NOVO: Verificar se tem senha
+        logger.info(`🔍 IMPORTAÇÃO: Processando linha ${tecnico.linha} (DEBUG)`, {
+          nome: tecnico.nome,
+          email: tecnico.email, // NÃO MASCARADO
+          telefone: tecnico.telefone,
+          cpf: tecnico.cpf, // NÃO MASCARADO
+          cidade: tecnico.cidade || '[CIDADE_VAZIA]', // CRÍTICO: Mostrar se está vazia
+          cidadeTipo: typeof tecnico.cidade,
+          cidadeLength: tecnico.cidade ? tecnico.cidade.length : 'N/A',
+          temSenha: !!(tecnico.senha && tecnico.senha.trim()) // NOVO: Verificar se tem senha
         });
 
         // Validar campos obrigatórios
-        const validacao = this.validarEntregador(entregador);
+        const validacao = this.validarTecnico(tecnico);
         if (validacao.length > 0) {
           resultado.erros.push(...validacao);
-          logger.warn(`⚠️ IMPORTAÇÃO: Entregador inválido na linha ${entregador.linha}`, { 
+          logger.warn(`⚠️ IMPORTAÇÃO: Tecnico inválido na linha ${tecnico.linha}`, { 
             erros: validacao.map(e => e.erro),
             dadosInvalidos: {
-              nome: entregador.nome,
-              email: entregador.email,
-              telefone: entregador.telefone,
-              cpf: entregador.cpf,
-              cidade: entregador.cidade || '[VAZIO]',
-              senha: entregador.senha ? '[FORNECIDA]' : '[VAZIA]'
+              nome: tecnico.nome,
+              email: tecnico.email,
+              telefone: tecnico.telefone,
+              cpf: tecnico.cpf,
+              cidade: tecnico.cidade || '[VAZIO]',
+              senha: tecnico.senha ? '[FORNECIDA]' : '[VAZIA]'
             }
           });
           continue;
         }
 
-        logger.info(`✅ IMPORTAÇÃO: Validação OK para linha ${entregador.linha}`);
+        logger.info(`✅ IMPORTAÇÃO: Validação OK para linha ${tecnico.linha}`);
 
         // Verificar duplicados por email
         const { data: existente } = await supabase
           .from('tecnicos')
           .select('id, email, nome')
-          .eq('email', entregador.email.toLowerCase().trim())
+          .eq('email', tecnico.email.toLowerCase().trim())
           .maybeSingle();
 
         if (existente) {
-          resultado.duplicados.push(entregador);
-          logger.warn(`🔄 IMPORTAÇÃO: Email duplicado na linha ${entregador.linha}`, { 
-            email: entregador.email, // NÃO MASCARADO
-            entregadorExistente: existente.nome
+          resultado.duplicados.push(tecnico);
+          logger.warn(`🔄 IMPORTAÇÃO: Email duplicado na linha ${tecnico.linha}`, { 
+            email: tecnico.email, // NÃO MASCARADO
+            tecnicoExistente: existente.nome
           });
           continue;
         }
 
-        logger.info(`✅ IMPORTAÇÃO: Email único confirmado para linha ${entregador.linha}`);
+        logger.info(`✅ IMPORTAÇÃO: Email único confirmado para linha ${tecnico.linha}`);
 
         // Buscar ou criar cidade - COM PROTEÇÃO CONTRA NULOS
-        logger.info(`🏙️ IMPORTAÇÃO: Buscando cidade para linha ${entregador.linha}`, {
-          cidadeOriginal: entregador.cidade,
-          cidadeTipo: typeof entregador.cidade,
-          cidadeValida: !!(entregador.cidade && entregador.cidade.trim())
+        logger.info(`🏙️ IMPORTAÇÃO: Buscando cidade para linha ${tecnico.linha}`, {
+          cidadeOriginal: tecnico.cidade,
+          cidadeTipo: typeof tecnico.cidade,
+          cidadeValida: !!(tecnico.cidade && tecnico.cidade.trim())
         });
 
-        const cidade = await this.buscarOuCriarCidade(entregador.cidade, empresaId);
+        const cidade = await this.buscarOuCriarCidade(tecnico.cidade, empresaId);
         if (!cidade) {
           resultado.erros.push({
-            linha: entregador.linha,
+            linha: tecnico.linha,
             campo: 'cidade',
             erro: 'Não foi possível encontrar ou criar a cidade',
-            valor: entregador.cidade
+            valor: tecnico.cidade
           });
           continue;
         }
 
-        logger.info(`🏙️ IMPORTAÇÃO: Cidade OK para linha ${entregador.linha}`, {
+        logger.info(`🏙️ IMPORTAÇÃO: Cidade OK para linha ${tecnico.linha}`, {
           cidade: cidade.nome,
           cidadeId: cidade.id
         });
 
-        // Criar entregador - USANDO SENHA DO EXCEL
+        // Criar tecnico - USANDO SENHA DO EXCEL
         
         // LOG CRÍTICO COM TODOS OS DADOS REAIS
-        logger.info(`🚀 IMPORTAÇÃO: Chamando adminManagementService para linha ${entregador.linha} (DADOS REAIS)`, {
-          dadosEntregador: {
-            nome: entregador.nome.trim(),
-            email: entregador.email.toLowerCase().trim(), // EMAIL REAL VISÍVEL
-            telefone: entregador.telefone.trim(),
-            cpf: entregador.cpf.trim(), // CPF REAL VISÍVEL
+        logger.info(`🚀 IMPORTAÇÃO: Chamando adminManagementService para linha ${tecnico.linha} (DADOS REAIS)`, {
+          dadosTecnico: {
+            nome: tecnico.nome.trim(),
+            email: tecnico.email.toLowerCase().trim(), // EMAIL REAL VISÍVEL
+            telefone: tecnico.telefone.trim(),
+            cpf: tecnico.cpf.trim(), // CPF REAL VISÍVEL
             cidade_id: cidade.id,
             empresa_id: empresaId,
             senhaFornecida: '[SENHA_DO_EXCEL]' // NOVO: Indicar que veio do Excel
           }
         });
 
-        await adminManagementService.createEntregador({
-          nome: entregador.nome.trim(),
-          email: entregador.email.toLowerCase().trim(),
-          telefone: entregador.telefone.trim(),
-          cpf: entregador.cpf.trim(),
+        await adminManagementService.createTecnico({
+          nome: tecnico.nome.trim(),
+          email: tecnico.email.toLowerCase().trim(),
+          telefone: tecnico.telefone.trim(),
+          cpf: tecnico.cpf.trim(),
           cidade_id: cidade.id,
           empresa_id: empresaId,
-          senha: entregador.senha.trim() // NOVO: Usar senha do Excel em vez de gerar
+          senha: tecnico.senha.trim() // NOVO: Usar senha do Excel em vez de gerar
         }, allowedEmpresaIds);
 
-        resultado.sucesso.push(entregador);
-        logger.info(`✅ IMPORTAÇÃO: Entregador criado com sucesso linha ${entregador.linha}`, { 
-          nome: entregador.nome,
-          email: entregador.email // EMAIL REAL VISÍVEL
+        resultado.sucesso.push(tecnico);
+        logger.info(`✅ IMPORTAÇÃO: Tecnico criado com sucesso linha ${tecnico.linha}`, { 
+          nome: tecnico.nome,
+          email: tecnico.email // EMAIL REAL VISÍVEL
         });
 
       } catch (error) {
         resultado.erros.push({
-          linha: entregador.linha,
+          linha: tecnico.linha,
           campo: 'geral',
           erro: error instanceof Error ? error.message : 'Erro desconhecido',
-          valor: entregador.email
+          valor: tecnico.email
         });
         
         // LOG DE ERRO COM DADOS REAIS PARA DEBUG
-        logger.error(`❌ IMPORTAÇÃO: Erro ao criar entregador linha ${entregador.linha} (DEBUG)`, { 
+        logger.error(`❌ IMPORTAÇÃO: Erro ao criar tecnico linha ${tecnico.linha} (DEBUG)`, { 
           error: error instanceof Error ? error.message : error,
           stack: error instanceof Error ? error.stack : undefined,
-          dadosEntregador: {
-            nome: entregador.nome,
-            email: entregador.email, // EMAIL REAL PARA DEBUG
-            telefone: entregador.telefone,
-            cpf: entregador.cpf, // CPF REAL PARA DEBUG
-            cidade: entregador.cidade || '[VAZIO]',
-            senha: entregador.senha ? '[FORNECIDA]' : '[VAZIA]'
+          dadosTecnico: {
+            nome: tecnico.nome,
+            email: tecnico.email, // EMAIL REAL PARA DEBUG
+            telefone: tecnico.telefone,
+            cpf: tecnico.cpf, // CPF REAL PARA DEBUG
+            cidade: tecnico.cidade || '[VAZIO]',
+            senha: tecnico.senha ? '[FORNECIDA]' : '[VAZIA]'
           }
         });
       }
@@ -395,101 +395,101 @@ class ImportacaoService {
     }
   }
 
-  private validarEntregador(entregador: EntregadorImport): ValidationError[] {
+  private validarTecnico(tecnico: TecnicoImport): ValidationError[] {
     const erros: ValidationError[] = [];
 
     // Nome obrigatório
-    if (!entregador.nome || typeof entregador.nome !== 'string' || !entregador.nome.trim()) {
+    if (!tecnico.nome || typeof tecnico.nome !== 'string' || !tecnico.nome.trim()) {
       erros.push({
-        linha: entregador.linha,
+        linha: tecnico.linha,
         campo: 'nome',
         erro: 'Nome é obrigatório e deve ser uma string válida',
-        valor: entregador.nome
+        valor: tecnico.nome
       });
-    } else if (entregador.nome.trim().length < 3) {
+    } else if (tecnico.nome.trim().length < 3) {
       erros.push({
-        linha: entregador.linha,
+        linha: tecnico.linha,
         campo: 'nome',
         erro: 'Nome deve ter pelo menos 3 caracteres',
-        valor: entregador.nome
+        valor: tecnico.nome
       });
     }
 
     // Email obrigatório e válido
-    if (!entregador.email || typeof entregador.email !== 'string' || !entregador.email.trim()) {
+    if (!tecnico.email || typeof tecnico.email !== 'string' || !tecnico.email.trim()) {
       erros.push({
-        linha: entregador.linha,
+        linha: tecnico.linha,
         campo: 'email',
         erro: 'Email é obrigatório e deve ser uma string válida',
-        valor: entregador.email
+        valor: tecnico.email
       });
-    } else if (!this.validarEmail(entregador.email)) {
+    } else if (!this.validarEmail(tecnico.email)) {
       erros.push({
-        linha: entregador.linha,
+        linha: tecnico.linha,
         campo: 'email',
         erro: 'Email inválido',
-        valor: entregador.email
+        valor: tecnico.email
       });
     }
 
     // Telefone obrigatório
-    if (!entregador.telefone || typeof entregador.telefone !== 'string' || !entregador.telefone.trim()) {
+    if (!tecnico.telefone || typeof tecnico.telefone !== 'string' || !tecnico.telefone.trim()) {
       erros.push({
-        linha: entregador.linha,
+        linha: tecnico.linha,
         campo: 'telefone',
         erro: 'Telefone é obrigatório e deve ser uma string válida',
-        valor: entregador.telefone
+        valor: tecnico.telefone
       });
-    } else if (!this.validarTelefone(entregador.telefone)) {
+    } else if (!this.validarTelefone(tecnico.telefone)) {
       erros.push({
-        linha: entregador.linha,
+        linha: tecnico.linha,
         campo: 'telefone',
         erro: 'Telefone inválido (use formato: 11999999999)',
-        valor: entregador.telefone
+        valor: tecnico.telefone
       });
     }
 
     // CPF obrigatório e válido
-    if (!entregador.cpf || typeof entregador.cpf !== 'string' || !entregador.cpf.trim()) {
+    if (!tecnico.cpf || typeof tecnico.cpf !== 'string' || !tecnico.cpf.trim()) {
       erros.push({
-        linha: entregador.linha,
+        linha: tecnico.linha,
         campo: 'cpf',
         erro: 'CPF é obrigatório e deve ser uma string válida',
-        valor: entregador.cpf
+        valor: tecnico.cpf
       });
-    } else if (!this.validarCPF(entregador.cpf)) {
+    } else if (!this.validarCPF(tecnico.cpf)) {
       erros.push({
-        linha: entregador.linha,
+        linha: tecnico.linha,
         campo: 'cpf',
         erro: 'CPF inválido',
-        valor: entregador.cpf
+        valor: tecnico.cpf
       });
     }
 
     // Cidade obrigatória - VALIDAÇÃO MELHORADA
-    if (!entregador.cidade || typeof entregador.cidade !== 'string' || !entregador.cidade.trim()) {
+    if (!tecnico.cidade || typeof tecnico.cidade !== 'string' || !tecnico.cidade.trim()) {
       erros.push({
-        linha: entregador.linha,
+        linha: tecnico.linha,
         campo: 'cidade',
         erro: 'Cidade é obrigatória e deve ser uma string válida',
-        valor: entregador.cidade
+        valor: tecnico.cidade
       });
     }
 
     // NOVO: Senha obrigatória
-    if (!entregador.senha || typeof entregador.senha !== 'string' || !entregador.senha.trim()) {
+    if (!tecnico.senha || typeof tecnico.senha !== 'string' || !tecnico.senha.trim()) {
       erros.push({
-        linha: entregador.linha,
+        linha: tecnico.linha,
         campo: 'senha',
         erro: 'Senha é obrigatória e deve ser uma string válida',
-        valor: entregador.senha
+        valor: tecnico.senha
       });
-    } else if (entregador.senha.trim().length < 6) {
+    } else if (tecnico.senha.trim().length < 6) {
       erros.push({
-        linha: entregador.linha,
+        linha: tecnico.linha,
         campo: 'senha',
         erro: 'Senha deve ter pelo menos 6 caracteres',
-        valor: entregador.senha
+        valor: tecnico.senha
       });
     }
 
@@ -550,7 +550,7 @@ class ImportacaoService {
   /**
    * Processa dados de planilha Excel/CSV
    */
-  parseExcelData(data: any[]): EntregadorImport[] {
+  parseExcelData(data: any[]): TecnicoImport[] {
     return data.map((row, index) => {
       // PROTEÇÃO CONTRA VALORES UNDEFINED/NULL DOS CAMPOS DO EXCEL
       const processField = (value: any): string => {

@@ -9,7 +9,7 @@ interface ReservaAtiva {
   agenda_id: string;
   status: 'pendente' | 'confirmada';
   created_at: string;
-  entregador: {
+  tecnico: {
     nome: string;
     estrelas: number;
   };
@@ -95,7 +95,7 @@ export function useReservasAtivas() {
         agenda_id: item.agenda_id,
         status: item.status as 'pendente' | 'confirmada',
         created_at: item.created_at,
-        entregador: {
+        tecnico: {
           nome: item.tecnicos?.nome || 'N/A'
         },
         agenda: {

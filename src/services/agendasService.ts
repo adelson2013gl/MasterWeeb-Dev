@@ -5,35 +5,35 @@ import { safeStatus } from "@/lib/enumSafety";
 import { AgendaRaw } from "@/types/agendaDisponivel";
 import { logger } from '@/lib/logger';
 
-export const fetchEntregadorData = async (userId: string) => {
+export const fetchTecnicoData = async (userId: string) => {
   try {
-    logger.debug('Buscando dados do entregador para agendas', { userId }, 'AGENDAS');
+    logger.debug('Buscando dados do tecnico para agendas', { userId }, 'AGENDAS');
     
-    const { data: entregadorData, error: entregadorError } = await supabase
+    const { data: tecnicoData, error: tecnicoError } = await supabase
       .from('tecnicos')
       .select('id, estrelas, empresa_id, status, nome')
       .eq('user_id', userId)
       .eq('status', 'aprovado')
       .single();
 
-    if (entregadorError || !entregadorData) {
-      logger.warn('Entregador não encontrado ou não aprovado para agendamentos', { 
+    if (tecnicoError || !tecnicoData) {
+      logger.warn('Tecnico não encontrado ou não aprovado para agendamentos', { 
         userId, 
-        error: entregadorError?.message 
+        error: tecnicoError?.message 
       }, 'AGENDAS');
-      throw new Error('Entregador não encontrado ou não aprovado para agendamentos');
+      throw new Error('Tecnico não encontrado ou não aprovado para agendamentos');
     }
 
-    logger.info('Dados do entregador carregados', { 
-      entregadorId: entregadorData.id,
-      nome: entregadorData.nome,
-      estrelas: entregadorData.estrelas,
-      empresaId: entregadorData.empresa_id 
+    logger.info('Dados do tecnico carregados', { 
+      tecnicoId: tecnicoData.id,
+      nome: tecnicoData.nome,
+      estrelas: tecnicoData.estrelas,
+      empresaId: tecnicoData.empresa_id 
     }, 'AGENDAS');
 
-    return entregadorData;
+    return tecnicoData;
   } catch (error) {
-    logger.error('Erro ao buscar dados do entregador', { userId, error }, 'AGENDAS');
+    logger.error('Erro ao buscar dados do tecnico', { userId, error }, 'AGENDAS');
     throw error;
   }
 };
@@ -156,23 +156,23 @@ export const fetchContagemAgendamentos = async (agendasIds: string[]) => {
   }
 };
 
-export const fetchAgendamentosExistentes = async (entregadorId: string, dataAtual: string) => {
+export const fetchAgendamentosExistentes = async (tecnicoId: string, dataAtual: string) => {
   try {
-    logger.debug('Buscando agendamentos existentes do entregador', { 
-      entregadorId, 
+    logger.debug('Buscando agendamentos existentes do tecnico', { 
+      tecnicoId, 
       dataAtual 
     }, 'AGENDAS');
 
     const { data: agendamentosExistentes, error: agendamentosError } = await supabase
       .from('agendamentos')
       .select('agenda_id, status, tipo')
-      .eq('tecnico_id', entregadorId)
+      .eq('tecnico_id', tecnicoId)
       .in('status', [safeStatus('agendado'), safeStatus('pendente'), safeStatus('em_andamento')])
       .gte('data_agendamento', dataAtual);
 
     if (agendamentosError) {
       logger.error('Erro ao buscar agendamentos existentes', { 
-        entregadorId, 
+        tecnicoId, 
         dataAtual, 
         error: agendamentosError.message 
       }, 'AGENDAS');
@@ -182,13 +182,13 @@ export const fetchAgendamentosExistentes = async (entregadorId: string, dataAtua
     const agendamentos = agendamentosExistentes || [];
     
     logger.info('Agendamentos existentes carregados', { 
-      entregadorId, 
+      tecnicoId, 
       totalAgendamentos: agendamentos.length 
     }, 'AGENDAS');
 
     return agendamentos;
   } catch (error) {
-    logger.error('Erro ao buscar agendamentos existentes', { entregadorId, dataAtual, error }, 'AGENDAS');
+    logger.error('Erro ao buscar agendamentos existentes', { tecnicoId, dataAtual, error }, 'AGENDAS');
     throw error;
   }
 };

@@ -126,7 +126,7 @@ export function ConfiguracoesSistema() {
                 Priorização por Horários Específicos
               </CardTitle>
               <CardDescription>
-                Configure os horários de liberação das agendas baseado no nível de estrelas dos entregadores.
+                Configure os horários de liberação das agendas baseado no nível de estrelas dos tecnicos.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -247,8 +247,8 @@ export function ConfiguracoesSistema() {
               <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
                 <h4 className="font-medium mb-2">Como funciona:</h4>
                 <ul className="text-sm space-y-1 text-muted-foreground">
-                  <li>• Entregadores só veem agendas <strong>após</strong> o horário configurado para seu nível</li>
-                  <li>• Exemplo: Entregador 3★ só vê agendas de hoje após às {configs.horarioLiberacao3Estrelas}</li>
+                  <li>• Tecnicos só veem agendas <strong>após</strong> o horário configurado para seu nível</li>
+                  <li>• Exemplo: Tecnico 3★ só vê agendas de hoje após às {configs.horarioLiberacao3Estrelas}</li>
                   <li>• Para agendas de outros dias, liberação é normal (sem restrição de horário)</li>
                   <li>• Sistema substitui completamente o antigo baseado em "horas de antecedência"</li>
                 </ul>
@@ -307,7 +307,7 @@ export function ConfiguracoesSistema() {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Permitir Cancelamento</Label>
-                    <p className="text-sm text-muted-foreground">Entregadores podem cancelar agendamentos</p>
+                    <p className="text-sm text-muted-foreground">Tecnicos podem cancelar agendamentos</p>
                   </div>
                   <Switch
                     checked={configs.permiteCancel}
@@ -319,7 +319,7 @@ export function ConfiguracoesSistema() {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Permitir Múltiplos Turnos</Label>
-                    <p className="text-sm text-muted-foreground">Entregador pode agendar múltiplos turnos no mesmo dia</p>
+                    <p className="text-sm text-muted-foreground">Tecnico pode agendar múltiplos turnos no mesmo dia</p>
                   </div>
                   <Switch
                     checked={configs.permiteMultiplosTurnos}
@@ -331,7 +331,7 @@ export function ConfiguracoesSistema() {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Permitir Reagendamento</Label>
-                    <p className="text-sm text-muted-foreground">Entregadores podem reagendar compromissos</p>
+                    <p className="text-sm text-muted-foreground">Tecnicos podem reagendar compromissos</p>
                   </div>
                   <Switch
                     checked={configs.permiteReagendamento}
@@ -344,7 +344,7 @@ export function ConfiguracoesSistema() {
                   <div>
                     <Label>Permitir Agendamento no Mesmo Dia</Label>
                     <p className="text-sm text-muted-foreground">
-                      Entregadores podem agendar para o mesmo dia
+                      Tecnicos podem agendar para o mesmo dia
                       <br />
                       <span className="text-xs text-blue-600">
                         💡 Estado atual: {configs.permitirAgendamentoMesmoDia ? '✅ HABILITADO' : '❌ DESABILITADO'}
@@ -449,8 +449,8 @@ export function ConfiguracoesSistema() {
                 <div className="p-4 bg-yellow-50 dark:bg-yellow-950 rounded-lg">
                   <h4 className="font-medium mb-2">⚠️ Sistema Antigo vs Novo:</h4>
                   <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>• <strong>Antigo:</strong> "Entregador 3★ precisa de 4h de antecedência"</li>
-                    <li>• <strong>Novo:</strong> "Entregador 3★ vê agendas após às 09:20"</li>
+                    <li>• <strong>Antigo:</strong> "Tecnico 3★ precisa de 4h de antecedência"</li>
+                    <li>• <strong>Novo:</strong> "Tecnico 3★ vê agendas após às 09:20"</li>
                     <li>• Recomendamos migrar para o sistema de horários específicos</li>
                   </ul>
                 </div>
@@ -582,7 +582,7 @@ export function ConfiguracoesSistema() {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Aprovação Automática</Label>
-                    <p className="text-sm text-muted-foreground">Aprovar entregadores automaticamente após cadastro</p>
+                    <p className="text-sm text-muted-foreground">Aprovar tecnicos automaticamente após cadastro</p>
                   </div>
                   <Switch
                     checked={configs.aprovacaoAutomatica}
@@ -594,7 +594,7 @@ export function ConfiguracoesSistema() {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label>Múltiplos com Mesmo Telefone</Label>
-                    <p className="text-sm text-muted-foreground">Permitir vários entregadores com mesmo telefone</p>
+                    <p className="text-sm text-muted-foreground">Permitir vários tecnicos com mesmo telefone</p>
                   </div>
                   <Switch
                     checked={configs.multiplosComTelefone}

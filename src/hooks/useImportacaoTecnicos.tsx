@@ -1,20 +1,20 @@
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { importacaoService, EntregadorImport, ProcessamentoResult } from '@/services/importacaoService';
+import { importacaoService, TecnicoImport, ProcessamentoResult } from '@/services/importacaoService';
 import { useAuth } from '@/hooks/useAuth';
 import { logger } from '@/lib/logger';
 import * as XLSX from 'xlsx';
 
 interface ImportacaoState {
   arquivoSelecionado: File | null;
-  dadosPreview: EntregadorImport[];
+  dadosPreview: TecnicoImport[];
   processando: boolean;
   resultado: ProcessamentoResult | null;
   progresso: number;
   etapaAtual: string;
 }
 
-export function useImportacaoEntregadores() {
+export function useImportacaoTecnicos() {
   const { toast } = useToast();
   const { user } = useAuth();
   
@@ -116,7 +116,7 @@ export function useImportacaoEntregadores() {
   };
 
   const executarImportacao = async (
-    dadosCompletos: EntregadorImport[], 
+    dadosCompletos: TecnicoImport[], 
     empresaId: string,
     allowedEmpresaIds: string[]
   ) => {
@@ -158,7 +158,7 @@ export function useImportacaoEntregadores() {
       if (resultado.sucesso.length === totalProcessados) {
         toast({
           title: '🎉 Importação bem-sucedida!',
-          description: `${resultado.sucesso.length} entregadores importados com sucesso.`
+          description: `${resultado.sucesso.length} tecnicos importados com sucesso.`
         });
       } else {
         toast({
@@ -199,13 +199,13 @@ export function useImportacaoEntregadores() {
     try {
       const template = [
         ['Nome', 'Email', 'Telefone', 'CPF', 'Cidade', 'Senha', 'Perfil', 'Status', 'Observacoes'],
-        ['João Silva', 'joao@email.com', '11999999999', '12345678901', 'São Paulo', 'joao123456', 'tecnico', 'pendente', 'Entregador experiente'],
+        ['João Silva', 'joao@email.com', '11999999999', '12345678901', 'São Paulo', 'joao123456', 'tecnico', 'pendente', 'Tecnico experiente'],
         ['Maria Santos', 'maria@email.com', '11888888888', '98765432109', 'Rio de Janeiro', 'maria654321', 'tecnico', 'pendente', '']
       ];
 
       const ws = XLSX.utils.aoa_to_sheet(template);
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Entregadores');
+      XLSX.utils.book_append_sheet(wb, ws, 'Tecnicos');
 
       // Adicionar larguras das colunas
       ws['!cols'] = [
@@ -220,11 +220,11 @@ export function useImportacaoEntregadores() {
         { wch: 30 }  // Observações
       ];
 
-      XLSX.writeFile(wb, 'template-entregadores.xlsx');
+      XLSX.writeFile(wb, 'template-tecnicos.xlsx');
 
       toast({
         title: '📥 Template baixado',
-        description: 'Use este arquivo como modelo para importar entregadores. Agora inclui coluna de Senha.'
+        description: 'Use este arquivo como modelo para importar tecnicos. Agora inclui coluna de Senha.'
       });
 
       logger.info('📁 Template Excel gerado com coluna senha');

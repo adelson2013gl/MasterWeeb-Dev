@@ -176,7 +176,7 @@ export function useAgendasAtivasAdmin(dataInicio?: string, dataFim?: string) {
             id: ag.id,
             status: ag.status,
             tipo: ag.tipo,
-            entregador: ag.tecnicos ? {
+            tecnico: ag.tecnicos ? {
               id: ag.tecnicos.id,
               nome: ag.tecnicos.nome,
               telefone: ag.tecnicos.telefone,

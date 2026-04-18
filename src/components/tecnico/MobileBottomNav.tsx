@@ -12,13 +12,13 @@ interface MobileBottomNavProps {
 const preloadComponent = (tabId: string) => {
   switch (tabId) {
     case 'agendar':
-      import("@/components/entregador/AgendamentoCalendar").catch(() => {});
+      import("@/components/tecnico/AgendamentoCalendar").catch(() => {});
       break;
     case 'meus-agendamentos':
-      import("@/components/entregador/MeusAgendamentos").catch(() => {});
+      import("@/components/tecnico/MeusAgendamentos").catch(() => {});
       break;
     case 'notificacoes':
-      import("@/components/entregador/NotificacoesReservas").catch(() => {});
+      import("@/components/tecnico/NotificacoesReservas").catch(() => {});
       break;
   }
 };

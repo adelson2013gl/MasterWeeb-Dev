@@ -5,12 +5,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { User, LogOut, Shield, AlertTriangle, Building2, CalendarCheck } from "lucide-react";
-import { MobileBottomNav } from "@/components/entregador/MobileBottomNav";
-import { QuickActionCards } from "@/components/entregador/QuickActionCards";
+import { MobileBottomNav } from "@/components/tecnico/MobileBottomNav";
+import { QuickActionCards } from "@/components/tecnico/QuickActionCards";
 import { TimelineAgendamentosWithSuspense, SimpleLoader } from "@/components/LazyComponents";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useEntregadorData } from "@/hooks/useEntregadorData";
+import { useTecnicoData } from "@/hooks/useTecnicoData";
 import { useEmpresaUnificado } from "@/contexts/EmpresaUnificadoContext";
 import { usePreloadComponents } from "@/hooks/usePreloadComponents";
 import { ConnectionStatus } from "@/components/ui/connection-status";
@@ -19,11 +19,11 @@ import { InstallButton } from "@/components/InstallButton";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
 // Lazy loading para componentes pesados com loading otimizado
-const AgendamentoCalendar = lazy(() => import("@/components/entregador/AgendamentoCalendar").then(module => ({ default: module.AgendamentoCalendar })));
-const MeusAgendamentos = lazy(() => import("@/components/entregador/MeusAgendamentos").then(module => ({ default: module.MeusAgendamentos })));
-const StatusReservas = lazy(() => import("@/components/entregador/StatusReservas").then(module => ({ default: module.StatusReservas })));
-const NotificacoesReservas = lazy(() => import("@/components/entregador/NotificacoesReservas").then(module => ({ default: module.NotificacoesReservas })));
-const PerfilEntregador = lazy(() => import("@/components/entregador/PerfilEntregador").then(module => ({ default: module.PerfilEntregador })));
+const AgendamentoCalendar = lazy(() => import("@/components/tecnico/AgendamentoCalendar").then(module => ({ default: module.AgendamentoCalendar })));
+const MeusAgendamentos = lazy(() => import("@/components/tecnico/MeusAgendamentos").then(module => ({ default: module.MeusAgendamentos })));
+const StatusReservas = lazy(() => import("@/components/tecnico/StatusReservas").then(module => ({ default: module.StatusReservas })));
+const NotificacoesReservas = lazy(() => import("@/components/tecnico/NotificacoesReservas").then(module => ({ default: module.NotificacoesReservas })));
+const PerfilTecnico = lazy(() => import("@/components/tecnico/PerfilTecnico").then(module => ({ default: module.PerfilTecnico })));
 
 // Hook para detectar parâmetros URL dos shortcuts PWA
 const useShortcutNavigation = () => {
@@ -49,12 +49,12 @@ const useShortcutNavigation = () => {
   return initialTab;
 };
 
-export function EntregadorDashboard() {
+export function TecnicoDashboard() {
   const shortcutTab = useShortcutNavigation();
   const [activeTab, setActiveTab] = useState(shortcutTab || "dashboard");
   const { signOut, user } = useAuth();
   const isMobile = useIsMobile();
-  const { entregador } = useEntregadorData();
+  const { tecnico } = useTecnicoData();
   const { empresa } = useEmpresaUnificado();
   const { preloadOnHover } = usePreloadComponents();
 
@@ -112,7 +112,7 @@ export function EntregadorDashboard() {
       case "perfil":
         return (
           <Suspense fallback={<SimpleLoader text="Carregando perfil..." />}>
-            <PerfilEntregador onBack={() => handleTabChange('dashboard')} />
+            <PerfilTecnico onBack={() => handleTabChange('dashboard')} />
           </Suspense>
         );
       case "agendar":
@@ -147,7 +147,7 @@ export function EntregadorDashboard() {
             initial="hidden"
             animate="visible"
           >
-            {/* Status do Entregador - Simplificado */}
+            {/* Status do Tecnico - Simplificado */}
             <motion.div variants={itemVariants}>
               <Card className="glass-card border-glass">
                 <CardContent className="p-4">
@@ -160,7 +160,7 @@ export function EntregadorDashboard() {
                     </button>
                     <div className="flex-1">
                       <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                        Olá, {entregador?.nome || 'tecnico'}!
+                        Olá, {tecnico?.nome || 'tecnico'}!
                       </h1>
                       <div className="flex items-center gap-2 mt-1">
                         <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100 text-xs">
@@ -274,7 +274,7 @@ export function EntregadorDashboard() {
                   Master Web
                 </h1>
                 <p className="text-sm text-muted-foreground">
-                  Sistema de Agendamento de Entregadores
+                  Sistema de Agendamento de Tecnicos
                 </p>
               </div>
             </motion.div>

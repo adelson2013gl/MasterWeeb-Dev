@@ -2,7 +2,7 @@
 import { AgendaRaw } from "@/types/agendaDisponivel";
 import { logger } from "@/lib/logger";
 
-export const validateAgendaStructure = (agenda: AgendaRaw, entregadorEmpresaId: string): boolean => {
+export const validateAgendaStructure = (agenda: AgendaRaw, tecnicoEmpresaId: string): boolean => {
   // Verificar se turnos existe e está ativo
   if (!agenda.turnos || !agenda.turnos.ativo) {
     logger.debug('🚫 Agenda descartada: turno inválido', { 
@@ -34,11 +34,11 @@ export const validateAgendaStructure = (agenda: AgendaRaw, entregadorEmpresaId: 
   }
 
   // Verificar consistência de empresa_id
-  if (agenda.empresa_id !== entregadorEmpresaId) {
+  if (agenda.empresa_id !== tecnicoEmpresaId) {
     logger.warn('⚠️ INCONSISTÊNCIA DE EMPRESA detectada', {
       agendaId: agenda.id,
       empresaAgenda: agenda.empresa_id,
-      empresaEntregador: entregadorEmpresaId,
+      empresaTecnico: tecnicoEmpresaId,
       motivo: 'empresa_id_inconsistente'
     });
     return false;

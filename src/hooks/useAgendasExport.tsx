@@ -7,13 +7,13 @@ export interface AgendaExportData {
   cidade: string;
   regiao: string;
   turno: string;
-  cpf_entregador: string;
-  nome_entregador: string;
+  cpf_tecnico: string;
+  nome_tecnico: string;
 }
 
 /**
  * Hook para buscar dados completos das agendas para export
- * Inclui informações dos entregadores agendados
+ * Inclui informações dos tecnicos agendados
  */
 export function useAgendasExport() {
   const [loading, setLoading] = useState(false);
@@ -76,25 +76,25 @@ export function useAgendasExport() {
         ) || [];
 
         if (agendamentosAtivos.length === 0) {
-          // Agenda sem entregadores agendados - adicionar linha vazia
+          // Agenda sem tecnicos agendados - adicionar linha vazia
           dadosExport.push({
             data: agenda.data,
             cidade: agenda.regioes.cidades.nome,
             regiao: agenda.regioes.nome,
             turno: agenda.turnos.nome,
-            cpf_entregador: '--- Sem agendamentos ---',
-            nome_entregador: '--- Sem agendamentos ---'
+            cpf_tecnico: '--- Sem agendamentos ---',
+            nome_tecnico: '--- Sem agendamentos ---'
           });
         } else {
-          // Adicionar uma linha para cada entregador agendado
+          // Adicionar uma linha para cada tecnico agendado
           agendamentosAtivos.forEach((agendamento: any) => {
             dadosExport.push({
               data: agenda.data,
               cidade: agenda.regioes.cidades.nome,
               regiao: agenda.regioes.nome,
               turno: agenda.turnos.nome,
-              cpf_entregador: agendamento.tecnicos.cpf,
-              nome_entregador: agendamento.tecnicos.nome
+              cpf_tecnico: agendamento.tecnicos.cpf,
+              nome_tecnico: agendamento.tecnicos.nome
             });
           });
         }

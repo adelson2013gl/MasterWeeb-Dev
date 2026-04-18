@@ -7,7 +7,7 @@ export function BrandingSection() {
     {
       icon: CalendarCheck,
       title: "Agendamento Inteligente",
-      description: "Sistema automatizado para otimizar escalas de entregadores"
+      description: "Sistema automatizado para otimizar escalas de tecnicos"
     },
     {
       icon: Shield,
@@ -63,7 +63,7 @@ export function BrandingSection() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Revolucione a gestão dos seus entregadores
+            Revolucione a gestão dos seus tecnicos
           </motion.h2>
           
           <motion.p 
@@ -73,7 +73,7 @@ export function BrandingSection() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             Plataforma completa para otimizar escalas, aumentar eficiência e 
-            proporcionar melhor experiência para sua equipe de entregadores.
+            proporcionar melhor experiência para sua equipe de tecnicos.
           </motion.p>
         </motion.div>
 

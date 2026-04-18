@@ -1,6 +1,6 @@
 import { Database } from "@/types/database";
 
-export type Entregador = Database['public']['Tables']['entregadores']['Row'] & {
+export type Tecnico = Database['public']['Tables']['tecnicos']['Row'] & {
   cidade?: {
     nome: string;
     estado: string;

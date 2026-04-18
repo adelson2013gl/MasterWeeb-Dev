@@ -4,36 +4,36 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check, X, User, UserX } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { EntregadoresTable } from "./EntregadoresTable";
+import { TecnicosTable } from "./TecnicosTable";
 import { Database } from '@/types/database';
-import { Entregador } from './types';
+import { Tecnico } from './types';
 
-interface EntregadorTabsProps {
-  entregadoresPorStatus: {
-    pendente: Entregador[];
-    aprovado: Entregador[];
-    rejeitado: Entregador[];
-    suspenso: Entregador[];
+interface TecnicoTabsProps {
+  tecnicosPorStatus: {
+    pendente: Tecnico[];
+    aprovado: Tecnico[];
+    rejeitado: Tecnico[];
+    suspenso: Tecnico[];
   };
   activeTab: string;
   onTabChange: (tab: string) => void;
   onStatusChange: (id: string, status: "aprovado" | "rejeitado") => void;
   onReativar: (id: string) => void;
-  onEdit: (entregador: Entregador) => void;
+  onEdit: (tecnico: Tecnico) => void;
 }
 
-export function EntregadorTabs({ 
-  entregadoresPorStatus, 
+export function TecnicoTabs({ 
+  tecnicosPorStatus, 
   activeTab,
   onTabChange,
   onStatusChange, 
   onReativar, 
   onEdit 
-}: EntregadorTabsProps) {
+}: TecnicoTabsProps) {
   const isMobile = useIsMobile();
 
   const renderTabContent = (
-    entregadores: Entregador[],
+    tecnicos: Tecnico[],
     title: string,
     description: string,
     icon: React.ReactNode
@@ -42,15 +42,15 @@ export function EntregadorTabs({
       <CardHeader>
         <CardTitle className="flex items-center text-base sm:text-lg">
           {icon}
-          {title} ({entregadores.length})
+          {title} ({tecnicos.length})
         </CardTitle>
         <CardDescription className="text-xs sm:text-sm">
           {description}
         </CardDescription>
       </CardHeader>
       <CardContent className="p-3 sm:p-6">
-        <EntregadoresTable
-          entregadores={entregadores}
+        <TecnicosTable
+          tecnicos={tecnicos}
           onStatusChange={onStatusChange}
           onReativar={onReativar}
           onEdit={onEdit}
@@ -64,27 +64,27 @@ export function EntregadorTabs({
       <TabsList className={`grid w-full grid-cols-4 ${isMobile ? 'text-xs' : 'text-sm'}`}>
         <TabsTrigger value="pendente" className="relative">
           <span className={isMobile ? "text-xs" : "text-sm"}>Pendentes</span>
-          {entregadoresPorStatus.pendente.length > 0 && (
+          {tecnicosPorStatus.pendente.length > 0 && (
             <Badge variant="destructive" className="ml-1 sm:ml-2 h-4 w-4 sm:h-5 sm:w-5 rounded-full p-0 text-xs">
-              {entregadoresPorStatus.pendente.length}
+              {tecnicosPorStatus.pendente.length}
             </Badge>
           )}
         </TabsTrigger>
         <TabsTrigger value="aprovado" className={isMobile ? "text-xs" : "text-sm"}>
-          Aprovados ({entregadoresPorStatus.aprovado.length})
+          Aprovados ({tecnicosPorStatus.aprovado.length})
         </TabsTrigger>
         <TabsTrigger value="rejeitado" className={isMobile ? "text-xs" : "text-sm"}>
-          Rejeitados ({entregadoresPorStatus.rejeitado.length})
+          Rejeitados ({tecnicosPorStatus.rejeitado.length})
         </TabsTrigger>
         <TabsTrigger value="suspenso" className={isMobile ? "text-xs" : "text-sm"}>
-          Suspensos ({entregadoresPorStatus.suspenso.length})
+          Suspensos ({tecnicosPorStatus.suspenso.length})
         </TabsTrigger>
       </TabsList>
 
       <TabsContent value="pendente" className="space-y-4">
         {renderTabContent(
-          entregadoresPorStatus.pendente,
-          "Entregadores Pendentes",
+          tecnicosPorStatus.pendente,
+          "Tecnicos Pendentes",
           "Novos cadastros aguardando aprovação",
           <User className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
         )}
@@ -92,17 +92,17 @@ export function EntregadorTabs({
 
       <TabsContent value="aprovado" className="space-y-4">
         {renderTabContent(
-          entregadoresPorStatus.aprovado,
-          "Entregadores Aprovados",
-          "Entregadores ativos no sistema",
+          tecnicosPorStatus.aprovado,
+          "Tecnicos Aprovados",
+          "Tecnicos ativos no sistema",
           <Check className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-green-600" />
         )}
       </TabsContent>
 
       <TabsContent value="rejeitado" className="space-y-4">
         {renderTabContent(
-          entregadoresPorStatus.rejeitado,
-          "Entregadores Rejeitados",
+          tecnicosPorStatus.rejeitado,
+          "Tecnicos Rejeitados",
           "Cadastros que foram rejeitados",
           <X className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-red-600" />
         )}
@@ -110,9 +110,9 @@ export function EntregadorTabs({
 
       <TabsContent value="suspenso" className="space-y-4">
         {renderTabContent(
-          entregadoresPorStatus.suspenso,
-          "Entregadores Suspensos",
-          "Entregadores temporariamente suspensos",
+          tecnicosPorStatus.suspenso,
+          "Tecnicos Suspensos",
+          "Tecnicos temporariamente suspensos",
           <UserX className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-orange-600" />
         )}
       </TabsContent>

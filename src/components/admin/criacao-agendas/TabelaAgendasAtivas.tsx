@@ -146,7 +146,7 @@ export function TabelaAgendasAtivas({
                           variant="outline"
                           size="sm"
                           onClick={() => onViewDetalhes(agenda)}
-                          title="Ver detalhes dos entregadores"
+                          title="Ver detalhes dos tecnicos"
                         >
                           <Eye className="h-4 w-4" />
                         </Button>

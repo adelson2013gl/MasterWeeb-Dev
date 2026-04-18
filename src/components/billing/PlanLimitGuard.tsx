@@ -10,7 +10,7 @@ import { type PlanoType } from '@/types/subscription';
 interface PlanLimitGuardProps {
   empresaId: string;
   plano: PlanoType;
-  action: 'add_entregador' | 'add_agendamento';
+  action: 'add_tecnico' | 'add_agendamento';
   children: React.ReactNode;
   onUpgradeClick?: () => void;
   showUpgradeOption?: boolean;
@@ -35,8 +35,8 @@ export function PlanLimitGuard({
     if (!data.assinaturaAtiva) return false;
     
     switch (action) {
-      case 'add_entregador':
-        return data.entregadoresAtuais < data.limites.max_entregadores;
+      case 'add_tecnico':
+        return data.tecnicosAtuais < data.limites.max_entregadores;
       case 'add_agendamento':
         return data.agendamentosNoMes < data.limites.max_agendas_mes;
       default:
@@ -54,10 +54,10 @@ export function PlanLimitGuard({
     }
 
     switch (action) {
-      case 'add_entregador':
+      case 'add_tecnico':
         return {
-          title: 'Limite de Entregadores Atingido',
-          description: `Você atingiu o limite de ${data.limites.max_entregadores} entregadores do plano ${data.limites.nome}. Para adicionar mais entregadores, faça upgrade do seu plano.`,
+          title: 'Limite de Tecnicos Atingido',
+          description: `Você atingiu o limite de ${data.limites.max_entregadores} tecnicos do plano ${data.limites.nome}. Para adicionar mais tecnicos, faça upgrade do seu plano.`,
           icon: <Users className="w-5 h-5 text-orange-500" />
         };
       case 'add_agendamento':
@@ -111,9 +111,9 @@ export function PlanLimitGuard({
               <h4 className="text-sm font-medium">Uso atual:</h4>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="text-muted-foreground">Entregadores:</span>
+                  <span className="text-muted-foreground">Tecnicos:</span>
                   <div className="font-medium">
-                    {data.entregadoresAtuais} / {data.limites.max_entregadores}
+                    {data.tecnicosAtuais} / {data.limites.max_entregadores}
                   </div>
                 </div>
                 <div>
@@ -159,7 +159,7 @@ export function PlanLimitGuard({
 export function usePlanLimitCheck(empresaId: string, plano: PlanoType) {
   const { data, loading } = usePlanLimits({ empresaId, plano });
 
-  const checkLimit = React.useCallback((action: 'add_entregador' | 'add_agendamento') => {
+  const checkLimit = React.useCallback((action: 'add_tecnico' | 'add_agendamento') => {
     if (loading || !data) return { canProceed: true, reason: null };
     
     if (!data.assinaturaAtiva) {
@@ -170,11 +170,11 @@ export function usePlanLimitCheck(empresaId: string, plano: PlanoType) {
     }
 
     switch (action) {
-      case 'add_entregador':
-        if (data.entregadoresAtuais >= data.limites.max_entregadores) {
+      case 'add_tecnico':
+        if (data.tecnicosAtuais >= data.limites.max_entregadores) {
           return { 
             canProceed: false, 
-            reason: `Limite de ${data.limites.max_entregadores} entregadores atingido. Faça upgrade do plano.` 
+            reason: `Limite de ${data.limites.max_entregadores} tecnicos atingido. Faça upgrade do plano.` 
           };
         }
         break;
@@ -208,7 +208,7 @@ export function PlanLimitAlert({
 }: {
   empresaId: string;
   plano: PlanoType;
-  action: 'add_entregador' | 'add_agendamento';
+  action: 'add_tecnico' | 'add_agendamento';
   threshold?: number;
   onUpgradeClick?: () => void;
 }) {
@@ -218,8 +218,8 @@ export function PlanLimitAlert({
 
   const getUsagePercentage = () => {
     switch (action) {
-      case 'add_entregador':
-        return data.percentualUsoEntregadores;
+      case 'add_tecnico':
+        return data.percentualUsoTecnicos;
       case 'add_agendamento':
         return data.percentualUsoAgendamentos;
       default:
@@ -233,8 +233,8 @@ export function PlanLimitAlert({
 
   const getMessage = () => {
     switch (action) {
-      case 'add_entregador':
-        return `Você está usando ${usagePercentage}% do limite de tecnicos (${data.entregadoresAtuais}/${data.limites.max_entregadores}).`;
+      case 'add_tecnico':
+        return `Você está usando ${usagePercentage}% do limite de tecnicos (${data.tecnicosAtuais}/${data.limites.max_entregadores}).`;
       case 'add_agendamento':
         return `Você está usando ${usagePercentage}% do limite de agendamentos mensais (${data.agendamentosNoMes}/${data.limites.max_agendas_mes}).`;
       default:

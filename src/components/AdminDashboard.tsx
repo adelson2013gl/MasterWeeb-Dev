@@ -5,7 +5,7 @@ import { LogOut, Menu } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { DashboardContent } from "@/components/DashboardContent";
-import { GestaoEntregadores } from "@/components/admin/GestaoEntregadores";
+import { GestaoTecnicos } from "@/components/admin/GestaoTecnicos";
 import { AgendasAtivas } from "@/components/admin/AgendasAtivas";
 import CriacaoAgendas from "@/components/admin/CriacaoAgendas";
 import { GestaoCidades } from "@/components/admin/GestaoCidades";
@@ -13,7 +13,7 @@ import { GestaoTurnos } from "@/components/admin/GestaoTurnos";
 import { ConfiguracoesSistema } from "@/components/admin/ConfiguracoesSistema";
 import { ConfiguracoesPage } from "@/pages/admin/ConfiguracoesPage";
 import { GestaoEmpresas } from "./admin/GestaoEmpresas";
-import { CadastroEntregadorAdmin } from "./admin/CadastroEntregadorAdmin";
+import { CadastroTecnicoAdmin } from "./admin/CadastroTecnicoAdmin";
 import { DashboardPrioridades } from "./admin/DashboardPrioridades";
 import GestaoAdministradores from "./admin/GestaoAdministradores";
 import { ExportAgendasButton } from "./admin/ExportAgendasButton";
@@ -65,10 +65,10 @@ function AdminDashboardContent() {
     switch (activeMenu) {
       case 'dashboard':
         return <DashboardContent />;
-      case 'cadastro-entregadores':
-        return <CadastroEntregadorAdmin />;
-      case 'entregadores':
-        return <GestaoEntregadores />;
+      case 'cadastro-tecnicos':
+        return <CadastroTecnicoAdmin />;
+      case 'tecnicos':
+        return <GestaoTecnicos />;
       case 'administradores':
         return <GestaoAdministradores />;
       case 'agendas-ativas':

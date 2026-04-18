@@ -80,8 +80,8 @@ export function ExampleBillingPage() {
                 <div className="space-y-2">
                   <h4 className="font-medium">Planos Disponíveis:</h4>
                   <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• <strong>Básico:</strong> 5 entregadores, 100 agendamentos/mês</li>
-                    <li>• <strong>Profissional:</strong> 20 entregadores, 500 agendamentos/mês</li>
+                    <li>• <strong>Básico:</strong> 5 tecnicos, 100 agendamentos/mês</li>
+                    <li>• <strong>Profissional:</strong> 20 tecnicos, 500 agendamentos/mês</li>
                     <li>• <strong>Enterprise:</strong> Ilimitado</li>
                   </ul>
                 </div>
@@ -130,10 +130,10 @@ export function ExampleBillingPage() {
 function ExamplesSection({ empresaId, plano }: { empresaId: string; plano: string }) {
   const { checkLimit } = usePlanLimitCheck(empresaId, plano as any);
   
-  const handleAddEntregador = () => {
-    const result = checkLimit('add_entregador');
+  const handleAddTecnico = () => {
+    const result = checkLimit('add_tecnico');
     if (result.canProceed) {
-      console.log('✅ Pode adicionar entregador');
+      console.log('✅ Pode adicionar tecnico');
       // Implementar lógica de adição
     } else {
       console.log('❌ Não pode adicionar:', result.reason);
@@ -175,12 +175,12 @@ function ExamplesSection({ empresaId, plano }: { empresaId: string; plano: strin
             <PlanLimitGuard
               empresaId={empresaId}
               plano={plano as any}
-              action="add_entregador"
+              action="add_tecnico"
               onUpgradeClick={() => console.log('Upgrade clicked!')}
             >
               <Button className="w-full">
                 <Users className="w-4 h-4 mr-2" />
-                Adicionar Entregador
+                Adicionar Tecnico
               </Button>
             </PlanLimitGuard>
             
@@ -204,11 +204,11 @@ function ExamplesSection({ empresaId, plano }: { empresaId: string; plano: strin
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Button 
-                onClick={handleAddEntregador}
+                onClick={handleAddTecnico}
                 variant="outline"
                 className="w-full"
               >
-                Testar Limite Entregadores
+                Testar Limite Tecnicos
               </Button>
               
               <Button 
@@ -238,7 +238,7 @@ function ExamplesSection({ empresaId, plano }: { empresaId: string; plano: strin
             <PlanLimitAlert
               empresaId={empresaId}
               plano={plano as any}
-              action="add_entregador"
+              action="add_tecnico"
               threshold={70} // Mostrar alerta quando usar 70% do limite
               onUpgradeClick={() => console.log('Upgrade from alert!')}
             />
@@ -275,7 +275,7 @@ function MeuComponente() {
   );
   
   const handleAction = () => {
-    const result = checkLimit('add_entregador');
+    const result = checkLimit('add_tecnico');
     if (result.canProceed) {
       // Executar ação
     } else {
@@ -287,11 +287,11 @@ function MeuComponente() {
     <PlanLimitGuard
       empresaId={user?.empresa_id}
       plano={user?.empresa?.plano}
-      action="add_entregador"
+      action="add_tecnico"
       onUpgradeClick={() => navigate('/billing/plans')}
     >
       <Button onClick={handleAction}>
-        Adicionar Entregador
+        Adicionar Tecnico
       </Button>
     </PlanLimitGuard>
   );

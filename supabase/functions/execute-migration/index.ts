@@ -47,16 +47,16 @@ serve(async (req) => {
       
       // 7. Remover políticas antigas
       `DROP POLICY IF EXISTS "cidades_policy" ON cidades;`,
-      `DROP POLICY IF EXISTS "entregadores_can_view_their_empresa_cidades" ON cidades;`,
+      `DROP POLICY IF EXISTS "tecnicos_can_view_their_empresa_cidades" ON cidades;`,
       `DROP POLICY IF EXISTS "admins_can_manage_their_empresa_cidades" ON cidades;`,
       
-      // 8. Criar política para entregadores
-      `CREATE POLICY "entregadores_can_view_their_empresa_cidades" ON cidades
+      // 8. Criar política para tecnicos
+      `CREATE POLICY "tecnicos_can_view_their_empresa_cidades" ON cidades
        FOR SELECT 
        USING (
          empresa_id IN (
            SELECT e.empresa_id 
-           FROM entregadores e 
+           FROM tecnicos e 
            WHERE e.user_id = auth.uid()
          )
        );`,

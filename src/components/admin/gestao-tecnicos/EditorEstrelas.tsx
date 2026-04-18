@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 interface EditorEstrelasProps {
-  entregador: {
+  tecnico: {
     id: string;
     nome: string;
     estrelas: number;
@@ -13,8 +13,8 @@ interface EditorEstrelasProps {
   onUpdate: () => void;
 }
 
-export function EditorEstrelas({ entregador, onUpdate }: EditorEstrelasProps) {
-  const [estrelas, setEstrelas] = useState(entregador.estrelas.toString());
+export function EditorEstrelas({ tecnico, onUpdate }: EditorEstrelasProps) {
+  const [estrelas, setEstrelas] = useState(tecnico.estrelas.toString());
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
@@ -26,7 +26,7 @@ export function EditorEstrelas({ entregador, onUpdate }: EditorEstrelasProps) {
           estrelas: parseInt(estrelas),
           updated_at: new Date().toISOString()
         })
-        .eq('id', entregador.id);
+        .eq('id', tecnico.id);
 
       if (error) throw error;
 
@@ -67,7 +67,7 @@ export function EditorEstrelas({ entregador, onUpdate }: EditorEstrelasProps) {
       </Select>
       <Button 
         onClick={handleSave} 
-        disabled={loading || estrelas === entregador.estrelas.toString()}
+        disabled={loading || estrelas === tecnico.estrelas.toString()}
         size="sm"
       >
         {loading ? 'Salvando...' : 'Salvar'}

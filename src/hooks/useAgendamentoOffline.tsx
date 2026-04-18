@@ -35,7 +35,7 @@ export function useAgendamentoOffline() {
   /**
    * Função para criar um novo agendamento
    */
-  const criarAgendamento = async (agendaId: string, data: string, entregadorId: string) => {
+  const criarAgendamento = async (agendaId: string, data: string, tecnicoId: string) => {
     if (!user?.id) {
       toast.error('Usuário não autenticado');
       return { success: false, error: 'Usuário não autenticado' };
@@ -80,7 +80,7 @@ export function useAgendamentoOffline() {
           return { success: false, error: 'Sem vagas disponíveis' };
         }
 
-        // Verificar se o entregador já tem agendamento para o mesmo dia/horário
+        // Verificar se o tecnico já tem agendamento para o mesmo dia/horário
         const { data: agendamentosExistentes, error: agendamentosError } = await supabase
           .from('agendamentos')
           .select(`
@@ -95,7 +95,7 @@ export function useAgendamentoOffline() {
               )
             )
           `)
-          .eq('tecnico_id', entregadorId)
+          .eq('tecnico_id', tecnicoId)
           .eq('status', safeStatus('agendado'))
           .neq('agendas.data_agenda', data);
 
@@ -124,7 +124,7 @@ export function useAgendamentoOffline() {
           .from('agendamentos')
           .insert({
             agenda_id: agendaId,
-            tecnico_id: entregadorId,
+            tecnico_id: tecnicoId,
             data_agendamento: data,
             status: 'agendado',
             tipo: 'vaga'
@@ -146,7 +146,7 @@ export function useAgendamentoOffline() {
         const offlineAgendamento = {
           id: `offline_${Date.now()}`,
           agenda_id: agendaId,
-          tecnico_id: entregadorId,
+          tecnico_id: tecnicoId,
           data_agendamento: data,
           status: 'agendado',
           tipo: 'vaga',

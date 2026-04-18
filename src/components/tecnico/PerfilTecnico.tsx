@@ -4,16 +4,16 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, User, Mail, Phone, FileText } from 'lucide-react';
-import { useEntregadorData } from '@/hooks/useEntregadorData';
+import { useTecnicoData } from '@/hooks/useTecnicoData';
 import { maskCPF, formatPhone } from '@/lib/profileUtils';
 import { Skeleton } from '@/components/ui/skeleton';
 
-interface PerfilEntregadorProps {
+interface PerfilTecnicoProps {
   onBack: () => void;
 }
 
-export function PerfilEntregador({ onBack }: PerfilEntregadorProps) {
-  const { entregador, loading, error } = useEntregadorData();
+export function PerfilTecnico({ onBack }: PerfilTecnicoProps) {
+  const { tecnico, loading, error } = useTecnicoData();
 
   if (loading) {
     return (
@@ -37,7 +37,7 @@ export function PerfilEntregador({ onBack }: PerfilEntregadorProps) {
     );
   }
 
-  if (error || !entregador) {
+  if (error || !tecnico) {
     return (
       <div className="space-y-4">
         <div className="flex items-center space-x-3 mb-6">
@@ -112,7 +112,7 @@ export function PerfilEntregador({ onBack }: PerfilEntregadorProps) {
                 Nome Completo
               </p>
               <p className="text-gray-900 dark:text-gray-100 font-medium">
-                {entregador.nome}
+                {tecnico.nome}
               </p>
             </div>
           </div>
@@ -127,7 +127,7 @@ export function PerfilEntregador({ onBack }: PerfilEntregadorProps) {
                 E-mail
               </p>
               <p className="text-gray-900 dark:text-gray-100 font-medium">
-                {entregador.email}
+                {tecnico.email}
               </p>
             </div>
           </div>
@@ -142,7 +142,7 @@ export function PerfilEntregador({ onBack }: PerfilEntregadorProps) {
                 Telefone
               </p>
               <p className="text-gray-900 dark:text-gray-100 font-medium">
-                {formatPhone(entregador.telefone || '')}
+                {formatPhone(tecnico.telefone || '')}
               </p>
             </div>
           </div>
@@ -157,7 +157,7 @@ export function PerfilEntregador({ onBack }: PerfilEntregadorProps) {
                 CPF
               </p>
               <p className="text-gray-900 dark:text-gray-100 font-medium">
-                {maskCPF(entregador.cpf)}
+                {maskCPF(tecnico.cpf)}
               </p>
             </div>
           </div>

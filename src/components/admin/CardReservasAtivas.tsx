@@ -43,7 +43,7 @@ export function CardReservasAtivas() {
             Reservas Ativas
           </CardTitle>
           <CardDescription>
-            Entregadores aguardando liberação de vagas
+            Tecnicos aguardando liberação de vagas
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -85,7 +85,7 @@ export function CardReservasAtivas() {
         <Alert className="border-orange-200 bg-orange-50">
           <AlertCircle className="h-4 w-4 text-orange-600" />
           <AlertDescription className="text-orange-800">
-            <strong>Alta demanda detectada:</strong> {stats.reservasPendentes} entregadores em lista de reserva. 
+            <strong>Alta demanda detectada:</strong> {stats.reservasPendentes} tecnicos em lista de reserva. 
             Considere criar mais agendas ou aumentar vagas existentes.
           </AlertDescription>
         </Alert>
@@ -116,7 +116,7 @@ export function CardReservasAtivas() {
                   <div key={reserva.id} className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-sm">{reserva.entregador.nome}</span>
+                        <span className="font-medium text-sm">{reserva.tecnico.nome}</span>
                         <Badge variant={reserva.status === 'pendente' ? 'secondary' : 'default'} className="text-xs">
                           {reserva.status === 'pendente' ? 'Pendente' : 'Confirmada'}
                         </Badge>
@@ -130,7 +130,7 @@ export function CardReservasAtivas() {
                         <span 
                           key={i} 
                           className={`text-xs ${
-                            i < reserva.entregador.estrelas ? 'text-yellow-400' : 'text-gray-300'
+                            i < reserva.tecnico.estrelas ? 'text-yellow-400' : 'text-gray-300'
                           }`}
                         >
                           ★
@@ -160,7 +160,7 @@ export function CardReservasAtivas() {
             <div className="text-center text-muted-foreground">
               <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
               <p className="text-sm">Nenhuma reserva ativa no momento</p>
-              <p className="text-xs mt-1">Entregadores aparecerão aqui quando entrarem em listas de reserva</p>
+              <p className="text-xs mt-1">Tecnicos aparecerão aqui quando entrarem em listas de reserva</p>
             </div>
           </CardContent>
         </Card>

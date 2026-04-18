@@ -322,11 +322,11 @@ export function FormEmpresaModal({
               name="max_entregadores"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Máximo de Entregadores</FormLabel>
+                  <FormLabel>Máximo de Tecnicos</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
-                      placeholder="Máximo de entregadores"
+                      placeholder="Máximo de tecnicos"
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                     />

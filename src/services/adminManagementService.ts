@@ -35,7 +35,7 @@ export interface AdminFilters {
   status?: string;
 }
 
-interface CreateEntregadorData {
+interface CreateTecnicoData {
   nome: string;
   email: string;
   telefone: string;
@@ -46,10 +46,10 @@ interface CreateEntregadorData {
 }
 
 class AdminManagementService {
-  // Método existente para criar entregadores
-  async createEntregador(data: CreateEntregadorData, allowedEmpresaIds: string[]) {
+  // Método existente para criar tecnicos
+  async createTecnico(data: CreateTecnicoData, allowedEmpresaIds: string[]) {
     try {
-      logger.info('🚀 ADMIN_SERVICE: Iniciando criação de entregador', {
+      logger.info('🚀 ADMIN_SERVICE: Iniciando criação de tecnico', {
         nome: data.nome,
         email: data.email,
         telefone: data.telefone,
@@ -61,7 +61,7 @@ class AdminManagementService {
 
       // Validar permissões
       if (!allowedEmpresaIds.includes(data.empresa_id)) {
-        throw new Error('Sem permissão para criar entregador nesta empresa');
+        throw new Error('Sem permissão para criar tecnico nesta empresa');
       }
 
       logger.info('✅ ADMIN_SERVICE: Permissões validadas');
@@ -93,7 +93,7 @@ class AdminManagementService {
       let result, error;
       
       try {
-        const edgeResponse = await supabase.functions.invoke('create-entregador', {
+        const edgeResponse = await supabase.functions.invoke('create-tecnico', {
           body: requestData
         });
         result = edgeResponse.data;
@@ -103,8 +103,8 @@ class AdminManagementService {
           edgeError: edgeError.message
         });
         
-        // FALLBACK: Criar entregador diretamente
-        return await this.createEntregadorDirect(requestData);
+        // FALLBACK: Criar tecnico diretamente
+        return await this.createTecnicoDirect(requestData);
       }
 
       if (error) {
@@ -123,7 +123,7 @@ class AdminManagementService {
         throw new Error(result?.error || result?.message || 'Erro desconhecido');
       }
 
-      logger.info('✅ ADMIN_SERVICE: Entregador criado com sucesso', {
+      logger.info('✅ ADMIN_SERVICE: Tecnico criado com sucesso', {
         tecnico_id: result.data?.tecnico_id,
         user_id: result.data?.user_id,
         nome: result.data?.nome,
@@ -195,7 +195,7 @@ class AdminManagementService {
         throw new Error('Usuário não foi criado no sistema de autenticação');
       }
 
-      // Inserir administrador na tabela entregadores
+      // Inserir administrador na tabela tecnicos
       const { data: adminData, error: adminError } = await supabase
         .from('tecnicos')
         .insert({
@@ -451,7 +451,7 @@ class AdminManagementService {
         throw new Error('Sem permissão para excluir este administrador');
       }
 
-      // Excluir da tabela entregadores
+      // Excluir da tabela tecnicos
       const { error: deleteError } = await supabase
         .from('tecnicos')
         .delete()
@@ -489,10 +489,10 @@ class AdminManagementService {
     }
   }
 
-  // Método para criar entregador diretamente (fallback quando Edge Function falha)
-  private async createEntregadorDirect(data: any) {
+  // Método para criar tecnico diretamente (fallback quando Edge Function falha)
+  private async createTecnicoDirect(data: any) {
     try {
-      logger.info('🔄 ADMIN_SERVICE: Criando entregador via método direto', {
+      logger.info('🔄 ADMIN_SERVICE: Criando tecnico via método direto', {
         nome: data.nome,
         email: data.email
       });
@@ -518,8 +518,8 @@ class AdminManagementService {
         email: authData.user.email 
       });
 
-      // 2. Criar entregador na tabela
-      const { data: entregadorData, error: entregadorError } = await supabase
+      // 2. Criar tecnico na tabela
+      const { data: tecnicoData, error: tecnicoError } = await supabase
         .from('tecnicos')
         .insert({
           user_id: authData.user.id,
@@ -531,13 +531,13 @@ class AdminManagementService {
           empresa_id: data.empresa_id,
           perfil: 'tecnico',
           status: 'pendente',
-          estrelas: 5 // Padrão para novos entregadores
+          estrelas: 5 // Padrão para novos tecnicos
         })
         .select()
         .single();
 
-      if (entregadorError) {
-        logger.error('❌ ADMIN_SERVICE: Erro ao criar entregador', entregadorError);
+      if (tecnicoError) {
+        logger.error('❌ ADMIN_SERVICE: Erro ao criar tecnico', tecnicoError);
         
         // Limpar usuário Auth criado
         try {
@@ -546,10 +546,10 @@ class AdminManagementService {
           logger.error('❌ ADMIN_SERVICE: Erro ao limpar usuário Auth', cleanupError);
         }
         
-        throw new Error(`Erro ao criar entregador: ${entregadorError.message}`);
+        throw new Error(`Erro ao criar tecnico: ${tecnicoError.message}`);
       }
 
-      // 3. Criar role de entregador
+      // 3. Criar role de tecnico
       const { error: roleError } = await supabase
         .from('user_roles')
         .insert({
@@ -562,21 +562,21 @@ class AdminManagementService {
         logger.warn('⚠️ ADMIN_SERVICE: Erro ao criar role (não crítico)', roleError);
       }
 
-      logger.info('✅ ADMIN_SERVICE: Entregador criado com sucesso via método direto', {
-        tecnico_id: entregadorData.id,
+      logger.info('✅ ADMIN_SERVICE: Tecnico criado com sucesso via método direto', {
+        tecnico_id: tecnicoData.id,
         user_id: authData.user.id,
-        nome: entregadorData.nome,
-        empresa_id: entregadorData.empresa_id
+        nome: tecnicoData.nome,
+        empresa_id: tecnicoData.empresa_id
       });
 
       return {
         success: true,
-        message: 'Entregador criado com sucesso',
+        message: 'Tecnico criado com sucesso',
         data: {
-          tecnico_id: entregadorData.id,
+          tecnico_id: tecnicoData.id,
           user_id: authData.user.id,
-          nome: entregadorData.nome,
-          email: entregadorData.email
+          nome: tecnicoData.nome,
+          email: tecnicoData.email
         }
       };
 

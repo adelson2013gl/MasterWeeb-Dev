@@ -46,15 +46,15 @@ export function NotificacoesReservas() {
     try {
       setLoading(true);
       
-      // Buscar entregador
-      const { data: entregadorData, error: entregadorError } = await supabase
+      // Buscar tecnico
+      const { data: tecnicoData, error: tecnicoError } = await supabase
         .from('tecnicos')
         .select('id')
         .eq('user_id', user.id)
         .single();
 
-      if (entregadorError || !entregadorData) {
-        logger.error('Erro ao buscar entregador', { error: entregadorError }, 'NOTIFICACOES_RESERVAS');
+      if (tecnicoError || !tecnicoData) {
+        logger.error('Erro ao buscar tecnico', { error: tecnicoError }, 'NOTIFICACOES_RESERVAS');
         return;
       }
 
@@ -85,7 +85,7 @@ export function NotificacoesReservas() {
             )
           )
         `)
-        .eq('tecnico_id', entregadorData.id)
+        .eq('tecnico_id', tecnicoData.id)
         .eq('tipo', safeTipo('entrega'))
         .gte('created_at', new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString()) // Últimas 8 horas
         .order('created_at', { ascending: false })

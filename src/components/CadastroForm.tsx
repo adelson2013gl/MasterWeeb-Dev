@@ -65,7 +65,7 @@ export function CadastroForm({ onBack }: CadastroFormProps) {
           <div>
             <CardTitle className="flex items-center">
               <UserPlus className="h-5 w-5 mr-2" />
-              Cadastro de Entregador
+              Cadastro de Tecnico
             </CardTitle>
           </div>
         </div>

@@ -175,7 +175,7 @@ const DashboardContent = memo(() => {
           <CardContent>
             <div className="text-2xl font-bold text-green-600">{estatisticasAgendas.agendasAtivas}</div>
             <p className="text-xs text-muted-foreground">
-              Visíveis para entregadores
+              Visíveis para tecnicos
             </p>
           </CardContent>
         </Card>
@@ -188,7 +188,7 @@ const DashboardContent = memo(() => {
           <CardContent>
             <div className="text-2xl font-bold text-red-600">{estatisticasAgendas.agendasInativas}</div>
             <p className="text-xs text-muted-foreground">
-              Ocultas dos entregadores
+              Ocultas dos tecnicos
             </p>
           </CardContent>
         </Card>
@@ -538,14 +538,14 @@ const DashboardContent = memo(() => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Entregadores Ativos
+              Tecnicos Ativos
             </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.entregadoresAtivos}</div>
+            <div className="text-2xl font-bold">{stats.tecnicosAtivos}</div>
             <p className="text-xs text-muted-foreground">
-              {stats.entregadoresPendentes} aguardando aprovação
+              {stats.tecnicosPendentes} aguardando aprovação
             </p>
           </CardContent>
         </Card>
@@ -587,21 +587,21 @@ const DashboardContent = memo(() => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5" />
-              Gestão de Entregadores
+              Gestão de Tecnicos
             </CardTitle>
             <CardDescription>
-              Status da equipe de entregadores
+              Status da equipe de tecnicos
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Ativos</span>
-                <Badge variant="default">{stats.entregadoresAtivos}</Badge>
+                <Badge variant="default">{stats.tecnicosAtivos}</Badge>
               </div>
               <div className="flex justify-between">
                 <span>Pendentes</span>
-                <Badge variant="secondary">{stats.entregadoresPendentes}</Badge>
+                <Badge variant="secondary">{stats.tecnicosPendentes}</Badge>
               </div>
             </div>
           </CardContent>
@@ -664,18 +664,18 @@ const DashboardContent = memo(() => {
       <div className="space-y-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-900">Reservas Ativas</h3>
-          <p className="text-sm text-gray-600">Entregadores aguardando liberação de vagas</p>
+          <p className="text-sm text-gray-600">Tecnicos aguardando liberação de vagas</p>
         </div>
         <CardReservasAtivas />
       </div>
 
       {/* Alertas e Ações Rápidas */}
-      {stats.entregadoresPendentes > 0 && (
+      {stats.tecnicosPendentes > 0 && (
         <Card className="border-yellow-200 bg-yellow-50">
           <CardHeader>
             <CardTitle className="text-yellow-800">Ação Necessária</CardTitle>
             <CardDescription className="text-yellow-700">
-              Você tem {stats.entregadoresPendentes} entregadores aguardando aprovação
+              Você tem {stats.tecnicosPendentes} tecnicos aguardando aprovação
             </CardDescription>
           </CardHeader>
         </Card>

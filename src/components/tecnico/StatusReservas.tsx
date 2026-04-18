@@ -45,16 +45,16 @@ export function StatusReservas() {
     try {
       setLoading(true);
 
-      // CORRIGIDO: status do entregador precisa ser 'aprovado' literal
-      const { data: entregadorData, error: entregadorError } = await supabase
+      // CORRIGIDO: status do tecnico precisa ser 'aprovado' literal
+      const { data: tecnicoData, error: tecnicoError } = await supabase
         .from('tecnicos')
         .select('id')
         .eq('user_id', user.id)
         .eq('status', 'aprovado')
         .single();
 
-      if (entregadorError || !entregadorData) {
-        logger.error('Erro ao buscar entregador', { error: entregadorError }, 'STATUS_RESERVAS');
+      if (tecnicoError || !tecnicoData) {
+        logger.error('Erro ao buscar tecnico', { error: tecnicoError }, 'STATUS_RESERVAS');
         setLoading(false);
         return;
       }
@@ -86,7 +86,7 @@ export function StatusReservas() {
             )
           )
         `)
-        .eq('tecnico_id', entregadorData.id)
+        .eq('tecnico_id', tecnicoData.id)
         .eq('tipo', safeTipo('entrega'))
         .in('status', statusReservasValidos)
         .gte('agendas.data_agenda', new Date().toISOString().split('T')[0])

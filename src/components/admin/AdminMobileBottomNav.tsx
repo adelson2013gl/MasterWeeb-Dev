@@ -22,7 +22,7 @@ export function AdminMobileBottomNav({ activeMenu, onMenuClick }: AdminMobileBot
 
   const navItems = [
     { id: 'dashboard', icon: LayoutDashboard, label: 'Home' },
-    { id: 'entregadores', icon: Users, label: 'Entregadores' },
+    { id: 'tecnicos', icon: Users, label: 'Tecnicos' },
     { id: 'agendas-ativas', icon: Calendar, label: 'Agendas' },
     // RESTRIÇÃO: Dashboard Prioridades apenas para super admin, Empresas para super admin, Planos para admin comum
     ...(isSuperAdmin ? [

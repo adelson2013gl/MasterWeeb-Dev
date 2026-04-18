@@ -93,7 +93,7 @@ const AgendasAtivas = memo(() => {
           agenda.turnos?.nome || '',
           agenda.data_agenda || '',
           // Buscar também nos agendamentos
-          ...(agenda.agendamentos?.map(ag => ag.entregador?.nome || ag.cliente_nome || '') || [])
+          ...(agenda.agendamentos?.map(ag => ag.tecnico?.nome || ag.cliente_nome || '') || [])
         ];
         
         return searchableFields.some(field => 
@@ -338,7 +338,7 @@ const AgendasAtivas = memo(() => {
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Buscar por cidade, região, turno, data ou entregador..."
+              placeholder="Buscar por cidade, região, turno, data ou tecnico..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -692,7 +692,7 @@ const AgendasAtivas = memo(() => {
                               <Table>
                                 <TableHeader>
                                   <TableRow>
-                                    <TableHead>Entregador</TableHead>
+                                    <TableHead>Tecnico</TableHead>
                                     <TableHead>Telefone</TableHead>
                                     <TableHead>Email</TableHead>
                                   </TableRow>
@@ -700,9 +700,9 @@ const AgendasAtivas = memo(() => {
                                 <TableBody>
                                   {vagas.map((agendamento) => (
                                     <TableRow key={agendamento.id}>
-                                      <TableCell>{agendamento.entregador?.nome}</TableCell>
-                                      <TableCell>{agendamento.entregador?.telefone}</TableCell>
-                                      <TableCell>{agendamento.entregador?.email}</TableCell>
+                                      <TableCell>{agendamento.tecnico?.nome}</TableCell>
+                                      <TableCell>{agendamento.tecnico?.telefone}</TableCell>
+                                      <TableCell>{agendamento.tecnico?.email}</TableCell>
                                     </TableRow>
                                   ))}
                                 </TableBody>
@@ -722,7 +722,7 @@ const AgendasAtivas = memo(() => {
                               <Table>
                                 <TableHeader>
                                   <TableRow>
-                                    <TableHead>Entregador</TableHead>
+                                    <TableHead>Tecnico</TableHead>
                                     <TableHead>Telefone</TableHead>
                                     <TableHead>Email</TableHead>
                                   </TableRow>
@@ -730,9 +730,9 @@ const AgendasAtivas = memo(() => {
                                 <TableBody>
                                   {reservas.map((agendamento) => (
                                     <TableRow key={agendamento.id} className="bg-orange-50">
-                                      <TableCell>{agendamento.entregador?.nome}</TableCell>
-                                      <TableCell>{agendamento.entregador?.telefone}</TableCell>
-                                      <TableCell>{agendamento.entregador?.email}</TableCell>
+                                      <TableCell>{agendamento.tecnico?.nome}</TableCell>
+                                      <TableCell>{agendamento.tecnico?.telefone}</TableCell>
+                                      <TableCell>{agendamento.tecnico?.email}</TableCell>
                                     </TableRow>
                                   ))}
                                 </TableBody>

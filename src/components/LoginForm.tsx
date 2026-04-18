@@ -23,7 +23,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
     setTimeout(() => {
       if (
         (type === "admin" && email === "admin@teste.com" && password === "123456") ||
-        (type === "tecnico" && email === "entregador@teste.com" && password === "123456")
+        (type === "tecnico" && email === "tecnico@teste.com" && password === "123456")
       ) {
         toast.success(`Login realizado como ${type}`);
         onLogin(type);
@@ -39,7 +39,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="tecnico">
           <UserCheck className="h-4 w-4 mr-2" />
-          Entregador
+          Tecnico
         </TabsTrigger>
         <TabsTrigger value="admin">
           <Shield className="h-4 w-4 mr-2" />
@@ -49,9 +49,9 @@ export function LoginForm({ onLogin }: LoginFormProps) {
 
       <TabsContent value="tecnico" className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email-entregador">Email</Label>
+          <Label htmlFor="email-tecnico">Email</Label>
           <Input
-            id="email-entregador"
+            id="email-tecnico"
             type="email"
             placeholder="seu@email.com"
             value={email}
@@ -59,9 +59,9 @@ export function LoginForm({ onLogin }: LoginFormProps) {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="password-entregador">Senha</Label>
+          <Label htmlFor="password-tecnico">Senha</Label>
           <Input
-            id="password-entregador"
+            id="password-tecnico"
             type="password"
             placeholder="••••••••"
             value={password}
@@ -73,7 +73,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
           onClick={() => handleSubmit("tecnico")}
           disabled={loading}
         >
-          {loading ? "Entrando..." : "Entrar como Entregador"}
+          {loading ? "Entrando..." : "Entrar como Tecnico"}
         </Button>
       </TabsContent>
 

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Check, X, Star, Phone, Mail, MapPin, RotateCcw, Pencil } from "lucide-react";
 import { StatusBadge } from "./StatusBadge";
-import { Entregador } from "./types";
+import { Tecnico } from "./types";
 import { useState } from "react";
 import {
   AlertDialog,
@@ -16,65 +16,65 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-interface EntregadoresTableProps {
-  entregadores: Entregador[];
+interface TecnicosTableProps {
+  tecnicos: Tecnico[];
   onStatusChange: (id: string, status: "aprovado" | "rejeitado") => void;
   onReativar: (id: string) => void;
-  onEdit: (entregador: Entregador) => void;
+  onEdit: (tecnico: Tecnico) => void;
 }
 
-export function EntregadoresTable({ 
-  entregadores, 
+export function TecnicosTable({ 
+  tecnicos, 
   onStatusChange, 
   onReativar, 
   onEdit
-}: EntregadoresTableProps) {
+}: TecnicosTableProps) {
   const [confirmAction, setConfirmAction] = useState<{
     type: 'aprovar' | 'rejeitar' | 'reativar' | null;
-    entregador: Entregador | null;
-  }>({ type: null, entregador: null });
+    tecnico: Tecnico | null;
+  }>({ type: null, tecnico: null });
 
   const handleConfirmAction = () => {
-    if (!confirmAction.entregador) return;
+    if (!confirmAction.tecnico) return;
     
     switch (confirmAction.type) {
       case 'aprovar':
-        onStatusChange(confirmAction.entregador.id, 'aprovado');
+        onStatusChange(confirmAction.tecnico.id, 'aprovado');
         break;
       case 'rejeitar':
-        onStatusChange(confirmAction.entregador.id, 'rejeitado');
+        onStatusChange(confirmAction.tecnico.id, 'rejeitado');
         break;
       case 'reativar':
-        onReativar(confirmAction.entregador.id);
+        onReativar(confirmAction.tecnico.id);
         break;
     }
     
-    setConfirmAction({ type: null, entregador: null });
+    setConfirmAction({ type: null, tecnico: null });
   };
 
   const getActionTitle = () => {
     switch (confirmAction.type) {
       case 'aprovar':
-        return 'Aprovar Entregador';
+        return 'Aprovar Tecnico';
       case 'rejeitar':
-        return 'Rejeitar Entregador';
+        return 'Rejeitar Tecnico';
       case 'reativar':
-        return 'Reativar Entregador';
+        return 'Reativar Tecnico';
       default:
         return '';
     }
   };
 
   const getActionDescription = () => {
-    if (!confirmAction.entregador) return '';
+    if (!confirmAction.tecnico) return '';
     
     switch (confirmAction.type) {
       case 'aprovar':
-        return `Tem certeza que deseja aprovar o entregador ${confirmAction.entregador.nome}?`;
+        return `Tem certeza que deseja aprovar o tecnico ${confirmAction.tecnico.nome}?`;
       case 'rejeitar':
-        return `Tem certeza que deseja rejeitar o entregador ${confirmAction.entregador.nome}?`;
+        return `Tem certeza que deseja rejeitar o tecnico ${confirmAction.tecnico.nome}?`;
       case 'reativar':
-        return `Tem certeza que deseja reativar o entregador ${confirmAction.entregador.nome}?`;
+        return `Tem certeza que deseja reativar o tecnico ${confirmAction.tecnico.nome}?`;
       default:
         return '';
     }
@@ -101,10 +101,10 @@ export function EntregadoresTable({
     return estrelasArray;
   };
 
-  if (entregadores.length === 0) {
+  if (tecnicos.length === 0) {
     return (
       <div className="text-center py-8 border rounded-lg">
-        <p className="text-gray-600">Nenhum entregador encontrado</p>
+        <p className="text-gray-600">Nenhum tecnico encontrado</p>
       </div>
     );
   }
@@ -112,7 +112,7 @@ export function EntregadoresTable({
   return (
     <>
       <AlertDialog open={confirmAction.type !== null} onOpenChange={(open) => {
-        if (!open) setConfirmAction({ type: null, entregador: null });
+        if (!open) setConfirmAction({ type: null, tecnico: null });
       }}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -133,7 +133,7 @@ export function EntregadoresTable({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="min-w-[200px]">Entregador</TableHead>
+                <TableHead className="min-w-[200px]">Tecnico</TableHead>
                 <TableHead className="min-w-[150px] hidden md:table-cell">Contato</TableHead>
                 <TableHead className="min-w-[120px] hidden lg:table-cell">Localização</TableHead>
                 <TableHead className="min-w-[100px]">Status</TableHead>
@@ -143,13 +143,13 @@ export function EntregadoresTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {entregadores.map((entregador) => (
-                <TableRow key={entregador.id}>
+              {tecnicos.map((tecnico) => (
+                <TableRow key={tecnico.id}>
                   <TableCell className="font-medium">
                     <div className="flex flex-col">
-                      <span className="font-semibold">{entregador.nome}</span>
-                      <span className="text-sm text-gray-500 md:hidden">{entregador.email}</span>
-                      <span className="text-sm text-gray-500 md:hidden">{entregador.telefone}</span>
+                      <span className="font-semibold">{tecnico.nome}</span>
+                      <span className="text-sm text-gray-500 md:hidden">{tecnico.email}</span>
+                      <span className="text-sm text-gray-500 md:hidden">{tecnico.telefone}</span>
                     </div>
                   </TableCell>
                   
@@ -157,11 +157,11 @@ export function EntregadoresTable({
                     <div className="flex flex-col space-y-1">
                       <div className="flex items-center space-x-1 text-sm">
                         <Phone className="h-3 w-3" />
-                        <span>{entregador.telefone}</span>
+                        <span>{tecnico.telefone}</span>
                       </div>
                       <div className="flex items-center space-x-1 text-sm">
                         <Mail className="h-3 w-3" />
-                        <span className="truncate max-w-[120px]">{entregador.email}</span>
+                        <span className="truncate max-w-[120px]">{tecnico.email}</span>
                       </div>
                     </div>
                   </TableCell>
@@ -170,26 +170,26 @@ export function EntregadoresTable({
                     <div className="flex items-center space-x-1 text-sm">
                       <MapPin className="h-3 w-3" />
                       <span className="truncate max-w-[100px]">
-                        {entregador.cidade ? `${entregador.cidade.nome} - ${entregador.cidade.estado}` : 'N/A'}
+                        {tecnico.cidade ? `${tecnico.cidade.nome} - ${tecnico.cidade.estado}` : 'N/A'}
                       </span>
                     </div>
                   </TableCell>
                   
                   <TableCell>
-                    <StatusBadge status={entregador.status} />
+                    <StatusBadge status={tecnico.status} />
                   </TableCell>
                   
                   <TableCell className="hidden sm:table-cell">
                     <div className="flex items-center space-x-1">
                       <div className="flex items-center">
-                        {getEstrelasDisplay(entregador.estrelas)}
+                        {getEstrelasDisplay(tecnico.estrelas)}
                       </div>
-                      <span className="text-sm font-medium">{entregador.estrelas || 'N/A'}</span>
+                      <span className="text-sm font-medium">{tecnico.estrelas || 'N/A'}</span>
                     </div>
                   </TableCell>
                   
                   <TableCell className="text-sm hidden xl:table-cell">
-                    {new Date(entregador.data_cadastro).toLocaleDateString('pt-BR')}
+                    {new Date(tecnico.data_cadastro).toLocaleDateString('pt-BR')}
                   </TableCell>
                   
                   <TableCell className="text-right">
@@ -199,8 +199,8 @@ export function EntregadoresTable({
                           variant="ghost"
                           size="icon"
                           onClick={() => {
-                            console.log('Editar clicado', entregador);
-                            onEdit(entregador);
+                            console.log('Editar clicado', tecnico);
+                            onEdit(tecnico);
                           }}
                         >
                           <Pencil className="h-4 w-4" />
@@ -209,10 +209,10 @@ export function EntregadoresTable({
                           variant="ghost"
                           size="icon"
                           onClick={() => {
-                            console.log('Aprovar clicado', entregador.id);
-                            setConfirmAction({ type: 'aprovar', entregador });
+                            console.log('Aprovar clicado', tecnico.id);
+                            setConfirmAction({ type: 'aprovar', tecnico });
                           }}
-                          disabled={entregador.status === 'aprovado'}
+                          disabled={tecnico.status === 'aprovado'}
                         >
                           <Check className="h-4 w-4" />
                         </Button>
@@ -220,10 +220,10 @@ export function EntregadoresTable({
                           variant="ghost"
                           size="icon"
                           onClick={() => {
-                            console.log('Rejeitar clicado', entregador.id);
-                            setConfirmAction({ type: 'rejeitar', entregador });
+                            console.log('Rejeitar clicado', tecnico.id);
+                            setConfirmAction({ type: 'rejeitar', tecnico });
                           }}
-                          disabled={entregador.status === 'rejeitado'}
+                          disabled={tecnico.status === 'rejeitado'}
                         >
                           <X className="h-4 w-4" />
                         </Button>
@@ -231,20 +231,20 @@ export function EntregadoresTable({
                           variant="ghost"
                           size="icon"
                           onClick={() => {
-                            console.log('Reativar clicado', entregador.id);
-                            setConfirmAction({ type: 'reativar', entregador });
+                            console.log('Reativar clicado', tecnico.id);
+                            setConfirmAction({ type: 'reativar', tecnico });
                           }}
-                          disabled={entregador.status !== 'rejeitado'}
+                          disabled={tecnico.status !== 'rejeitado'}
                         >
                           <RotateCcw className="h-4 w-4" />
                         </Button>
                       </TableCell>
-                      {entregador.status === "suspenso" && (
+                      {tecnico.status === "suspenso" && (
                         <Button 
                           size="sm"
                           onClick={() => {
-                            console.log('Reativar clicado', entregador.id);
-                            setConfirmAction({ type: 'reativar', entregador });
+                            console.log('Reativar clicado', tecnico.id);
+                            setConfirmAction({ type: 'reativar', tecnico });
                           }}
                           className="bg-blue-600 hover:bg-blue-700 h-8 w-8 p-0"
                         >

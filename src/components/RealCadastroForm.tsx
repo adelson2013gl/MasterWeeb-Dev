@@ -215,7 +215,7 @@ export function RealCadastroForm({ onBack }: RealCadastroFormProps) {
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div>
-              <CardTitle>Cadastro de Entregador</CardTitle>
+              <CardTitle>Cadastro de Tecnico</CardTitle>
               <CardDescription>
                 Preencha seus dados para se cadastrar
               </CardDescription>

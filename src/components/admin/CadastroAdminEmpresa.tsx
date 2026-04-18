@@ -85,7 +85,7 @@ export function CadastroAdminEmpresa() {
   // Verificar disponibilidade do email
   const verificarEmailDisponivel = async (email: string): Promise<boolean> => {
     try {
-      console.log('📧 Verificando email na tabela entregadores:', email);
+      console.log('📧 Verificando email na tabela tecnicos:', email);
       
       const { data, error } = await supabase
         .from('tecnicos')
@@ -94,12 +94,12 @@ export function CadastroAdminEmpresa() {
         .maybeSingle();
 
       if (error && error.code !== 'PGRST116') {
-        console.error('❌ Erro ao verificar email na tabela entregadores:', error);
+        console.error('❌ Erro ao verificar email na tabela tecnicos:', error);
         return false;
       }
 
       if (data) {
-        console.warn('⚠️ Email já existe na tabela entregadores:', {
+        console.warn('⚠️ Email já existe na tabela tecnicos:', {
           id: data.id,
           email: data.email,
           perfil: data.perfil
@@ -107,7 +107,7 @@ export function CadastroAdminEmpresa() {
         return false;
       }
 
-      console.log('✅ Email não encontrado na tabela entregadores, está disponível');
+      console.log('✅ Email não encontrado na tabela tecnicos, está disponível');
       return true;
     } catch (error) {
       console.error('💥 Erro inesperado na verificação de email:', error);
@@ -131,12 +131,12 @@ export function CadastroAdminEmpresa() {
       console.log('🔍 Verificando disponibilidade do email...');
       const emailDisponivel = await verificarEmailDisponivel(data.email);
       if (!emailDisponivel) {
-        console.warn('❌ Email já existe na tabela entregadores');
+        console.warn('❌ Email já existe na tabela tecnicos');
         toast.error('Este email já está associado a outro usuário no sistema');
         setLoading(false);
         return;
       }
-      console.log('✅ Email disponível na tabela entregadores');
+      console.log('✅ Email disponível na tabela tecnicos');
 
       // Usar Edge Function para criar administrador
       console.log('📧 Criando administrador via Edge Function');

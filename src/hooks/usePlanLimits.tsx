@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { 
   getPlanoConfig, 
-  podeAdicionarEntregador, 
+  podeAdicionarTecnico, 
   podeAdicionarAgendamento,
   type PlanoType,
   type LimitesPlano 
@@ -17,11 +17,11 @@ interface UsePlanLimitsProps {
 
 interface PlanLimitsData {
   limites: LimitesPlano;
-  entregadoresAtuais: number;
+  tecnicosAtuais: number;
   agendamentosNoMes: number;
-  podeAdicionarEntregador: boolean;
+  podeAdicionarTecnico: boolean;
   podeAdicionarAgendamento: boolean;
-  percentualUsoEntregadores: number;
+  percentualUsoTecnicos: number;
   percentualUsoAgendamentos: number;
   proximoVencimento?: string;
   diasParaVencimento?: number;
@@ -48,8 +48,8 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
       const planoConfig = getPlanoConfig(plano);
       
       // Buscar dados atuais da empresa
-      const [entregadoresResult, agendamentosResult, assinaturaResult] = await Promise.all([
-        // Contar entregadores ativos
+      const [tecnicosResult, agendamentosResult, assinaturaResult] = await Promise.all([
+        // Contar tecnicos ativos
         supabase
           .from('tecnicos')
           .select('id', { count: 'exact' })
@@ -73,26 +73,26 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
           .single()
       ]);
 
-      if (entregadoresResult.error) {
-        console.error('Erro ao buscar entregadores:', entregadoresResult.error);
+      if (tecnicosResult.error) {
+        console.error('Erro ao buscar tecnicos:', tecnicosResult.error);
       }
 
       if (agendamentosResult.error) {
         console.error('Erro ao buscar agendamentos:', agendamentosResult.error);
       }
 
-      const entregadoresAtuais = entregadoresResult.count || 0;
+      const tecnicosAtuais = tecnicosResult.count || 0;
       const agendamentosNoMes = agendamentosResult.count || 0;
       const assinatura = assinaturaResult.data;
 
       // Verificar limites personalizados no metadata
       const metadata = (assinatura?.metadata as any) || {};
-      const limiteEntregadores = metadata.limite_entregadores || planoConfig.max_entregadores;
+      const limiteTecnicos = metadata.limite_entregadores || planoConfig.max_entregadores;
       const limiteAgendamentos = metadata.limite_agendamentos_mes || planoConfig.max_agendas_mes;
 
       // Calcular percentuais de uso com limites personalizados
-      const percentualUsoEntregadores = Math.round(
-        (entregadoresAtuais / limiteEntregadores) * 100
+      const percentualUsoTecnicos = Math.round(
+        (tecnicosAtuais / limiteTecnicos) * 100
       );
       const percentualUsoAgendamentos = Math.round(
         (agendamentosNoMes / limiteAgendamentos) * 100
@@ -108,15 +108,15 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
 
       const planLimitsData: PlanLimitsData = {
         limites: {
-          max_entregadores: limiteEntregadores,
+          max_entregadores: limiteTecnicos,
           max_agendas_mes: limiteAgendamentos,
           recursos_disponivel: planoConfig.recursos
         },
-        entregadoresAtuais,
+        tecnicosAtuais,
         agendamentosNoMes,
-        podeAdicionarEntregador: entregadoresAtuais < limiteEntregadores,
+        podeAdicionarTecnico: tecnicosAtuais < limiteTecnicos,
         podeAdicionarAgendamento: agendamentosNoMes < limiteAgendamentos,
-        percentualUsoEntregadores,
+        percentualUsoTecnicos,
         percentualUsoAgendamentos,
         proximoVencimento: assinatura?.data_proximo_pagamento,
         diasParaVencimento,
@@ -137,11 +137,11 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
   };
 
   const verificarAlertas = (planData: PlanLimitsData) => {
-    // Alerta de limite de entregadores
-    if (planData.percentualUsoEntregadores >= 90) {
+    // Alerta de limite de tecnicos
+    if (planData.percentualUsoTecnicos >= 90) {
       toast({
-        title: 'Limite de entregadores quase atingido',
-        description: `Você está usando ${planData.percentualUsoEntregadores}% do limite de entregadores.`,
+        title: 'Limite de tecnicos quase atingido',
+        description: `Você está usando ${planData.percentualUsoTecnicos}% do limite de tecnicos.`,
         variant: 'destructive'
       });
     }
@@ -174,13 +174,13 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
     }
   };
 
-  const verificarLimiteEntregador = (): boolean => {
+  const verificarLimiteTecnico = (): boolean => {
     if (!data) return false;
     
-    if (!data.podeAdicionarEntregador) {
+    if (!data.podeAdicionarTecnico) {
       toast({
         title: 'Limite atingido',
-        description: `Você atingiu o limite de ${data.limites.max_entregadores} entregadores do seu plano. Faça upgrade para adicionar mais.`,
+        description: `Você atingiu o limite de ${data.limites.max_entregadores} tecnicos do seu plano. Faça upgrade para adicionar mais.`,
         variant: 'destructive'
       });
       return false;
@@ -238,7 +238,7 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
     loading,
     error,
     refetch,
-    verificarLimiteEntregador,
+    verificarLimiteTecnico,
     verificarLimiteAgendamento,
     verificarAssinaturaAtiva
   };

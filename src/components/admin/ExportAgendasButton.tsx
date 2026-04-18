@@ -153,9 +153,9 @@ export function ExportAgendasButton() {
               <div className="border-l-2 border-orange-400 pl-3">
                 <p className="font-medium text-orange-700 dark:text-orange-300">🟡 Aba 2: Lista de Reservas</p>
                 <ul className="text-xs mt-1 space-y-1 text-orange-600 dark:text-orange-400">
-                  <li>• Entregadores na fila de espera</li>
+                  <li>• Tecnicos na fila de espera</li>
                   <li>• Posição na fila por ordem de chegada</li>
-                  <li>• Data da reserva e estrelas do entregador</li>
+                  <li>• Data da reserva e estrelas do tecnico</li>
                 </ul>
               </div>
               

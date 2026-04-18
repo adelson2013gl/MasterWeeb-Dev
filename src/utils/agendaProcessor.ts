@@ -7,7 +7,7 @@ interface ProcessAgendaParams {
   agenda: AgendaRaw;
   agendamentosExistentes: any[];
   contagemRealPorAgenda: { [key: string]: number };
-  entregadorData: any;
+  tecnicoData: any;
   configs: any;
   podeVerAgendaPorHorario?: (estrelas: number, dataAgenda: string, horaInicioTurno: string) => { permitido: boolean; motivo: string };
 }
@@ -16,7 +16,7 @@ export const processAgenda = ({
   agenda,
   agendamentosExistentes,
   contagemRealPorAgenda,
-  entregadorData,
+  tecnicoData,
   configs,
   podeVerAgendaPorHorario
 }: ProcessAgendaParams): AgendaDisponivel => {
@@ -56,17 +56,17 @@ export const processAgenda = ({
   // Verificar horário específico por estrelas ANTES de verificar vagas
   else if (podeVerAgendaPorHorario && configs?.habilitarPriorizacaoHorarios) {
     // Validação adequada: verificar se estrelas é válido antes de processar
-    if (entregadorData.estrelas === null || entregadorData.estrelas === undefined) {
+    if (tecnicoData.estrelas === null || tecnicoData.estrelas === undefined) {
       podeAgendar = false;
-      motivoBloqueio = 'Dados de estrelas do entregador não disponíveis';
+      motivoBloqueio = 'Dados de estrelas do tecnico não disponíveis';
       
       logger.warn('⚠️ BLOQUEIO: Estrelas não definidas', {
         agendaId: agenda.id,
-        entregadorId: entregadorData.id,
-        entregadorNome: entregadorData.nome
+        tecnicoId: tecnicoData.id,
+        tecnicoNome: tecnicoData.nome
       });
     } else {
-      const validacaoHorario = podeVerAgendaPorHorario(entregadorData.estrelas, agenda.data_agenda, agenda.turnos.hora_inicio);
+      const validacaoHorario = podeVerAgendaPorHorario(tecnicoData.estrelas, agenda.data_agenda, agenda.turnos.hora_inicio);
     
       if (!validacaoHorario.permitido) {
         podeAgendar = false;

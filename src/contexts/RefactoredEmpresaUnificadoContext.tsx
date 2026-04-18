@@ -6,7 +6,7 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useEmpresaUnificado } from '@/hooks/useEmpresaUnificado';
 import { Database } from '@/integrations/supabase/types';
-import { Entregador } from '@/components/admin/gestao-entregadores/types';
+import { Tecnico } from '@/components/admin/gestao-tecnicos/types';
 
 // Função utilitária mantida para compatibilidade
 export function generateSlug(nome: string): string {
@@ -30,7 +30,7 @@ interface EmpresaComRole extends Empresa {
 // Interface do contexto - mantida para compatibilidade
 interface EmpresaUnificadoContextType {
   empresa: Empresa | null;
-  entregador: Entregador | null;
+  tecnico: Tecnico | null;
   userRole: UserRole | null;
   isSuperAdmin: boolean;
   isAdminEmpresa: boolean;
@@ -55,7 +55,7 @@ export function RefactoredEmpresaUnificadoProvider({ children }: { children: Rea
   // Adaptar interface para compatibilidade
   const contextValue: EmpresaUnificadoContextType = {
     empresa: empresaUnificado.empresa,
-    entregador: empresaUnificado.entregador,
+    tecnico: empresaUnificado.tecnico,
     userRole: empresaUnificado.userRole,
     isSuperAdmin: empresaUnificado.isSuperAdmin,
     isAdminEmpresa: empresaUnificado.isAdminEmpresa,

@@ -6,7 +6,7 @@ export interface Agenda {
   vagas_ocupadas: number;
   ativo: boolean;
   permite_reserva: boolean;  // ADICIONADO: nova coluna do banco
-  created_by?: string;  // ADICIONADO: referência ao entregador que criou
+  created_by?: string;  // ADICIONADO: referência ao tecnico que criou
   turno_id: string;
   regiao_id: string;
   turno: {
@@ -40,7 +40,7 @@ export interface Agenda {
     id: string;
     status: string;
     tipo: 'vaga' | 'reserva';
-    entregador?: {
+    tecnico?: {
       id: string;
       nome: string;
       telefone: string;

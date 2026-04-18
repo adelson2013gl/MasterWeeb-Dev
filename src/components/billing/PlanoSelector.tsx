@@ -377,7 +377,7 @@ function PlanoSelectorComponent({
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span>Entregadores</span>
+                  <span>Tecnicos</span>
                   <span className="font-medium">{plano.max_entregadores}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">

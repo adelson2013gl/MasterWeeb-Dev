@@ -9,17 +9,17 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useImportacaoEntregadores } from '@/hooks/useImportacaoEntregadores';
+import { useImportacaoTecnicos } from '@/hooks/useImportacaoTecnicos';
 import { useAuth } from '@/hooks/useAuth';
 import { useAdminPermissions } from '@/hooks/useAdminPermissions';
-import { EntregadorImport } from '@/services/importacaoService';
+import { TecnicoImport } from '@/services/importacaoService';
 
-interface ImportacaoEntregadoresProps {
+interface ImportacaoTecnicosProps {
   empresaId: string;
   onImportacaoConcluida?: () => void;
 }
 
-export function ImportacaoEntregadores({ empresaId, onImportacaoConcluida }: ImportacaoEntregadoresProps) {
+export function ImportacaoTecnicos({ empresaId, onImportacaoConcluida }: ImportacaoTecnicosProps) {
   const { user } = useAuth();
   const { permissions } = useAdminPermissions();
   const {
@@ -29,9 +29,9 @@ export function ImportacaoEntregadores({ empresaId, onImportacaoConcluida }: Imp
     gerarTemplateExcel,
     limparState,
     exportarRelatorio
-  } = useImportacaoEntregadores();
+  } = useImportacaoTecnicos();
 
-  const [dadosCompletos, setDadosCompletos] = useState<EntregadorImport[]>([]);
+  const [dadosCompletos, setDadosCompletos] = useState<TecnicoImport[]>([]);
   const [modalPreviewAberto, setModalPreviewAberto] = useState(false);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
@@ -80,7 +80,7 @@ export function ImportacaoEntregadores({ empresaId, onImportacaoConcluida }: Imp
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Importação em Massa</h2>
-          <p className="text-gray-600">Importe múltiplos entregadores usando planilha Excel ou CSV</p>
+          <p className="text-gray-600">Importe múltiplos tecnicos usando planilha Excel ou CSV</p>
         </div>
         <Button
           onClick={gerarTemplateExcel}
@@ -199,7 +199,7 @@ export function ImportacaoEntregadores({ empresaId, onImportacaoConcluida }: Imp
                 className="flex items-center gap-2"
               >
                 <Upload size={16} />
-                {state.processando ? 'Importando...' : `Importar ${dadosCompletos.length} Entregadores`}
+                {state.processando ? 'Importando...' : `Importar ${dadosCompletos.length} Tecnicos`}
               </Button>
               
               <Button
@@ -218,7 +218,7 @@ export function ImportacaoEntregadores({ empresaId, onImportacaoConcluida }: Imp
       {state.processando && (
         <Card>
           <CardHeader>
-            <CardTitle>Importando Entregadores</CardTitle>
+            <CardTitle>Importando Tecnicos</CardTitle>
             <CardDescription>{state.etapaAtual}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -308,7 +308,7 @@ export function ImportacaoEntregadores({ empresaId, onImportacaoConcluida }: Imp
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Nenhum sucesso</AlertTitle>
                     <AlertDescription>
-                      Nenhum entregador foi importado com sucesso.
+                      Nenhum tecnico foi importado com sucesso.
                     </AlertDescription>
                   </Alert>
                 )}
@@ -379,7 +379,7 @@ export function ImportacaoEntregadores({ empresaId, onImportacaoConcluida }: Imp
             <div>
               <h4 className="font-medium text-gray-900 mb-2">Colunas Obrigatórias:</h4>
               <ul className="space-y-1 text-gray-600">
-                <li>• <strong>Nome:</strong> Nome completo do entregador</li>
+                <li>• <strong>Nome:</strong> Nome completo do tecnico</li>
                 <li>• <strong>Email:</strong> Email válido e único</li>
                 <li>• <strong>Telefone:</strong> Telefone com DDD</li>
                 <li>• <strong>CPF:</strong> CPF válido</li>
@@ -389,7 +389,7 @@ export function ImportacaoEntregadores({ empresaId, onImportacaoConcluida }: Imp
             <div>
               <h4 className="font-medium text-gray-900 mb-2">Colunas Opcionais:</h4>
               <ul className="space-y-1 text-gray-600">
-                <li>• <strong>Perfil:</strong> entregador ou admin</li>
+                <li>• <strong>Perfil:</strong> tecnico ou admin</li>
                 <li>• <strong>Status:</strong> pendente ou aprovado</li>
                 <li>• <strong>Observacoes:</strong> Notas adicionais</li>
               </ul>
@@ -401,7 +401,7 @@ export function ImportacaoEntregadores({ empresaId, onImportacaoConcluida }: Imp
             <AlertTitle>Dica</AlertTitle>
             <AlertDescription>
               Baixe o template Excel para ter a estrutura correta e exemplos de dados.
-              Os entregadores serão criados com senhas temporárias que devem ser alteradas no primeiro acesso.
+              Os tecnicos serão criados com senhas temporárias que devem ser alteradas no primeiro acesso.
             </AlertDescription>
           </Alert>
         </CardContent>
@@ -411,7 +411,7 @@ export function ImportacaoEntregadores({ empresaId, onImportacaoConcluida }: Imp
 }
 
 // Componente auxiliar para preview de dados
-function PreviewTable({ dados }: { dados: EntregadorImport[] }) {
+function PreviewTable({ dados }: { dados: TecnicoImport[] }) {
   return (
     <div className="border rounded-lg overflow-hidden">
       <Table>

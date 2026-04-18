@@ -145,14 +145,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // CORREÇÃO CRÍTICA: Usar empresa_id dos userData ou fallback para empresa padrão
       const empresaId = userData.empresa_id || EMPRESA_PADRAO_ID;
       
-      logger.auth('info', 'Cadastrando entregador', { 
+      logger.auth('info', 'Cadastrando tecnico', { 
         hasUserId: !!authData.user.id,
         emailDomain: email.split('@')[1],
         hasEmpresaId: !!empresaId,
         usandoFallback: !userData.empresa_id
       });
       
-      const entregadorData = {
+      const tecnicoData = {
         user_id: authData.user.id,
         nome: userData.nome,
         email: email,
@@ -164,21 +164,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         status: 'pendente' as const,
       };
 
-      const { error: entregadorError, data: entregadorCreated } = await supabase
+      const { error: tecnicoError, data: tecnicoCreated } = await supabase
         .from('tecnicos')
-        .insert(entregadorData)
+        .insert(tecnicoData)
         .select()
         .single();
 
-      if (entregadorError) {
-        logger.authError('signUp', entregadorError, { emailDomain: email.split('@')[1] });
+      if (tecnicoError) {
+        logger.authError('signUp', tecnicoError, { emailDomain: email.split('@')[1] });
         // Tentar limpar o usuário criado na auth
         try {
           await supabase.auth.admin.deleteUser(authData.user.id);
         } catch (cleanupError) {
           logger.authError('cleanup', cleanupError);
         }
-        return { error: entregadorError };
+        return { error: tecnicoError };
       }
       
       const { error: roleError } = await supabase
@@ -193,8 +193,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logger.authError('createRole', roleError);
       }
       
-      logger.auth('info', 'Entregador criado com sucesso', { 
-        hasEntregador: !!entregadorCreated,
+      logger.auth('info', 'Tecnico criado com sucesso', { 
+        hasTecnico: !!tecnicoCreated,
         hasEmpresaId: !!empresaId 
       });
       return { error: null };

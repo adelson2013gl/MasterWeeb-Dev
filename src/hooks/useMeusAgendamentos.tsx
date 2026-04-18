@@ -25,17 +25,17 @@ export function useMeusAgendamentos() {
       return;
     }
     try {
-      console.log('Buscando todos os agendamentos do entregador...');
-      // CORRIGIDO: status do entregador precisa ser 'aprovado' literal, não enum agendamento
-      const { data: entregadorData, error: entregadorError } = await supabase
+      console.log('Buscando todos os agendamentos do tecnico...');
+      // CORRIGIDO: status do tecnico precisa ser 'aprovado' literal, não enum agendamento
+      const { data: tecnicoData, error: tecnicoError } = await supabase
         .from('tecnicos')
         .select('id')
         .eq('user_id', user.id)
         .eq('status', 'aprovado')
         .single();
 
-      if (entregadorError || !entregadorData) {
-        console.error('Erro ao buscar entregador:', entregadorError);
+      if (tecnicoError || !tecnicoData) {
+        console.error('Erro ao buscar tecnico:', tecnicoError);
         setLoading(false);
         return;
       }
@@ -81,7 +81,7 @@ export function useMeusAgendamentos() {
             )
           )
         `)
-        .eq('tecnico_id', entregadorData.id)
+        .eq('tecnico_id', tecnicoData.id)
         .order('data_agendamento', { ascending: false });
 
       if (error) {
@@ -150,7 +150,7 @@ export function useMeusAgendamentos() {
         .update({ 
           status: safeStatus('cancelado'),
           data_cancelamento: new Date().toISOString(),
-          observacoes: 'Cancelado pelo entregador'
+          observacoes: 'Cancelado pelo tecnico'
         })
         .eq('id', agendamentoId);
       if (error) {

@@ -40,7 +40,7 @@ export function EmpresaCard({ empresa, onEdit, onAlterarStatus }: EmpresaCardPro
             <span className="capitalize">{empresa.plano_atual || 'Não definido'}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-600 dark:text-gray-400">Max. Entregadores:</span>
+            <span className="text-gray-600 dark:text-gray-400">Max. Tecnicos:</span>
             <span>{empresa.max_entregadores}</span>
           </div>
           <div className="flex justify-between">

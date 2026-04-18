@@ -42,7 +42,7 @@ export function PaymentSuccessModal({
 
   const proximosPassos = [
     "Configure seu painel administrativo",
-    "Adicione entregadores à sua equipe",
+    "Adicione tecnicos à sua equipe",
     "Crie suas primeiras agendas",
     "Explore os relatórios avançados"
   ];

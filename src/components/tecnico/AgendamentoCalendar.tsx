@@ -13,7 +13,7 @@ import { logger } from "@/lib/logger";
 
 export function AgendamentoCalendar() {
   const { user } = useAuth();
-  const { agendas, loading, entregadorData, refetch } = useAgendasDisponiveis();
+  const { agendas, loading, tecnicoData, refetch } = useAgendasDisponiveis();
   const { criarAgendamento, loading: agendandoLoading } = useAgendamento();
   const { configs, podeVerAgendaPorHorario } = useConfiguracoesSistema();
 
@@ -32,11 +32,11 @@ export function AgendamentoCalendar() {
       }
 
       // Para agendas de hoje, aplicar validação de horário por estrelas
-      // Validação adequada: só processa se entregadorData estiver disponível
-      if (!entregadorData?.estrelas) {
-        return false; // Bloqueia se não há dados válidos do entregador
+      // Validação adequada: só processa se tecnicoData estiver disponível
+      if (!tecnicoData?.estrelas) {
+        return false; // Bloqueia se não há dados válidos do tecnico
       }
-      const validacao = podeVerAgendaPorHorario(entregadorData.estrelas, agenda.data, agenda.turno.hora_inicio);
+      const validacao = podeVerAgendaPorHorario(tecnicoData.estrelas, agenda.data, agenda.turno.hora_inicio);
       
       // 🔥 LOG ESPECÍFICO PARA INVESTIGAÇÃO
       if (user?.email?.toLowerCase().includes('adelson') || agenda.data === dataHoje) {
@@ -56,7 +56,7 @@ export function AgendamentoCalendar() {
 
       return validacao.permitido;
     });
-  }, [agendas, configs?.habilitarPriorizacaoHorarios, podeVerAgendaPorHorario, user?.email, entregadorData?.estrelas]);
+  }, [agendas, configs?.habilitarPriorizacaoHorarios, podeVerAgendaPorHorario, user?.email, tecnicoData?.estrelas]);
 
   const handleAgendar = async (agendaId: string, permiteReserva: boolean) => {
     // Sempre usar 'entrega' como tipo (conforme enum do banco)

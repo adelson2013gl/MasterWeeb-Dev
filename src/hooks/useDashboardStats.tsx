@@ -4,8 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useEmpresaUnificado } from "@/contexts/EmpresaUnificadoContext";
 
 interface DashboardStats {
-  entregadoresPendentes: number;
-  entregadoresAtivos: number;
+  tecnicosPendentes: number;
+  tecnicosAtivos: number;
   agendasHoje: number;
   ocupacaoMedia: number;
   cidadesAtivas: number;
@@ -17,8 +17,8 @@ interface DashboardStats {
 export function useDashboardStats() {
   const { empresa } = useEmpresaUnificado();
   const [stats, setStats] = useState<DashboardStats>({
-    entregadoresPendentes: 0,
-    entregadoresAtivos: 0,
+    tecnicosPendentes: 0,
+    tecnicosAtivos: 0,
     agendasHoje: 0,
     ocupacaoMedia: 0,
     cidadesAtivas: 0,
@@ -50,8 +50,8 @@ export function useDashboardStats() {
       if (data && data.length > 0) {
         const statsData = data[0];
         const newStats: DashboardStats = {
-          entregadoresPendentes: Number(statsData.entregadores_pendentes) || 0,
-          entregadoresAtivos: Number(statsData.entregadores_ativos) || 0,
+          tecnicosPendentes: Number(statsData.entregadores_pendentes) || 0,
+          tecnicosAtivos: Number(statsData.entregadores_ativos) || 0,
           agendasHoje: Number(statsData.agendas_hoje) || 0,
           ocupacaoMedia: Number(statsData.ocupacao_media) || 0,
           cidadesAtivas: Number(statsData.cidades_ativas) || 0,

@@ -3,40 +3,40 @@ import { supabase } from "@/integrations/supabase/client";
 import { safeStatus } from '@/lib/enumSafety';
 import { logger } from '@/lib/logger';
 
-export const buscarEntregador = async (userId: string) => {
+export const buscarTecnico = async (userId: string) => {
   try {
-    logger.debug('Buscando dados do entregador', { userId }, 'AGENDAMENTO');
+    logger.debug('Buscando dados do tecnico', { userId }, 'AGENDAMENTO');
     
-    const { data: entregadorData, error: entregadorError } = await supabase
+    const { data: tecnicoData, error: tecnicoError } = await supabase
       .from('tecnicos')
       .select('id, estrelas')
       .eq('user_id', userId)
       .eq('status', 'aprovado')
       .single();
 
-    if (entregadorError || !entregadorData) {
-      logger.warn('Entregador não encontrado ou não aprovado', { 
+    if (tecnicoError || !tecnicoData) {
+      logger.warn('Tecnico não encontrado ou não aprovado', { 
         userId, 
-        error: entregadorError?.message 
+        error: tecnicoError?.message 
       }, 'AGENDAMENTO');
-      throw new Error('Entregador não encontrado ou não aprovado');
+      throw new Error('Tecnico não encontrado ou não aprovado');
     }
 
-    logger.info('Entregador encontrado com sucesso', { 
-      entregadorId: entregadorData.id,
-      estrelas: entregadorData.estrelas 
+    logger.info('Tecnico encontrado com sucesso', { 
+      tecnicoId: tecnicoData.id,
+      estrelas: tecnicoData.estrelas 
     }, 'AGENDAMENTO');
     
-    return entregadorData;
+    return tecnicoData;
   } catch (error) {
-    logger.error('Erro ao buscar entregador', { userId, error }, 'AGENDAMENTO');
+    logger.error('Erro ao buscar tecnico', { userId, error }, 'AGENDAMENTO');
     throw error;
   }
 };
 
-export const buscarAgendamentosConflitantes = async (entregadorId: string, data: string) => {
+export const buscarAgendamentosConflitantes = async (tecnicoId: string, data: string) => {
   try {
-    logger.debug('Verificando conflitos de horário - Master Web', { entregadorId, data }, 'AGENDAMENTO');
+    logger.debug('Verificando conflitos de horário - Master Web', { tecnicoId, data }, 'AGENDAMENTO');
     
     const { data: agendamentosExistentes, error: conflitosError } = await supabase
       .from('agendamentos')
@@ -64,13 +64,13 @@ export const buscarAgendamentosConflitantes = async (entregadorId: string, data:
           )
         )
       `)
-      .eq('tecnico_id', entregadorId)
+      .eq('tecnico_id', tecnicoId)
       .eq('status', safeStatus('agendado'))
       .eq('agendas.data_agenda', data);
 
     if (conflitosError) {
       logger.error('Erro ao verificar conflitos de horário Master Web', { 
-        entregadorId, 
+        tecnicoId, 
         data, 
         error: conflitosError.message 
       }, 'AGENDAMENTO');
@@ -80,7 +80,7 @@ export const buscarAgendamentosConflitantes = async (entregadorId: string, data:
     const conflitos = agendamentosExistentes || [];
     if (conflitos.length > 0) {
       logger.warn('Conflitos Master Web encontrados', { 
-        entregadorId, 
+        tecnicoId, 
         data, 
         quantidadeConflitos: conflitos.length,
         conflitos: conflitos.map(c => ({
@@ -94,7 +94,7 @@ export const buscarAgendamentosConflitantes = async (entregadorId: string, data:
 
     return conflitos;
   } catch (error) {
-    logger.error('Erro ao buscar agendamentos conflitantes Master Web', { entregadorId, data, error }, 'AGENDAMENTO');
+    logger.error('Erro ao buscar agendamentos conflitantes Master Web', { tecnicoId, data, error }, 'AGENDAMENTO');
     throw error;
   }
 };
@@ -130,7 +130,7 @@ export const inserirAgendamento = async (payload: any) => {
   try {
     logger.info('Iniciando criação de agendamento', { 
       agendaId: payload.agenda_id,
-      entregadorId: payload.tecnico_id 
+      tecnicoId: payload.tecnico_id 
     }, 'AGENDAMENTO');
     
     const { data: novoAgendamento, error: insertError } = await supabase
@@ -147,7 +147,7 @@ export const inserirAgendamento = async (payload: any) => {
       
       // Tratamento específico para diferentes tipos de erro
       if (insertError.message?.includes('AGENDA LOTADA')) {
-        throw new Error('🚫 Agenda foi ocupada por outro entregador. Tente entrar na lista de reserva.');
+        throw new Error('🚫 Agenda foi ocupada por outro tecnico. Tente entrar na lista de reserva.');
       } else if (insertError.message?.includes('duplicate key')) {
         throw new Error('❌ Você já possui um agendamento para esta agenda.');
       } else {
@@ -159,7 +159,7 @@ export const inserirAgendamento = async (payload: any) => {
     logger.performance('agendamento_criado', duration, {
       agendamentoId: novoAgendamento.id,
       agendaId: payload.agenda_id,
-      entregadorId: payload.tecnico_id
+      tecnicoId: payload.tecnico_id
     });
 
     logger.info('Agendamento criado com sucesso', { 

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 import { toast } from 'sonner';
-import { Entregador } from '@/components/admin/gestao-entregadores/types';
+import { Tecnico } from '@/components/admin/gestao-tecnicos/types';
 import { useAuth } from '@/hooks/useAuth';
 
 // Função utilitária para gerar slug a partir do nome da empresa
@@ -26,7 +26,7 @@ interface EmpresaComRole extends Empresa {
 
 interface EmpresaUnificadoContextType {
   empresa: Empresa | null;
-  entregador: Entregador | null;
+  tecnico: Tecnico | null;
   userRole: UserRole | null;
   isSuperAdmin: boolean;
   isAdminEmpresa: boolean;
@@ -48,7 +48,7 @@ const EMPRESA_PADRAO_ID = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
 export function EmpresaUnificadoProvider({ children }: { children: ReactNode }) {
   const { user, session, loading: authLoading } = useAuth();
   const [empresa, setEmpresa] = useState<Empresa | null>(null);
-  const [entregador, setEntregador] = useState<Entregador | null>(null);
+  const [tecnico, setTecnico] = useState<Tecnico | null>(null);
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState(true);
   const [empresasDisponiveis, setEmpresasDisponiveis] = useState<EmpresaComRole[]>([]);
@@ -115,32 +115,32 @@ export function EmpresaUnificadoProvider({ children }: { children: ReactNode }) 
         return;
       }
 
-      // 1. Buscar entregador
-      console.log('👤 Buscando entregador...');
-      const { data: entregadorData, error: entregadorError } = await supabase
+      // 1. Buscar tecnico
+      console.log('👤 Buscando tecnico...');
+      const { data: tecnicoData, error: tecnicoError } = await supabase
         .from('tecnicos')
         .select('*')
         .eq('user_id', userId)
         .maybeSingle();
 
-      if (entregadorError) {
-        console.error('❌ Erro ao buscar entregador:', entregadorError);
-        if (entregadorError.code === '42501') {
+      if (tecnicoError) {
+        console.error('❌ Erro ao buscar tecnico:', tecnicoError);
+        if (tecnicoError.code === '42501') {
           console.log('🔍 Erro RLS detectado, executando debug...');
           await debugAuth();
         }
       }
 
-      if (entregadorData) {
-        console.log('✅ Entregador encontrado:', entregadorData.nome);
-        setEntregador(entregadorData);
+      if (tecnicoData) {
+        console.log('✅ Tecnico encontrado:', tecnicoData.nome);
+        setTecnico(tecnicoData);
       } else {
-        console.log('⚠️ EmpresaUnificado: Nenhum entregador encontrado');
-        setEntregador(null);
+        console.log('⚠️ EmpresaUnificado: Nenhum tecnico encontrado');
+        setTecnico(null);
       }
 
       // 2. Buscar empresa
-      const empresaId = entregadorData?.empresa_id || EMPRESA_PADRAO_ID;
+      const empresaId = tecnicoData?.empresa_id || EMPRESA_PADRAO_ID;
       console.log('🎯 Usando empresa ID:', empresaId);
 
       const { data: empresaData, error: empresaError } = await supabase
@@ -214,16 +214,16 @@ export function EmpresaUnificadoProvider({ children }: { children: ReactNode }) 
           };
           setUserRole(roleTyped);
         } else {
-          console.log('⚠️ Role não encontrada, definindo baseado no perfil do entregador');
+          console.log('⚠️ Role não encontrada, definindo baseado no perfil do tecnico');
           // CORREÇÃO DE SEGURANÇA: Não assumir admin automaticamente
           let roleType: 'super_admin' | 'admin_empresa' | 'tecnico' = 'tecnico';
           
           // Apenas definir como admin_empresa se explicitamente configurado no banco
           // E nunca assumir super_admin automaticamente
-          if (entregadorData.perfil === 'admin') {
+          if (tecnicoData.perfil === 'admin') {
             roleType = 'admin_empresa';
-            console.log('👨‍💼 Entregador é admin, definindo role como admin_empresa');
-            console.log('🔒 SEGURANÇA: Role definida pelo perfil do entregador, não por fallback');
+            console.log('👨‍💼 Tecnico é admin, definindo role como admin_empresa');
+            console.log('🔒 SEGURANÇA: Role definida pelo perfil do tecnico, não por fallback');
           }
           
           const defaultRole: UserRole = {
@@ -467,7 +467,7 @@ export function EmpresaUnificadoProvider({ children }: { children: ReactNode }) 
 
   const isSuperAdmin = userRole?.role === 'super_admin';
   const isAdminEmpresa = userRole?.role === 'admin_empresa' || isSuperAdmin;
-  const isAdmin = entregador?.perfil === 'admin';
+  const isAdmin = tecnico?.perfil === 'admin';
 
   // DEBUG: Log das permissões calculadas
   console.log('🔍 DEBUG Permissões Calculadas:', {
@@ -479,7 +479,7 @@ export function EmpresaUnificadoProvider({ children }: { children: ReactNode }) 
 
   const value = {
     empresa,
-    entregador,
+    tecnico,
     userRole,
     isSuperAdmin,
     isAdminEmpresa,

@@ -34,8 +34,8 @@ export interface ExportData {
   cidade: string;
   regiao: string;
   turno: string;
-  cpfEntregador: string;
-  nomeEntregador: string;
+  cpfTecnico: string;
+  nomeTecnico: string;
 }
 
 export interface ValidationResult {

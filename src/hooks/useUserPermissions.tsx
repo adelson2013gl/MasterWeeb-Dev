@@ -47,21 +47,21 @@ export function useUserPermissions() {
         });
       }
 
-      // Verificar dados do entregador para fallback
-      const { data: entregadorData, error: entregadorError } = await supabase
+      // Verificar dados do tecnico para fallback
+      const { data: tecnicoData, error: tecnicoError } = await supabase
         .from('tecnicos')
         .select('id, empresa_id, perfil, status')
         .eq('user_id', user.id)
         .single();
 
-      if (entregadorError) {
-        logger.error('❌ Erro ao buscar dados do entregador para permissões', { error: entregadorError });
+      if (tecnicoError) {
+        logger.error('❌ Erro ao buscar dados do tecnico para permissões', { error: tecnicoError });
       } else {
-        logger.info('👤 Dados do entregador para permissões', { 
-          entregadorId: entregadorData.id,
-          empresaId: entregadorData.empresa_id,
-          perfil: entregadorData.perfil,
-          status: entregadorData.status
+        logger.info('👤 Dados do tecnico para permissões', { 
+          tecnicoId: tecnicoData.id,
+          empresaId: tecnicoData.empresa_id,
+          perfil: tecnicoData.perfil,
+          status: tecnicoData.status
         });
       }
 
@@ -78,7 +78,7 @@ export function useUserPermissions() {
       if (userRoles && userRoles.length > 0) {
         const adminRole = userRoles.find(r => r.role === 'admin_empresa');
         const superAdminRole = userRoles.find(r => r.role === 'super_admin');
-        const entregadorRole = userRoles.find(r => r.role === 'tecnico');
+        const tecnicoRole = userRoles.find(r => r.role === 'tecnico');
 
         if (superAdminRole) {
           finalPermissions = {
@@ -96,29 +96,29 @@ export function useUserPermissions() {
             roleType: 'admin_empresa',
             canAccessSystem: true
           };
-        } else if (entregadorRole) {
+        } else if (tecnicoRole) {
           finalPermissions = {
             hasValidRole: true,
             isAdminEmpresa: false,
-            empresaId: entregadorRole.empresa_id,
+            empresaId: tecnicoRole.empresa_id,
             roleType: 'tecnico',
             canAccessSystem: true
           };
         }
       }
       
-      // Fallback para entregador aprovado sem role em user_roles
-      if (!finalPermissions.hasValidRole && entregadorData && entregadorData.status === 'aprovado') {
-        logger.warn('⚠️ Usando fallback para entregador sem role em user_roles', {
-          entregadorId: entregadorData.id,
-          empresaId: entregadorData.empresa_id
+      // Fallback para tecnico aprovado sem role em user_roles
+      if (!finalPermissions.hasValidRole && tecnicoData && tecnicoData.status === 'aprovado') {
+        logger.warn('⚠️ Usando fallback para tecnico sem role em user_roles', {
+          tecnicoId: tecnicoData.id,
+          empresaId: tecnicoData.empresa_id
         });
         
         finalPermissions = {
           hasValidRole: true,
-          isAdminEmpresa: entregadorData.perfil === 'admin',
-          empresaId: entregadorData.empresa_id,
-          roleType: entregadorData.perfil === 'admin' ? 'admin_empresa' : 'tecnico',
+          isAdminEmpresa: tecnicoData.perfil === 'admin',
+          empresaId: tecnicoData.empresa_id,
+          roleType: tecnicoData.perfil === 'admin' ? 'admin_empresa' : 'tecnico',
           canAccessSystem: true
         };
       }
@@ -126,8 +126,8 @@ export function useUserPermissions() {
       logger.info('🔒 Permissões finais determinadas', { 
         permissions: finalPermissions,
         hasUserRoles: (userRoles?.length || 0) > 0,
-        hasEntregadorData: !!entregadorData,
-        usedFallback: !finalPermissions.hasValidRole && !!entregadorData
+        hasTecnicoData: !!tecnicoData,
+        usedFallback: !finalPermissions.hasValidRole && !!tecnicoData
       });
 
       setPermissions(finalPermissions);

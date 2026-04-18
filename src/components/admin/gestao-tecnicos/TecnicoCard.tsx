@@ -6,21 +6,21 @@ import { User, Phone, Mail, MapPin, Edit, Check, X, Star } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { StatusBadge } from "./StatusBadge";
 import { Database } from '@/types/database';
-import { Entregador } from './types';
+import { Tecnico } from './types';
 
-interface EntregadorCardProps {
-  entregador: Entregador;
+interface TecnicoCardProps {
+  tecnico: Tecnico;
   onStatusChange: (id: string, status: "aprovado" | "rejeitado") => void;
   onReativar: (id: string) => void;
-  onEdit: (entregador: Entregador) => void;
+  onEdit: (tecnico: Tecnico) => void;
 }
 
-export function EntregadorCard({ 
-  entregador, 
+export function TecnicoCard({ 
+  tecnico, 
   onStatusChange, 
   onReativar, 
   onEdit 
-}: EntregadorCardProps) {
+}: TecnicoCardProps) {
   const isMobile = useIsMobile();
 
   const getEstrelasDisplay = (estrelas: number | null | undefined) => {
@@ -61,23 +61,23 @@ export function EntregadorCard({
   };
 
   return (
-    <Card key={entregador.id} className="mb-4">
+    <Card key={tecnico.id} className="mb-4">
       <CardContent className="p-3 sm:p-4">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           <div className="space-y-2 flex-1">
             <div className="flex flex-col sm:flex-row sm:items-center gap-2">
               <div className="flex items-center space-x-2">
                 <User className="h-4 w-4 text-gray-500 flex-shrink-0" />
-                <span className="font-medium text-sm sm:text-base">{entregador.nome}</span>
+                <span className="font-medium text-sm sm:text-base">{tecnico.nome}</span>
               </div>
               <div className="flex items-center gap-2">
-                <StatusBadge status={entregador.status} />
-                <Badge className={getCorEstrela(entregador.estrelas)}>
+                <StatusBadge status={tecnico.status} />
+                <Badge className={getCorEstrela(tecnico.estrelas)}>
               <div className="flex items-center space-x-1">
                 <div className="flex items-center">
-                  {getEstrelasDisplay(entregador.estrelas)}
+                  {getEstrelasDisplay(tecnico.estrelas)}
                 </div>
-                <span className="text-xs font-medium">{entregador.estrelas || 'N/A'}</span>
+                <span className="text-xs font-medium">{tecnico.estrelas || 'N/A'}</span>
                   </div>
                 </Badge>
               </div>
@@ -86,20 +86,20 @@ export function EntregadorCard({
             <div className="space-y-1">
               <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600">
                 <Mail className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                <span className="break-all">{entregador.email}</span>
+                <span className="break-all">{tecnico.email}</span>
               </div>
               <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600">
                 <Phone className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                <span>{entregador.telefone}</span>
+                <span>{tecnico.telefone}</span>
               </div>
               <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600">
                 <MapPin className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
                 <span>
-                  {entregador.cidade ? `${entregador.cidade.nome} - ${entregador.cidade.estado}` : 'Cidade não encontrada'}
+                  {tecnico.cidade ? `${tecnico.cidade.nome} - ${tecnico.cidade.estado}` : 'Cidade não encontrada'}
                 </span>
               </div>
               <div className="text-xs text-gray-500">
-                Cadastrado em: {new Date(entregador.data_cadastro).toLocaleDateString('pt-BR')}
+                Cadastrado em: {new Date(tecnico.data_cadastro).toLocaleDateString('pt-BR')}
               </div>
             </div>
           </div>
@@ -108,18 +108,18 @@ export function EntregadorCard({
             <Button 
               size={isMobile ? "sm" : "default"}
               variant="outline"
-              onClick={() => onEdit(entregador)}
+              onClick={() => onEdit(tecnico)}
               className="w-full sm:w-auto"
             >
               <Edit className="h-4 w-4 mr-1" />
               Editar
             </Button>
             
-            {entregador.status === "pendente" && (
+            {tecnico.status === "pendente" && (
               <>
                 <Button 
                   size={isMobile ? "sm" : "default"}
-                  onClick={() => onStatusChange(entregador.id, "aprovado")}
+                  onClick={() => onStatusChange(tecnico.id, "aprovado")}
                   className="bg-green-600 hover:bg-green-700 w-full sm:w-auto"
                 >
                   <Check className="h-4 w-4 mr-1" />
@@ -128,7 +128,7 @@ export function EntregadorCard({
                 <Button 
                   size={isMobile ? "sm" : "default"}
                   variant="destructive"
-                  onClick={() => onStatusChange(entregador.id, "rejeitado")}
+                  onClick={() => onStatusChange(tecnico.id, "rejeitado")}
                   className="w-full sm:w-auto"
                 >
                   <X className="h-4 w-4 mr-1" />
@@ -137,10 +137,10 @@ export function EntregadorCard({
               </>
             )}
 
-            {entregador.status === "suspenso" && (
+            {tecnico.status === "suspenso" && (
               <Button 
                 size={isMobile ? "sm" : "default"}
-                onClick={() => onReativar(entregador.id)}
+                onClick={() => onReativar(tecnico.id)}
                 className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto"
               >
                 <Check className="h-4 w-4 mr-1" />

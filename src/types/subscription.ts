@@ -68,7 +68,7 @@ export const PLANOS_DISPONIVEIS: PlanoConfig[] = [
     max_entregadores: 5,
     max_agendas_mes: 100,
     recursos: [
-      'Até 5 entregadores',
+      'Até 5 tecnicos',
       'Até 100 agendamentos/mês',
       'Dashboard básico',
       'Suporte por email'
@@ -82,7 +82,7 @@ export const PLANOS_DISPONIVEIS: PlanoConfig[] = [
     max_entregadores: 20,
     max_agendas_mes: 500,
     recursos: [
-      'Até 20 entregadores',
+      'Até 20 tecnicos',
       'Até 500 agendamentos/mês',
       'Dashboard avançado',
       'Relatórios detalhados',
@@ -99,7 +99,7 @@ export const PLANOS_DISPONIVEIS: PlanoConfig[] = [
     max_entregadores: 100,
     max_agendas_mes: 2000,
     recursos: [
-      'Até 100 entregadores',
+      'Até 100 tecnicos',
       'Até 2000 agendamentos/mês',
       'Dashboard completo',
       'Relatórios personalizados',
@@ -166,10 +166,10 @@ export function getPlanoConfig(plano: PlanoType): PlanoConfig {
   return PLANOS_DISPONIVEIS.find(p => p.id === plano) || PLANOS_DISPONIVEIS[0];
 }
 
-// Função helper para verificar se empresa pode criar mais entregadores
-export function podeAdicionarEntregador(plano: PlanoType, entregadoresAtuais: number): boolean {
+// Função helper para verificar se empresa pode criar mais tecnicos
+export function podeAdicionarTecnico(plano: PlanoType, tecnicosAtuais: number): boolean {
   const config = getPlanoConfig(plano);
-  return entregadoresAtuais < config.max_entregadores;
+  return tecnicosAtuais < config.max_entregadores;
 }
 
 // Função helper para verificar se empresa pode criar mais agendamentos

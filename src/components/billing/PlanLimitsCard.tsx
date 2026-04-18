@@ -80,7 +80,7 @@ export function PlanLimitsCard({
     return new Date(data).toLocaleDateString('pt-BR');
   };
 
-  const needsUpgrade = data.percentualUsoEntregadores >= 80 || data.percentualUsoAgendamentos >= 80;
+  const needsUpgrade = data.percentualUsoTecnicos >= 80 || data.percentualUsoAgendamentos >= 80;
 
   return (
     <Card className={needsUpgrade ? 'border-yellow-200 bg-yellow-50' : ''}>
@@ -131,26 +131,26 @@ export function PlanLimitsCard({
           </div>
         )}
 
-        {/* Uso de Entregadores */}
+        {/* Uso de Tecnicos */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm font-medium">Entregadores</span>
-              {getStatusIcon(data.percentualUsoEntregadores)}
+              <span className="text-sm font-medium">Tecnicos</span>
+              {getStatusIcon(data.percentualUsoTecnicos)}
             </div>
             <span className="text-sm text-muted-foreground">
-              {data.entregadoresAtuais} / {data.limites.max_entregadores}
+              {data.tecnicosAtuais} / {data.limites.max_entregadores}
             </span>
           </div>
           <Progress 
-            value={data.percentualUsoEntregadores} 
+            value={data.percentualUsoTecnicos} 
             className="h-2"
           />
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{data.percentualUsoEntregadores}% usado</span>
+            <span>{data.percentualUsoTecnicos}% usado</span>
             <span>
-              {data.limites.max_entregadores - data.entregadoresAtuais} disponíveis
+              {data.limites.max_entregadores - data.tecnicosAtuais} disponíveis
             </span>
           </div>
         </div>

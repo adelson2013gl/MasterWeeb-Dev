@@ -1,6 +1,6 @@
 
 /**
- * Utilitários para o perfil do entregador
+ * Utilitários para o perfil do tecnico
  */
 
 /**

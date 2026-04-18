@@ -27,7 +27,7 @@ export type {
 export { 
   PLANOS_DISPONIVEIS,
   getPlanoConfig,
-  podeAdicionarEntregador,
+  podeAdicionarTecnico,
   podeAdicionarAgendamento
 } from '../../types/subscription';
 

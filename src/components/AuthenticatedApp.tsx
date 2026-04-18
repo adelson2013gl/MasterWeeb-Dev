@@ -1,5 +1,5 @@
 import { AdminDashboard } from "@/components/AdminDashboard";
-import { EntregadorDashboard } from "@/components/EntregadorDashboard";
+import { TecnicoDashboard } from "@/components/TecnicoDashboard";
 import { useAuth } from "@/hooks/useAuth";
 import { useEmpresaUnificado } from "@/contexts/EmpresaUnificadoContext";
 import { useUserPermissions } from "@/hooks/useUserPermissions";
@@ -13,7 +13,7 @@ export function AuthenticatedApp() {
   const { signOut, loading: authLoading } = useAuth();
   const { 
     empresa, 
-    entregador, 
+    tecnico, 
     userRole, 
     isAdminEmpresa, 
     loading: empresaLoading, 
@@ -34,7 +34,7 @@ export function AuthenticatedApp() {
       await Promise.all([refetch(), refetchPermissions()]);
       logger.info('🔄 Refresh completo executado', {
         hasEmpresa: !!empresa,
-        hasEntregador: !!entregador,
+        hasTecnico: !!tecnico,
         hasPermissions: permissions.canAccessSystem
       });
     } finally {
@@ -50,9 +50,9 @@ export function AuthenticatedApp() {
     empresaLoading,
     permissionsLoading,
     isLoading,
-    hasEntregador: !!entregador,
+    hasTecnico: !!tecnico,
     hasEmpresa: !!empresa,
-    entregadorStatus: entregador?.status,
+    tecnicoStatus: tecnico?.status,
     empresaStatus: empresa?.status,
     isExpired,
     canAccess,
@@ -255,13 +255,13 @@ export function AuthenticatedApp() {
     );
   }
 
-  if (!entregador) {
+  if (!tecnico) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center">
         <div className="text-center max-w-md">
           <h2 className="text-2xl font-bold mb-4">Perfil não encontrado</h2>
           <p className="text-gray-600 mb-6">
-            Não foi possível carregar seus dados de entregador. 
+            Não foi possível carregar seus dados de tecnico. 
             Verifique se seu cadastro foi realizado corretamente.
           </p>
           <div className="space-x-4">
@@ -320,14 +320,14 @@ export function AuthenticatedApp() {
     );
   }
 
-  // Verificar status do entregador
-  if (entregador.status === 'pendente') {
+  // Verificar status do tecnico
+  if (tecnico.status === 'pendente') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center max-w-md">
           <h2 className="text-2xl font-bold mb-4">Cadastro em Análise</h2>
           <p className="text-gray-600 mb-4">
-            Olá <strong>{entregador.nome}</strong>! Seu cadastro na empresa <strong>{empresa.nome}</strong> está sendo analisado.
+            Olá <strong>{tecnico.nome}</strong>! Seu cadastro na empresa <strong>{empresa.nome}</strong> está sendo analisado.
           </p>
           <p className="text-gray-600 mb-6">
             Você receberá um email quando for aprovado.
@@ -341,7 +341,7 @@ export function AuthenticatedApp() {
     );
   }
 
-  if (entregador.status === 'rejeitado') {
+  if (tecnico.status === 'rejeitado') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center">
         <div className="text-center max-w-md">
@@ -358,7 +358,7 @@ export function AuthenticatedApp() {
     );
   }
 
-  if (entregador.status === 'suspenso') {
+  if (tecnico.status === 'suspenso') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-yellow-50 to-yellow-100 flex items-center justify-center">
         <div className="text-center max-w-md">
@@ -378,12 +378,12 @@ export function AuthenticatedApp() {
 
   // Usuário aprovado - usar permissões estruturadas para determinar dashboard
   logger.info('✅ AuthenticatedApp: Usuário aprovado, determinando dashboard', {
-    entregadorStatus: entregador.status,
+    tecnicoStatus: tecnico.status,
     permissionsIsAdmin: permissions.isAdminEmpresa,
     legacyIsAdmin: isAdminEmpresa,
     roleType: permissions.roleType,
     empresaValidation: { isExpired, canAccess }
   });
   
-  return permissions.isAdminEmpresa ? <AdminDashboard /> : <EntregadorDashboard />;
+  return permissions.isAdminEmpresa ? <AdminDashboard /> : <TecnicoDashboard />;
 }

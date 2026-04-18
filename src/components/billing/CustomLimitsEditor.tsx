@@ -89,7 +89,7 @@ export function CustomLimitsEditor({ empresaId, empresaNome }: CustomLimitsEdito
       if (limites.limite_entregadores !== null && limites.limite_entregadores < 0) {
         toast({
           title: 'Erro de Validação',
-          description: 'O limite de entregadores deve ser um número positivo.',
+          description: 'O limite de tecnicos deve ser um número positivo.',
           variant: 'destructive'
         });
         return;
@@ -189,7 +189,7 @@ export function CustomLimitsEditor({ empresaId, empresaNome }: CustomLimitsEdito
             <div className="space-y-2">
               <Label htmlFor="limite_entregadores" className="flex items-center gap-2">
                 <Users className="w-4 h-4" />
-                Limite de Entregadores
+                Limite de Tecnicos
               </Label>
               <Input
                 id="limite_entregadores"
@@ -200,7 +200,7 @@ export function CustomLimitsEditor({ empresaId, empresaNome }: CustomLimitsEdito
                 onChange={(e) => handleInputChange('limite_entregadores', e.target.value)}
               />
               <p className="text-xs text-muted-foreground">
-                Número máximo de entregadores ativos para esta empresa
+                Número máximo de tecnicos ativos para esta empresa
               </p>
             </div>
 

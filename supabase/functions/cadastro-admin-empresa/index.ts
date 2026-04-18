@@ -193,13 +193,13 @@ serve(async (req) => {
 
     console.log('✅ Usuário Auth criado:', authUser.user.id)
     
-    // Gerar dados únicos para o entregador
+    // Gerar dados únicos para o tecnico
     const timestamp = Date.now().toString().slice(-10)
     const uniqueSuffix = Math.random().toString().slice(2, 5)
     const telefone = `11${timestamp}`.slice(-11)
     const cpf = `000${uniqueSuffix}${timestamp.slice(-6)}`.slice(-11)
 
-    console.log('📝 Dados gerados para entregador:', {
+    console.log('📝 Dados gerados para tecnico:', {
       user_id: authUser.user.id,
       telefone,
       cpf: cpf.substring(0, 3) + '***' + cpf.substring(8) // Mascarar CPF no log
@@ -255,10 +255,10 @@ serve(async (req) => {
       });
     }
 
-    // Inserir na tabela entregadores
-    console.log('📝 Criando registro de entregador...')
+    // Inserir na tabela tecnicos
+    console.log('📝 Criando registro de tecnico...')
 
-    const entregadorData = {
+    const tecnicoData = {
       user_id: authUser.user.id,
       nome: nome.trim(),
       email: email.toLowerCase(),
@@ -270,24 +270,24 @@ serve(async (req) => {
       empresa_id,
     };
 
-    console.log('📋 Dados do entregador a serem inseridos:', {
-      ...entregadorData,
+    console.log('📋 Dados do tecnico a serem inseridos:', {
+      ...tecnicoData,
       cpf: cpf.substring(0, 3) + '***' + cpf.substring(8) // Mascarar CPF no log
     });
 
-    const { data: entregador, error: entregadorError } = await supabaseAdmin
+    const { data: tecnico, error: tecnicoError } = await supabaseAdmin
       .from('tecnicos')
-      .insert(entregadorData)
+      .insert(tecnicoData)
       .select()
       .single()
 
-    if (entregadorError) {
-      console.error('❌ Erro ao criar entregador:', entregadorError)
-      console.error('❌ Detalhes do erro entregador:', {
-        message: entregadorError.message,
-        code: entregadorError.code,
-        details: entregadorError.details,
-        hint: entregadorError.hint
+    if (tecnicoError) {
+      console.error('❌ Erro ao criar tecnico:', tecnicoError)
+      console.error('❌ Detalhes do erro tecnico:', {
+        message: tecnicoError.message,
+        code: tecnicoError.code,
+        details: tecnicoError.details,
+        hint: tecnicoError.hint
       });
       
       // Tentar limpar usuário criado no Auth
@@ -297,10 +297,10 @@ serve(async (req) => {
       } catch (cleanupError) {
         console.error('⚠️ Erro ao limpar usuário Auth:', cleanupError)
       }
-      throw new Error(`Erro ao criar entregador: ${entregadorError.message}`)
+      throw new Error(`Erro ao criar tecnico: ${tecnicoError.message}`)
     }
 
-    console.log('✅ Entregador criado:', entregador.id)
+    console.log('✅ Tecnico criado:', tecnico.id)
     
     // Inserir role de admin_empresa
     console.log('👑 Atribuindo role admin_empresa...')
@@ -321,7 +321,7 @@ serve(async (req) => {
     // Log de auditoria final
     console.log('🎉 Cadastro concluído com sucesso:', {
       user_id: authUser.user.id,
-      tecnico_id: entregador.id,
+      tecnico_id: tecnico.id,
       empresa: empresa.nome,
       origem
     })
@@ -330,10 +330,10 @@ serve(async (req) => {
       JSON.stringify({
         success: true,
         message: 'Administrador criado com sucesso!',
-        admin_id: entregador.id,
+        admin_id: tecnico.id,
         data: {
           user_id: authUser.user.id,
-          tecnico_id: entregador.id,
+          tecnico_id: tecnico.id,
           empresa: empresa.nome
         }
       }),

@@ -8,7 +8,7 @@ import { getDataAtualFormatada, turnoJaTerminou } from "@/lib/utils";
 import { validateAgendaStructure } from "@/utils/agendaValidation";
 import { processAgenda } from "@/utils/agendaProcessor";
 import { 
-  fetchEntregadorData, 
+  fetchTecnicoData, 
   fetchAgendasRaw, 
   fetchContagemAgendamentos, 
   fetchAgendamentosExistentes 
@@ -20,8 +20,8 @@ export function useAgendasDisponiveis() {
   const { configs, podeVerAgendaPorHorario } = useConfiguracoesSistema();
   const [agendas, setAgendas] = useState<AgendaDisponivel[]>([]);
   const [loading, setLoading] = useState(true);
-  const [entregadorId, setEntregadorId] = useState<string | null>(null);
-  const [entregadorData, setEntregadorData] = useState<any>(null);
+  const [tecnicoId, setTecnicoId] = useState<string | null>(null);
+  const [tecnicoData, setTecnicoData] = useState<any>(null);
 
   const fetchAgendasDisponiveis = async () => {
     if (!user?.id) {
@@ -33,39 +33,39 @@ export function useAgendasDisponiveis() {
       setLoading(true);
       logger.info('🔍 FASE 1: Iniciando busca de agendas com validação temporal', { userId: user.id });
 
-      // Buscar dados do entregador
-      const entregadorDataFetched = await fetchEntregadorData(user.id);
-      setEntregadorId(entregadorDataFetched.id);
-      setEntregadorData(entregadorDataFetched);
+      // Buscar dados do tecnico
+      const tecnicoDataFetched = await fetchTecnicoData(user.id);
+      setTecnicoId(tecnicoDataFetched.id);
+      setTecnicoData(tecnicoDataFetched);
       
       // 🔥 LOG ESPECÍFICO PARA ADELSON NASCIMENTO
-      if (entregadorDataFetched.nome?.toLowerCase().includes('adelson')) {
-        logger.info('🔍 INVESTIGAÇÃO ADELSON - Dados do entregador carregados', {
-          entregadorId: entregadorDataFetched.id,
-          nome: entregadorDataFetched.nome,
-          estrelas: entregadorDataFetched.estrelas,
-          empresaId: entregadorDataFetched.empresa_id,
-          status: entregadorDataFetched.status,
+      if (tecnicoDataFetched.nome?.toLowerCase().includes('adelson')) {
+        logger.info('🔍 INVESTIGAÇÃO ADELSON - Dados do tecnico carregados', {
+          tecnicoId: tecnicoDataFetched.id,
+          nome: tecnicoDataFetched.nome,
+          estrelas: tecnicoDataFetched.estrelas,
+          empresaId: tecnicoDataFetched.empresa_id,
+          status: tecnicoDataFetched.status,
           userId: user.id,
           timestamp: new Date().toISOString()
         }, 'INVESTIGAÇÃO_ADELSON');
       }
       
       logger.info('✅ ENTREGADOR VALIDADO', { 
-        entregadorId: entregadorDataFetched.id, 
-        estrelas: entregadorDataFetched.estrelas,
-        empresaId: entregadorDataFetched.empresa_id,
-        nome: entregadorDataFetched.nome,
-        status: entregadorDataFetched.status
+        tecnicoId: tecnicoDataFetched.id, 
+        estrelas: tecnicoDataFetched.estrelas,
+        empresaId: tecnicoDataFetched.empresa_id,
+        nome: tecnicoDataFetched.nome,
+        status: tecnicoDataFetched.status
       });
 
       // Buscar agendas brutas
       const dataAtual = getDataAtualFormatada();
-      const agendasData = await fetchAgendasRaw(entregadorDataFetched.empresa_id);
+      const agendasData = await fetchAgendasRaw(tecnicoDataFetched.empresa_id);
       
       logger.info('📊 QUERY DE AGENDAS executada com sucesso', { 
         totalAgendas: agendasData.length,
-        empresaId: entregadorDataFetched.empresa_id,
+        empresaId: tecnicoDataFetched.empresa_id,
         primeiraAgenda: agendasData[0] ? {
           id: agendasData[0].id,
           data: agendasData[0].data_agenda,
@@ -75,7 +75,7 @@ export function useAgendasDisponiveis() {
 
       // Validar estrutura das agendas
       const agendasValidas = agendasData.filter(agenda => 
-        validateAgendaStructure(agenda, entregadorDataFetched.empresa_id)
+        validateAgendaStructure(agenda, tecnicoDataFetched.empresa_id)
       );
 
       logger.info('🔍 VALIDAÇÃO ESTRUTURAL concluída', {
@@ -94,14 +94,14 @@ export function useAgendasDisponiveis() {
       });
 
       // Buscar agendamentos existentes
-      const agendamentosExistentes = await fetchAgendamentosExistentes(entregadorDataFetched.id, dataAtual);
+      const agendamentosExistentes = await fetchAgendamentosExistentes(tecnicoDataFetched.id, dataAtual);
       
       logger.info('📋 Agendamentos existentes carregados', { 
         totalAgendamentos: agendamentosExistentes.length
       });
 
       // 🔥 LOG ESPECÍFICO PARA ADELSON NASCIMENTO - Configurações antes do processamento
-      if (entregadorDataFetched.nome?.toLowerCase().includes('adelson')) {
+      if (tecnicoDataFetched.nome?.toLowerCase().includes('adelson')) {
         logger.info('🔍 INVESTIGAÇÃO ADELSON - Configurações antes do processamento', {
           configsDisponiveis: !!configs,
           habilitarPriorizacaoHorarios: configs?.habilitarPriorizacaoHorarios,
@@ -126,14 +126,14 @@ export function useAgendasDisponiveis() {
           agenda,
           agendamentosExistentes,
           contagemRealPorAgenda,
-          entregadorData: entregadorDataFetched,
+          tecnicoData: tecnicoDataFetched,
           configs,
           podeVerAgendaPorHorario // 🔥 PASSANDO A FUNÇÃO DE VALIDAÇÃO
         })
       );
 
       // 🔥 LOG ESPECÍFICO PARA ADELSON NASCIMENTO - Resultado do processamento
-      if (entregadorDataFetched.nome?.toLowerCase().includes('adelson')) {
+      if (tecnicoDataFetched.nome?.toLowerCase().includes('adelson')) {
         const agendasHoje = agendasProcessadas.filter(a => a.data_agenda === dataAtual);
         const agendasDisponiveis = agendasHoje.filter(a => a.podeAgendar);
         const agendasBloqueadas = agendasHoje.filter(a => !a.podeAgendar);
@@ -151,7 +151,7 @@ export function useAgendasDisponiveis() {
             motivoBloqueio: a.motivoBloqueio,
             turnoIniciado: a.turnoIniciado
           })),
-          estrelas: entregadorDataFetched.estrelas,
+          estrelas: tecnicoDataFetched.estrelas,
           dataAtual,
           timestamp: new Date().toISOString()
         }, 'INVESTIGAÇÃO_ADELSON');
@@ -182,7 +182,7 @@ export function useAgendasDisponiveis() {
         agendasJaAgendadas: agendasAtivas.filter(a => a.jaAgendado).length,
         agendasTurnoIniciado: agendasAtivas.filter(a => a.turnoIniciado).length,
         inconsistenciasDetectadas: agendasAtivas.filter(a => a.inconsistenciaDetectada).length,
-        estrelas: entregadorDataFetched.estrelas,
+        estrelas: tecnicoDataFetched.estrelas,
         permiteMesmoDia: configs?.permitirAgendamentoMesmoDia,
         habilitaPriorizacao: configs?.habilitarPriorizacaoHorarios
       });
@@ -208,8 +208,8 @@ export function useAgendasDisponiveis() {
   return {
     agendas,
     loading,
-    entregadorId,
-    entregadorData,
+    tecnicoId,
+    tecnicoData,
     refetch: fetchAgendasDisponiveis
   };
 }

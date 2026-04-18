@@ -34,11 +34,11 @@ interface ModalDetalhesAgendaProps {
 }
 
 export function ModalDetalhesAgenda({ agenda, isOpen, onClose }: ModalDetalhesAgendaProps) {
-  const { entregadores, loading, buscarEntregadoresAgenda, cancelarAgendamento } = useAgendaDetalhes();
+  const { tecnicos, loading, buscarTecnicosAgenda, cancelarAgendamento } = useAgendaDetalhes();
 
   React.useEffect(() => {
     if (isOpen && agenda) {
-      buscarEntregadoresAgenda(agenda.id);
+      buscarTecnicosAgenda(agenda.id);
     }
   }, [isOpen, agenda?.id]);
 
@@ -58,8 +58,8 @@ export function ModalDetalhesAgenda({ agenda, isOpen, onClose }: ModalDetalhesAg
   const handleCancelarAgendamento = async (agendamentoId: string, agendaId: string) => {
     const sucesso = await cancelarAgendamento(agendamentoId);
     if (sucesso) {
-      // Recarregar a lista de entregadores
-      await buscarEntregadoresAgenda(agendaId);
+      // Recarregar a lista de tecnicos
+      await buscarTecnicosAgenda(agendaId);
     }
   };
 
@@ -103,23 +103,23 @@ export function ModalDetalhesAgenda({ agenda, isOpen, onClose }: ModalDetalhesAg
             </div>
           </div>
 
-          {/* Lista de Entregadores */}
+          {/* Lista de Tecnicos */}
           <div>
             <h4 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
               <Users className="h-4 w-4" />
-              Entregadores Agendados ({entregadores.length})
+              Tecnicos Agendados ({tecnicos.length})
             </h4>
             
             {loading ? (
               <div className="flex items-center justify-center py-8">
                 <Loader2 className="h-6 w-6 animate-spin mr-2" />
-                <span>Carregando entregadores...</span>
+                <span>Carregando tecnicos...</span>
               </div>
-            ) : entregadores.length > 0 ? (
+            ) : tecnicos.length > 0 ? (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Entregador</TableHead>
+                    <TableHead>Tecnico</TableHead>
                     <TableHead>Contato</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Agendado em</TableHead>
@@ -128,40 +128,40 @@ export function ModalDetalhesAgenda({ agenda, isOpen, onClose }: ModalDetalhesAg
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {entregadores.map((entregador) => (
-                    <TableRow key={entregador.id}>
+                  {tecnicos.map((tecnico) => (
+                    <TableRow key={tecnico.id}>
                       <TableCell className="font-medium">
-                        {entregador.nome}
+                        {tecnico.nome}
                       </TableCell>
                       <TableCell>
                         <div className="space-y-1">
                           <div className="flex items-center gap-1 text-sm">
                             <Phone className="h-3 w-3" />
-                            {entregador.telefone}
+                            {tecnico.telefone}
                           </div>
                           <div className="flex items-center gap-1 text-sm text-gray-600">
                             <Mail className="h-3 w-3" />
-                            {entregador.email}
+                            {tecnico.email}
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={getStatusBadgeVariant(entregador.status)}>
-                          {entregador.status}
+                        <Badge variant={getStatusBadgeVariant(tecnico.status)}>
+                          {tecnico.status}
                         </Badge>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1 text-sm">
                           <Calendar className="h-3 w-3" />
-                          {formatarTimestamp(entregador.data_agendamento)}
+                          {formatarTimestamp(tecnico.data_agendamento)}
                         </div>
                       </TableCell>
                       <TableCell>
-                        {entregador.observacoes ? (
+                        {tecnico.observacoes ? (
                           <div className="flex items-center gap-1 text-sm">
                             <MessageSquare className="h-3 w-3" />
-                            <span className="max-w-xs truncate" title={entregador.observacoes}>
-                              {entregador.observacoes}
+                            <span className="max-w-xs truncate" title={tecnico.observacoes}>
+                              {tecnico.observacoes}
                             </span>
                           </div>
                         ) : (
@@ -169,7 +169,7 @@ export function ModalDetalhesAgenda({ agenda, isOpen, onClose }: ModalDetalhesAg
                         )}
                       </TableCell>
                       <TableCell>
-                        {entregador.status === 'agendado' && (
+                        {tecnico.status === 'agendado' && (
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <Button variant="destructive" size="sm">
@@ -181,14 +181,14 @@ export function ModalDetalhesAgenda({ agenda, isOpen, onClose }: ModalDetalhesAg
                               <AlertDialogHeader>
                                 <AlertDialogTitle>Confirmar Cancelamento</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Tem certeza que deseja cancelar o agendamento de {entregador.nome}? 
+                                  Tem certeza que deseja cancelar o agendamento de {tecnico.nome}? 
                                   Esta ação não pode ser desfeita.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel>Voltar</AlertDialogCancel>
                                 <AlertDialogAction 
-                                  onClick={() => handleCancelarAgendamento(entregador.id, agenda.id)}
+                                  onClick={() => handleCancelarAgendamento(tecnico.id, agenda.id)}
                                   className="bg-red-600 hover:bg-red-700"
                                 >
                                   Sim, cancelar
@@ -205,7 +205,7 @@ export function ModalDetalhesAgenda({ agenda, isOpen, onClose }: ModalDetalhesAg
             ) : (
               <div className="text-center py-8">
                 <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">Nenhum entregador agendado</p>
+                <p className="text-gray-600">Nenhum tecnico agendado</p>
                 <p className="text-sm text-gray-500">Esta agenda ainda não possui agendamentos</p>
               </div>
             )}

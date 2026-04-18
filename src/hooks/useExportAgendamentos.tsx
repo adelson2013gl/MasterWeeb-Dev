@@ -69,11 +69,11 @@ const validarDadosExportacao = (dados: any[]): ValidationResult => {
     }
     
     // Validar CPF se presente e não for placeholder
-    if (item.cpfEntregador && 
-        item.cpfEntregador !== EXPORT_CONFIG.LABELS.NOT_AVAILABLE && 
-        item.cpfEntregador !== EXPORT_CONFIG.LABELS.NO_APPOINTMENTS &&
-        !validarCPF(item.cpfEntregador.replace(',', ''))) {
-      warnings.push(`Linha ${index + 1}: CPF inválido - ${item.cpfEntregador}`);
+    if (item.cpfTecnico && 
+        item.cpfTecnico !== EXPORT_CONFIG.LABELS.NOT_AVAILABLE && 
+        item.cpfTecnico !== EXPORT_CONFIG.LABELS.NO_APPOINTMENTS &&
+        !validarCPF(item.cpfTecnico.replace(',', ''))) {
+      warnings.push(`Linha ${index + 1}: CPF inválido - ${item.cpfTecnico}`);
     }
   });
   
@@ -114,8 +114,8 @@ const criarDadosFormatoEspecifico = (agendas: any[], agendamentos: any[]): Expor
         cidade: agenda.regioes?.cidades?.nome || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
         regiao: agenda.regioes?.nome || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
         turno: agenda.turnos?.nome || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
-        cpfEntregador: EXPORT_CONFIG.LABELS.NO_APPOINTMENTS,
-        nomeEntregador: EXPORT_CONFIG.LABELS.NO_APPOINTMENTS
+        cpfTecnico: EXPORT_CONFIG.LABELS.NO_APPOINTMENTS,
+        nomeTecnico: EXPORT_CONFIG.LABELS.NO_APPOINTMENTS
       });
     } else {
       // Com agendamentos confirmados - agrupar CPFs e nomes
@@ -131,8 +131,8 @@ const criarDadosFormatoEspecifico = (agendas: any[], agendamentos: any[]): Expor
         cidade: agenda.regioes?.cidades?.nome || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
         regiao: agenda.regioes?.nome || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
         turno: agenda.turnos?.nome || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
-        cpfEntregador: cpfs.length > 0 ? cpfs.join(', ') + ',' : EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
-        nomeEntregador: nomes.length > 0 ? nomes.join(', ') : EXPORT_CONFIG.LABELS.NOT_AVAILABLE
+        cpfTecnico: cpfs.length > 0 ? cpfs.join(', ') + ',' : EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
+        nomeTecnico: nomes.length > 0 ? nomes.join(', ') : EXPORT_CONFIG.LABELS.NOT_AVAILABLE
       });
     }
   });

@@ -3,8 +3,8 @@ import { safeStatus } from '@/lib/enumSafety';
 import { turnoJaIniciou } from "@/lib/utils";
 import { logger } from "@/lib/logger";
 
-export const verificarDisponibilidade = async (agendaId: string, entregadorId: string, tipo: 'vaga' | 'reserva') => {
-  logger.info('🔍 FASE 1: Verificação de disponibilidade com validação temporal', { agendaId, entregadorId, tipo });
+export const verificarDisponibilidade = async (agendaId: string, tecnicoId: string, tipo: 'vaga' | 'reserva') => {
+  logger.info('🔍 FASE 1: Verificação de disponibilidade com validação temporal', { agendaId, tecnicoId, tipo });
 
   // 1. BUSCAR DADOS COMPLETOS DA AGENDA
   const { data: agendaData, error: agendaError } = await supabase
@@ -58,7 +58,7 @@ export const verificarDisponibilidade = async (agendaId: string, entregadorId: s
     .from('agendamentos')
     .select('id, tipo, status')
     .eq('agenda_id', agendaId)
-    .eq('tecnico_id', entregadorId)
+    .eq('tecnico_id', tecnicoId)
     .in('status', [safeStatus('agendado'), safeStatus('pendente')])
     .maybeSingle();
 

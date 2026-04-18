@@ -1,5 +1,5 @@
 /**
- * Hook central para coordenar empresa, entregador e roles
+ * Hook central para coordenar empresa, tecnico e roles
  * Substitui a lógica complexa do EmpresaUnificadoContext
  */
 
@@ -7,7 +7,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useEmpresaData } from '@/hooks/useEmpresaData';
 import { useUserRoles } from '@/hooks/useUserRoles';
-import { useEntregadorContext } from '@/hooks/useEntregadorContext';
+import { useTecnicoContext } from '@/hooks/useTecnicoContext';
 import { logger } from '@/lib/logger';
 import { toast } from 'sonner';
 
@@ -23,7 +23,7 @@ export function useEmpresaUnificado() {
   // Estados dos hooks modulares
   const empresaData = useEmpresaData();
   const userRoles = useUserRoles();
-  const entregadorContext = useEntregadorContext();
+  const tecnicoContext = useTecnicoContext();
   
   // Estado do hook principal
   const [state, setState] = useState<EmpresaUnificadoState>({
@@ -44,11 +44,11 @@ export function useEmpresaUnificado() {
     try {
       logger.info('🚀 Iniciando inicialização do contexto unificado', { userId });
 
-      // Passo 1: Buscar dados do entregador
-      const entregador = await entregadorContext.fetchEntregador(userId);
+      // Passo 1: Buscar dados do tecnico
+      const tecnico = await tecnicoContext.fetchTecnico(userId);
       
-      // Passo 2: Determinar empresa ID (do entregador ou padrão)
-      const empresaId = entregador?.empresa_id || import.meta.env.VITE_DEFAULT_COMPANY_ID;
+      // Passo 2: Determinar empresa ID (do tecnico ou padrão)
+      const empresaId = tecnico?.empresa_id || import.meta.env.VITE_DEFAULT_COMPANY_ID;
       
       if (!empresaId) {
         throw new Error('ID da empresa não configurado');
@@ -77,7 +77,7 @@ export function useEmpresaUnificado() {
         userId,
         empresaId: empresa?.id,
         empresaNome: empresa?.nome,
-        entregadorNome: entregador?.nome,
+        tecnicoNome: tecnico?.nome,
         userRole: userRole?.role,
         permissions
       });
@@ -97,7 +97,7 @@ export function useEmpresaUnificado() {
 
       toast.error('Erro ao carregar dados do usuário');
     }
-  }, [session, entregadorContext, empresaData, userRoles]);
+  }, [session, tecnicoContext, empresaData, userRoles]);
 
   // Trocar empresa
   const trocarEmpresa = useCallback(async (novaEmpresaId: string) => {
@@ -168,20 +168,20 @@ export function useEmpresaUnificado() {
   const debugAuth = useCallback(async () => {
     if (import.meta.env.PROD || !user?.id) return;
     
-    await entregadorContext.debugPermissions(user.id);
-  }, [user?.id, entregadorContext]);
+    await tecnicoContext.debugPermissions(user.id);
+  }, [user?.id, tecnicoContext]);
 
   // Reset completo
   const reset = useCallback(() => {
     empresaData.reset();
     userRoles.reset();
-    entregadorContext.reset();
+    tecnicoContext.reset();
     setState({
       loading: false,
       initialized: false,
       error: null
     });
-  }, [empresaData, userRoles, entregadorContext]);
+  }, [empresaData, userRoles, tecnicoContext]);
 
   // Efeito principal - inicializar quando usuário muda
   useEffect(() => {
@@ -200,15 +200,15 @@ export function useEmpresaUnificado() {
 
   // Calcular propriedades derivadas
   const isLoading = authLoading || state.loading || 
-                   empresaData.loading || userRoles.loading || entregadorContext.loading;
+                   empresaData.loading || userRoles.loading || tecnicoContext.loading;
 
   const hasError = state.error || empresaData.error || 
-                   userRoles.error || entregadorContext.error;
+                   userRoles.error || tecnicoContext.error;
 
   return {
     // Estados principais
     empresa: empresaData.empresa,
-    entregador: entregadorContext.entregador,
+    tecnico: tecnicoContext.tecnico,
     userRole: userRoles.userRole,
     loading: isLoading,
     initialized: state.initialized,

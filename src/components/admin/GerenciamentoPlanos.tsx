@@ -96,7 +96,7 @@ export function GerenciamentoPlanos() {
           price_cents: 4990,
           interval: 'monthly',
           max_users: 5,
-          features: ['Até 5 entregadores', 'Dashboard básico', 'Suporte por email'],
+          features: ['Até 5 tecnicos', 'Dashboard básico', 'Suporte por email'],
           synced: false
         },
         {
@@ -106,7 +106,7 @@ export function GerenciamentoPlanos() {
           price_cents: 9990,
           interval: 'monthly',
           max_users: 20,
-          features: ['Até 20 entregadores', 'Dashboard avançado', 'Relatórios detalhados', 'Suporte prioritário'],
+          features: ['Até 20 tecnicos', 'Dashboard avançado', 'Relatórios detalhados', 'Suporte prioritário'],
           synced: false
         },
         {
@@ -116,7 +116,7 @@ export function GerenciamentoPlanos() {
           price_cents: 19990,
           interval: 'monthly',
           max_users: 100,
-          features: ['Até 100 entregadores', 'Dashboard completo', 'Suporte 24/7', 'Gerente dedicado'],
+          features: ['Até 100 tecnicos', 'Dashboard completo', 'Suporte 24/7', 'Gerente dedicado'],
           synced: false
         }
       ];
@@ -412,7 +412,7 @@ export function GerenciamentoPlanos() {
                   <Textarea
                     value={featuresText}
                     onChange={(e) => setFeaturesText(e.target.value)}
-                    placeholder="Até 5 entregadores&#10;Dashboard básico&#10;Suporte por email"
+                    placeholder="Até 5 tecnicos&#10;Dashboard básico&#10;Suporte por email"
                     rows={4}
                   />
                 </div>

@@ -1,11 +1,11 @@
 
 import { useState } from "react";
-import { useGestaoEntregadores } from "@/hooks/useGestaoEntregadores";
-import { SearchBar } from "./gestao-entregadores/SearchBar";
-import { EntregadorTabs } from "./gestao-entregadores/EntregadorTabs";
-import { EditEntregadorModal } from "./EditEntregadorModal";
-import { ImportacaoEntregadores } from "./ImportacaoEntregadores";
-import { Entregador } from "./gestao-entregadores/types";
+import { useGestaoTecnicos } from "@/hooks/useGestaoTecnicos";
+import { SearchBar } from "./gestao-tecnicos/SearchBar";
+import { TecnicoTabs } from "./gestao-tecnicos/TecnicoTabs";
+import { EditTecnicoModal } from "./EditTecnicoModal";
+import { ImportacaoTecnicos } from "./ImportacaoTecnicos";
+import { Tecnico } from "./gestao-tecnicos/types";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Upload, Users } from "lucide-react";
@@ -13,9 +13,9 @@ import { useEmpresaUnificado } from "@/contexts/EmpresaUnificadoContext";
 import { logger } from "@/lib/logger";
 import { AdminErrorBoundary } from "@/components/ErrorBoundary/index";
 
-function GestaoEntregadoresComponent() {
+function GestaoTecnicosComponent() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [editingEntregador, setEditingEntregador] = useState<Entregador | null>(null);
+  const [editingTecnico, setEditingTecnico] = useState<Tecnico | null>(null);
   const [activeTab, setActiveTab] = useState("pendente");
   const [importModalOpen, setImportModalOpen] = useState(false);
   
@@ -25,36 +25,36 @@ function GestaoEntregadoresComponent() {
     loading,
     handleStatusChange,
     handleReativar,
-    handleEntregadorUpdated,
-    getFilteredEntregadores,
-    getEntregadoresPorStatus,
+    handleTecnicoUpdated,
+    getFilteredTecnicos,
+    getTecnicosPorStatus,
     refetch
-  } = useGestaoEntregadores();
+  } = useGestaoTecnicos();
 
   const handleImportacaoConcluida = () => {
-    logger.info('Importação de entregadores concluída', { empresaId: empresa?.id }, 'ADMIN');
+    logger.info('Importação de tecnicos concluída', { empresaId: empresa?.id }, 'ADMIN');
     setImportModalOpen(false);
-    refetch(); // Recarregar a lista de entregadores
+    refetch(); // Recarregar a lista de tecnicos
   };
 
   if (loading) {
-    logger.debug('Carregando gestão de entregadores', { empresaId: empresa?.id }, 'ADMIN');
+    logger.debug('Carregando gestão de tecnicos', { empresaId: empresa?.id }, 'ADMIN');
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Gestão de Entregadores</h2>
-          <p className="text-gray-600 text-sm sm:text-base">Carregando entregadores...</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Gestão de Tecnicos</h2>
+          <p className="text-gray-600 text-sm sm:text-base">Carregando tecnicos...</p>
         </div>
       </div>
     );
   }
 
-  const filteredEntregadores = getFilteredEntregadores(searchTerm);
-  const entregadoresPorStatus = getEntregadoresPorStatus(filteredEntregadores);
+  const filteredTecnicos = getFilteredTecnicos(searchTerm);
+  const tecnicosPorStatus = getTecnicosPorStatus(filteredTecnicos);
 
-  logger.debug('Renderizando gestão de entregadores', {
+  logger.debug('Renderizando gestão de tecnicos', {
     empresaId: empresa?.id,
-    totalEntregadores: filteredEntregadores.length,
+    totalTecnicos: filteredTecnicos.length,
     searchTerm,
     activeTab
   }, 'ADMIN');
@@ -63,8 +63,8 @@ function GestaoEntregadoresComponent() {
     <div className="space-y-6">
       <div className="flex justify-between items-start">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Gestão de Entregadores</h2>
-          <p className="text-gray-600 text-sm sm:text-base">Gerencie todos os entregadores da plataforma</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Gestão de Tecnicos</h2>
+          <p className="text-gray-600 text-sm sm:text-base">Gerencie todos os tecnicos da plataforma</p>
         </div>
         
         <Dialog open={importModalOpen} onOpenChange={setImportModalOpen}>
@@ -78,15 +78,15 @@ function GestaoEntregadoresComponent() {
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Users size={20} />
-                Importação em Massa de Entregadores
+                Importação em Massa de Tecnicos
               </DialogTitle>
               <DialogDescription>
-                Importe múltiplos entregadores usando planilha Excel ou CSV
+                Importe múltiplos tecnicos usando planilha Excel ou CSV
               </DialogDescription>
             </DialogHeader>
             
             {empresa?.id && (
-              <ImportacaoEntregadores 
+              <ImportacaoTecnicos 
                 empresaId={empresa.id}
                 onImportacaoConcluida={handleImportacaoConcluida}
               />
@@ -100,38 +100,38 @@ function GestaoEntregadoresComponent() {
         onSearchChange={setSearchTerm}
       />
       
-      <EntregadorTabs 
-        entregadoresPorStatus={entregadoresPorStatus}
+      <TecnicoTabs 
+        tecnicosPorStatus={tecnicosPorStatus}
         activeTab={activeTab}
         onTabChange={setActiveTab}
         onStatusChange={handleStatusChange}
         onReativar={handleReativar}
-        onEdit={setEditingEntregador}
+        onEdit={setEditingTecnico}
       />
       
-      {editingEntregador && (
-        <EditEntregadorModal
-          entregador={editingEntregador}
-          open={!!editingEntregador}
-          onOpenChange={() => setEditingEntregador(null)}
-          onEntregadorUpdated={handleEntregadorUpdated}
+      {editingTecnico && (
+        <EditTecnicoModal
+          tecnico={editingTecnico}
+          open={!!editingTecnico}
+          onOpenChange={() => setEditingTecnico(null)}
+          onTecnicoUpdated={handleTecnicoUpdated}
         />
       )}
     </div>
   );
 }
 
-// Wrapper com error boundary específico para gestão de entregadores
-export function GestaoEntregadores() {
+// Wrapper com error boundary específico para gestão de tecnicos
+export function GestaoTecnicos() {
   return (
     <AdminErrorBoundary 
-      context="entregadores"
-      fallbackTitle="Erro na Gestão de Entregadores"
+      context="tecnicos"
+      fallbackTitle="Erro na Gestão de Tecnicos"
       criticalOperation={true}
       onRetry={() => window.location.reload()}
       onNavigateBack={() => window.history.back()}
     >
-      <GestaoEntregadoresComponent />
+      <GestaoTecnicosComponent />
     </AdminErrorBoundary>
   );
 }

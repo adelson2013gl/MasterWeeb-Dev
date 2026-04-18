@@ -21,29 +21,29 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2, Edit } from "lucide-react";
 import { Database } from "@/integrations/supabase/types";
-import { EditorEstrelas } from "./gestao-entregadores/EditorEstrelas";
-import { Entregador } from "./gestao-entregadores/types";
+import { EditorEstrelas } from "./gestao-tecnicos/EditorEstrelas";
+import { Tecnico } from "./gestao-tecnicos/types";
 import { useEmpresaUnificado } from "@/contexts/EmpresaUnificadoContext";
 
 type Cidade = Database['public']['Tables']['cidades']['Row'];
 
-interface EditEntregadorModalProps {
-  entregador: Entregador;
+interface EditTecnicoModalProps {
+  tecnico: Tecnico;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onEntregadorUpdated: (entregador: Entregador) => void;
+  onTecnicoUpdated: (tecnico: Tecnico) => void;
 }
 
-export function EditEntregadorModal({ entregador, open, onOpenChange, onEntregadorUpdated }: EditEntregadorModalProps) {
+export function EditTecnicoModal({ tecnico, open, onOpenChange, onTecnicoUpdated }: EditTecnicoModalProps) {
   const { empresa, isSuperAdmin } = useEmpresaUnificado();
   const [formData, setFormData] = useState({
-    nome: entregador.nome,
-    email: entregador.email,
-    telefone: entregador.telefone,
-    cpf: entregador.cpf,
-    cidade_id: entregador.cidade_id,
-    status: entregador.status,
-    estrelas: entregador.estrelas || 1,
+    nome: tecnico.nome,
+    email: tecnico.email,
+    telefone: tecnico.telefone,
+    cpf: tecnico.cpf,
+    cidade_id: tecnico.cidade_id,
+    status: tecnico.status,
+    estrelas: tecnico.estrelas || 1,
   });
   const [cidades, setCidades] = useState<Cidade[]>([]);
   const [loading, setLoading] = useState(false);
@@ -53,16 +53,16 @@ export function EditEntregadorModal({ entregador, open, onOpenChange, onEntregad
     if (open) {
       fetchCidades();
       setFormData({
-        nome: entregador.nome,
-        email: entregador.email,
-        telefone: entregador.telefone,
-        cpf: entregador.cpf,
-        cidade_id: entregador.cidade_id,
-        status: entregador.status,
-        estrelas: entregador.estrelas || 1,
+        nome: tecnico.nome,
+        email: tecnico.email,
+        telefone: tecnico.telefone,
+        cpf: tecnico.cpf,
+        cidade_id: tecnico.cidade_id,
+        status: tecnico.status,
+        estrelas: tecnico.estrelas || 1,
       });
     }
-  }, [open, entregador]);
+  }, [open, tecnico]);
 
   const fetchCidades = async () => {
     if (!empresa) {
@@ -135,9 +135,9 @@ export function EditEntregadorModal({ entregador, open, onOpenChange, onEntregad
       return false;
     }
 
-    // Verificar se o entregador pertence à empresa atual (exceto Super Admin)
-    if (!isSuperAdmin && entregador.empresa_id !== empresa.id) {
-      toast.error('Você não tem permissão para editar este entregador');
+    // Verificar se o tecnico pertence à empresa atual (exceto Super Admin)
+    if (!isSuperAdmin && tecnico.empresa_id !== empresa.id) {
+      toast.error('Você não tem permissão para editar este tecnico');
       return false;
     }
 
@@ -159,7 +159,7 @@ export function EditEntregadorModal({ entregador, open, onOpenChange, onEntregad
     setLoading(true);
 
     try {
-      console.log('EditEntregadorModal: Atualizando entregador:', entregador.id);
+      console.log('EditTecnicoModal: Atualizando tecnico:', tecnico.id);
 
       const updateData = {
         nome: formData.nome.trim(),
@@ -175,7 +175,7 @@ export function EditEntregadorModal({ entregador, open, onOpenChange, onEntregad
       let updateQuery = supabase
         .from('tecnicos')
         .update(updateData)
-        .eq('id', entregador.id);
+        .eq('id', tecnico.id);
 
       // Se não é Super Admin, adicionar filtro por empresa
       if (!isSuperAdmin && empresa) {
@@ -185,11 +185,11 @@ export function EditEntregadorModal({ entregador, open, onOpenChange, onEntregad
       const { error } = await updateQuery;
 
       if (error) {
-        console.error('EditEntregadorModal: Erro ao atualizar:', error);
+        console.error('EditTecnicoModal: Erro ao atualizar:', error);
         if (error.code === '23505') {
-          toast.error('Este email ou CPF já está em uso por outro entregador');
+          toast.error('Este email ou CPF já está em uso por outro tecnico');
         } else {
-          toast.error('Erro ao atualizar entregador');
+          toast.error('Erro ao atualizar tecnico');
         }
         return;
       }
@@ -201,7 +201,7 @@ export function EditEntregadorModal({ entregador, open, onOpenChange, onEntregad
           *,
           cidades!tecnicos_cidade_id_fkey(nome, estado)
         `)
-        .eq('id', entregador.id);
+        .eq('id', tecnico.id);
 
       // Se não é Super Admin, adicionar filtro por empresa
       if (!isSuperAdmin && empresa) {
@@ -211,34 +211,34 @@ export function EditEntregadorModal({ entregador, open, onOpenChange, onEntregad
       const { data: updatedData, error: fetchError } = await fetchQuery.single();
 
       if (fetchError) {
-        console.error('EditEntregadorModal: Erro ao buscar dados atualizados:', fetchError);
+        console.error('EditTecnicoModal: Erro ao buscar dados atualizados:', fetchError);
         toast.error('Erro ao buscar dados atualizados');
       } else if (updatedData) {
-        const updatedEntregador = {
+        const updatedTecnico = {
           ...updatedData,
           cidade: updatedData.cidades ? {
             nome: updatedData.cidades.nome,
             estado: updatedData.cidades.estado
           } : undefined
         };
-        onEntregadorUpdated(updatedEntregador);
+        onTecnicoUpdated(updatedTecnico);
       }
 
-      console.log('EditEntregadorModal: Entregador atualizado com sucesso');
-      toast.success('Entregador atualizado com sucesso!');
+      console.log('EditTecnicoModal: Tecnico atualizado com sucesso');
+      toast.success('Tecnico atualizado com sucesso!');
       onOpenChange(false);
 
     } catch (error) {
-      console.error('EditEntregadorModal: Erro inesperado:', error);
-      toast.error('Erro inesperado ao atualizar entregador');
+      console.error('EditTecnicoModal: Erro inesperado:', error);
+      toast.error('Erro inesperado ao atualizar tecnico');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleEntregadorUpdate = () => {
+  const handleTecnicoUpdate = () => {
     // Recarregar dados após atualização das estrelas
-    onEntregadorUpdated({ ...entregador, estrelas: formData.estrelas });
+    onTecnicoUpdated({ ...tecnico, estrelas: formData.estrelas });
   };
 
   // Se não há empresa identificada, não renderizar
@@ -252,10 +252,10 @@ export function EditEntregadorModal({ entregador, open, onOpenChange, onEntregad
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Edit className="h-5 w-5" />
-            Editar Entregador
+            Editar Tecnico
           </DialogTitle>
           <DialogDescription>
-            Edite as informações do entregador {entregador.nome}
+            Edite as informações do tecnico {tecnico.nome}
           </DialogDescription>
         </DialogHeader>
 
@@ -347,12 +347,12 @@ export function EditEntregadorModal({ entregador, open, onOpenChange, onEntregad
           <div className="space-y-2">
             <Label>Nível de Estrelas</Label>
             <EditorEstrelas 
-              entregador={{
-                id: entregador.id,
-                nome: entregador.nome,
-                estrelas: entregador.estrelas || 1
+              tecnico={{
+                id: tecnico.id,
+                nome: tecnico.nome,
+                estrelas: tecnico.estrelas || 1
               }}
-              onUpdate={handleEntregadorUpdate}
+              onUpdate={handleTecnicoUpdate}
             />
           </div>
 

@@ -15,7 +15,7 @@ interface Props {
   onRetry?: () => void;
   onNavigateBack?: () => void;
   fallbackTitle?: string;
-  context?: string; // "entregadores", "empresas", "configuracoes", "agendas", etc.
+  context?: string; // "tecnicos", "empresas", "configuracoes", "agendas", etc.
   criticalOperation?: boolean; // Se true, mostra avisos mais severos
 }
 
@@ -124,8 +124,8 @@ export class AdminErrorBoundary extends Component<Props, State> {
       // Mensagens contextuais específicas
       const getContextMessage = () => {
         switch (context) {
-          case 'entregadores':
-            return 'Erro ao gerenciar entregadores. Os dados estão seguros.';
+          case 'tecnicos':
+            return 'Erro ao gerenciar tecnicos. Os dados estão seguros.';
           case 'empresas':
             return 'Erro ao gerenciar empresas. Configurações preservadas.';
           case 'configuracoes':

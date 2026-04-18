@@ -7,7 +7,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 }
 
-interface CreateEntregadorRequest {
+interface CreateTecnicoRequest {
   nome: string;
   email: string;
   telefone: string;
@@ -17,7 +17,7 @@ interface CreateEntregadorRequest {
   senha: string;
 }
 
-interface CreateEntregadorResponse {
+interface CreateTecnicoResponse {
   success: boolean;
   message: string;
   data?: {
@@ -36,7 +36,7 @@ serve(async (req) => {
   }
 
   try {
-    console.log("🚀 EDGE_FUNCTION: create-entregador iniciada")
+    console.log("🚀 EDGE_FUNCTION: create-tecnico iniciada")
     
     const contentType = req.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
@@ -57,7 +57,7 @@ serve(async (req) => {
       temSenha: !!requestBody.senha
     });
 
-    const { nome, email, telefone, cpf, cidade_id, empresa_id, senha }: CreateEntregadorRequest = requestBody;
+    const { nome, email, telefone, cpf, cidade_id, empresa_id, senha }: CreateTecnicoRequest = requestBody;
 
     // Validações detalhadas
     console.log("🔍 EDGE_FUNCTION: Iniciando validações...");
@@ -140,10 +140,10 @@ serve(async (req) => {
 
     console.log("✅ EDGE_FUNCTION: Cidade validada:", cidade.nome);
 
-    // Verificar email duplicado na tabela entregadores
+    // Verificar email duplicado na tabela tecnicos
     console.log("📧 EDGE_FUNCTION: Verificando email duplicado:", email);
     
-    const { data: existingEntregador, error: checkError } = await supabaseAdmin
+    const { data: existingTecnico, error: checkError } = await supabaseAdmin
       .from("tecnicos")
       .select("id, email")
       .eq("email", email.toLowerCase())
@@ -154,9 +154,9 @@ serve(async (req) => {
       throw new Error("Erro ao verificar email existente");
     }
 
-    if (existingEntregador) {
+    if (existingTecnico) {
       console.error("❌ EDGE_FUNCTION: Email já existe:", email);
-      throw new Error("Este email ja esta cadastrado como entregador");
+      throw new Error("Este email ja esta cadastrado como tecnico");
     }
 
     console.log("✅ EDGE_FUNCTION: Email único confirmado");
@@ -191,10 +191,10 @@ serve(async (req) => {
       email: authUser.user.email
     });
 
-    // Inserir entregador
-    console.log("📝 EDGE_FUNCTION: Inserindo entregador na tabela...");
+    // Inserir tecnico
+    console.log("📝 EDGE_FUNCTION: Inserindo tecnico na tabela...");
     
-    const entregadorData = {
+    const tecnicoData = {
       user_id: authUser.user.id,
       nome: nome.trim(),
       email: email.toLowerCase().trim(),
@@ -208,18 +208,18 @@ serve(async (req) => {
     };
 
     console.log("📤 EDGE_FUNCTION: Dados para inserção:", {
-      ...entregadorData,
-      cpf: `${entregadorData.cpf.substring(0, 3)}***`
+      ...tecnicoData,
+      cpf: `${tecnicoData.cpf.substring(0, 3)}***`
     });
 
-    const { data: entregador, error: insertError } = await supabaseAdmin
+    const { data: tecnico, error: insertError } = await supabaseAdmin
       .from("tecnicos")
-      .insert(entregadorData)
+      .insert(tecnicoData)
       .select("id, nome, email, user_id, status")
       .single();
 
     if (insertError) {
-      console.error("❌ EDGE_FUNCTION: Erro ao inserir entregador:", insertError);
+      console.error("❌ EDGE_FUNCTION: Erro ao inserir tecnico:", insertError);
       
       // Cleanup: remover usuário se falhar
       try {
@@ -230,24 +230,24 @@ serve(async (req) => {
         console.error("❌ EDGE_FUNCTION: Erro no cleanup:", cleanupError);
       }
       
-      throw new Error(`Erro ao criar entregador: ${insertError.message}`);
+      throw new Error(`Erro ao criar tecnico: ${insertError.message}`);
     }
 
-    console.log("✅ EDGE_FUNCTION: Entregador inserido com sucesso:", {
-      id: entregador.id,
-      nome: entregador.nome,
-      email: entregador.email,
-      status: entregador.status
+    console.log("✅ EDGE_FUNCTION: Tecnico inserido com sucesso:", {
+      id: tecnico.id,
+      nome: tecnico.nome,
+      email: tecnico.email,
+      status: tecnico.status
     });
 
-    const response: CreateEntregadorResponse = {
+    const response: CreateTecnicoResponse = {
       success: true,
-      message: "Entregador criado com sucesso! Podera fazer login com a senha fornecida.",
+      message: "Tecnico criado com sucesso! Podera fazer login com a senha fornecida.",
       data: {
-        tecnico_id: entregador.id,
-        user_id: entregador.user_id,
-        nome: entregador.nome,
-        email: entregador.email
+        tecnico_id: tecnico.id,
+        user_id: tecnico.user_id,
+        nome: tecnico.nome,
+        email: tecnico.email
       }
     };
 
@@ -261,7 +261,7 @@ serve(async (req) => {
   } catch (error) {
     console.error("💥 EDGE_FUNCTION: Erro geral:", error);
     
-    const response: CreateEntregadorResponse = {
+    const response: CreateTecnicoResponse = {
       success: false,
       error: error instanceof Error ? error.message : "Erro desconhecido no servidor",
       details: error instanceof Error ? error.stack : undefined

@@ -25,7 +25,7 @@ interface EstatisticasEstrelas {
   };
 }
 
-interface EntregadorEstrelas {
+interface TecnicoEstrelas {
   id: string;
   nome: string;
   estrelas: number;
@@ -38,7 +38,7 @@ interface EntregadorEstrelas {
 export function DashboardPrioridades() {
   const { isSuperAdmin, empresa } = useEmpresaUnificado();
   const [stats, setStats] = useState<EstatisticasEstrelas | null>(null);
-  const [entregadores, setEntregadores] = useState<EntregadorEstrelas[]>([]);
+  const [tecnicos, setTecnicos] = useState<TecnicoEstrelas[]>([]);
   const [loading, setLoading] = useState(true);
 
   // PROTEÇÃO: Verificar se é super admin
@@ -73,15 +73,15 @@ export function DashboardPrioridades() {
 
       if (error) throw error;
 
-      const entregadoresData = data?.map(e => ({
+      const tecnicosData = data?.map(e => ({
         ...e,
         estrelas: 5 // Valor padrão já que o campo não existe
       })) || [];
 
-      setEntregadores(entregadoresData);
+      setTecnicos(tecnicosData);
 
       // Calcular estatísticas simplificadas
-      const total = entregadoresData.length;
+      const total = tecnicosData.length;
       const porEstrela = { 1: 0, 2: 0, 3: 0, 4: 0, 5: total }; // Todos com 5 estrelas como padrão
       
       const mediaEstrelas = total > 0 ? 5 : 0;
@@ -151,19 +151,19 @@ export function DashboardPrioridades() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-gray-900">Dashboard de Prioridades</h2>
-        <p className="text-gray-600">Visualização da distribuição de estrelas dos entregadores</p>
+        <p className="text-gray-600">Visualização da distribuição de estrelas dos tecnicos</p>
       </div>
 
       {/* Cards de Estatísticas Gerais */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Entregadores</CardTitle>
+            <CardTitle className="text-sm font-medium">Total de Tecnicos</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.total}</div>
-            <p className="text-xs text-muted-foreground">Entregadores aprovados</p>
+            <p className="text-xs text-muted-foreground">Tecnicos aprovados</p>
           </CardContent>
         </Card>
 
@@ -205,7 +205,7 @@ export function DashboardPrioridades() {
       <Card>
         <CardHeader>
           <CardTitle>Distribuição por Estrelas</CardTitle>
-          <CardDescription>Quantidade e percentual de entregadores por nível de prioridade</CardDescription>
+          <CardDescription>Quantidade e percentual de tecnicos por nível de prioridade</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -234,31 +234,31 @@ export function DashboardPrioridades() {
         </CardContent>
       </Card>
 
-      {/* Lista de Entregadores por Prioridade */}
+      {/* Lista de Tecnicos por Prioridade */}
       <Card>
         <CardHeader>
-          <CardTitle>Entregadores por Prioridade</CardTitle>
+          <CardTitle>Tecnicos por Prioridade</CardTitle>
           <CardDescription>Lista completa ordenada por estrelas</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2 max-h-96 overflow-y-auto">
-            {entregadores
+            {tecnicos
               .sort((a, b) => b.estrelas - a.estrelas)
-              .map(entregador => (
-                <div key={entregador.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+              .map(tecnico => (
+                <div key={tecnico.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
                   <div className="flex items-center space-x-3">
-                    <Badge className={getCorEstrela(entregador.estrelas)}>
-                      {getEstrelasIcon(entregador.estrelas)}
+                    <Badge className={getCorEstrela(tecnico.estrelas)}>
+                      {getEstrelasIcon(tecnico.estrelas)}
                     </Badge>
                     <div>
-                      <p className="font-medium">{entregador.nome}</p>
-                      <p className="text-sm text-gray-600">{entregador.cidade?.nome}</p>
+                      <p className="font-medium">{tecnico.nome}</p>
+                      <p className="text-sm text-gray-600">{tecnico.cidade?.nome}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-medium">{entregador.estrelas} estrelas</p>
+                    <p className="text-sm font-medium">{tecnico.estrelas} estrelas</p>
                     <p className="text-xs text-gray-600">
-                      Status: {entregador.status}
+                      Status: {tecnico.status}
                     </p>
                   </div>
                 </div>

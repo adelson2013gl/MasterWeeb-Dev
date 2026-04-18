@@ -35,9 +35,9 @@ export function AdminSidebar({ onMenuClick, activeMenu }: AdminSidebarProps) {
       { id: 'dashboard-prioridades', icon: Star, label: 'Prioridades', badge: null }
     ] : []),
     ...(isSuperAdmin || isAdminEmpresa ? [
-      { id: 'cadastro-entregadores', icon: UserPlus, label: 'Cadastrar Entregador', badge: null }
+      { id: 'cadastro-tecnicos', icon: UserPlus, label: 'Cadastrar Tecnico', badge: null }
     ] : []),
-    { id: 'entregadores', icon: Users, label: 'Entregadores', badge: null },
+    { id: 'tecnicos', icon: Users, label: 'Tecnicos', badge: null },
     ...(isSuperAdmin ? [
       { id: 'administradores', icon: UserCog, label: 'Administradores', badge: null }
     ] : []),

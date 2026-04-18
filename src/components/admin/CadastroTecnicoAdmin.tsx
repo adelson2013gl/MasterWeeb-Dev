@@ -16,7 +16,7 @@ import { safeStringToPlanoType } from "@/lib/typeGuards";
 
 type Cidade = Database['public']['Tables']['cidades']['Row'];
 
-export function CadastroEntregadorAdmin() {
+export function CadastroTecnicoAdmin() {
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
@@ -46,7 +46,7 @@ export function CadastroEntregadorAdmin() {
     if (!empresa) return;
     
     try {
-      console.log('CadastroEntregadorAdmin: Carregando cidades da empresa:', empresa.id);
+      console.log('CadastroTecnicoAdmin: Carregando cidades da empresa:', empresa.id);
       
       const { data, error } = await supabase
         .from('cidades')
@@ -56,14 +56,14 @@ export function CadastroEntregadorAdmin() {
         .order('nome');
 
       if (error) {
-        console.error('CadastroEntregadorAdmin: Erro ao carregar cidades:', error);
+        console.error('CadastroTecnicoAdmin: Erro ao carregar cidades:', error);
         throw error;
       }
       
-      console.log('CadastroEntregadorAdmin: Cidades carregadas:', data?.length);
+      console.log('CadastroTecnicoAdmin: Cidades carregadas:', data?.length);
       setCidades(data || []);
     } catch (error) {
-      console.error('CadastroEntregadorAdmin: Erro ao carregar cidades:', error);
+      console.error('CadastroTecnicoAdmin: Erro ao carregar cidades:', error);
       toast.error("Não foi possível carregar as cidades");
     } finally {
       setLoadingCidades(false);
@@ -136,9 +136,9 @@ export function CadastroEntregadorAdmin() {
       return;
     }
 
-    // Verificar limite de entregadores
+    // Verificar limite de tecnicos
     if (stats.limite > 0 && stats.total >= stats.limite) {
-      toast.error(`Limite de ${stats.limite} entregadores atingido para esta empresa`);
+      toast.error(`Limite de ${stats.limite} tecnicos atingido para esta empresa`);
       return;
     }
 
@@ -150,13 +150,13 @@ export function CadastroEntregadorAdmin() {
     setLoading(true);
 
     try {
-      console.log('CadastroEntregadorAdmin: Iniciando cadastro para:', formData.email);
-      console.log('CadastroEntregadorAdmin: Empresa atual:', empresa.id, empresa.nome);
+      console.log('CadastroTecnicoAdmin: Iniciando cadastro para:', formData.email);
+      console.log('CadastroTecnicoAdmin: Empresa atual:', empresa.id, empresa.nome);
       
       // CORREÇÃO: Usar empresasDisponiveis da variável extraída no início
       const allowedEmpresaIds = empresasDisponiveis.map(emp => emp.id);
       
-      const result = await adminManagementService.createEntregador({
+      const result = await adminManagementService.createTecnico({
         nome: formData.nome,
         email: formData.email,
         telefone: formData.telefone,
@@ -167,7 +167,7 @@ export function CadastroEntregadorAdmin() {
       }, allowedEmpresaIds);
       
       if (result.success) {
-        console.log('CadastroEntregadorAdmin: Cadastro realizado com sucesso para empresa:', empresa.nome);
+        console.log('CadastroTecnicoAdmin: Cadastro realizado com sucesso para empresa:', empresa.nome);
         toast.success(result.message);
         
         setFormData({
@@ -183,7 +183,7 @@ export function CadastroEntregadorAdmin() {
         fetchStats(); // Atualizar estatísticas
       }
     } catch (error) {
-      console.error('CadastroEntregadorAdmin: Erro no cadastro:', error);
+      console.error('CadastroTecnicoAdmin: Erro no cadastro:', error);
       
       let errorMessage = "Ocorreu um erro no cadastro";
       
@@ -212,9 +212,9 @@ export function CadastroEntregadorAdmin() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Cadastro de Entregadores</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Cadastro de Tecnicos</h2>
         <p className="text-gray-600">
-          Cadastre novos entregadores para {empresa?.nome}
+          Cadastre novos tecnicos para {empresa?.nome}
         </p>
       </div>
 
@@ -223,7 +223,7 @@ export function CadastroEntregadorAdmin() {
         <PlanLimitAlert
           empresaId={empresa.id}
           plano={safeStringToPlanoType(empresa.plano || 'basico')}
-          action="add_entregador"
+          action="add_tecnico"
           threshold={80}
         />
       )}
@@ -233,13 +233,13 @@ export function CadastroEntregadorAdmin() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            Estatísticas de Entregadores
+            Estatísticas de Tecnicos
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-4">
             <div className="text-sm">
-              <span className="font-medium">Total de entregadores:</span>{' '}
+              <span className="font-medium">Total de tecnicos:</span>{' '}
               <span className="text-green-600">
                 {stats.total}
               </span>
@@ -258,10 +258,10 @@ export function CadastroEntregadorAdmin() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <UserPlus className="h-5 w-5" />
-            Novo Entregador
+            Novo Tecnico
           </CardTitle>
           <CardDescription>
-            Preencha os dados do novo entregador
+            Preencha os dados do novo tecnico
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -275,7 +275,7 @@ export function CadastroEntregadorAdmin() {
                   onChange={(e) => handleInputChange('nome', e.target.value)}
                   required
                   disabled={loading}
-                  placeholder="Nome completo do entregador"
+                  placeholder="Nome completo do tecnico"
                 />
               </div>
 
@@ -367,7 +367,7 @@ export function CadastroEntregadorAdmin() {
               <PlanLimitGuard
                 empresaId={empresa.id}
                 plano={safeStringToPlanoType(empresa.plano || 'basico')}
-                action="add_entregador"
+                action="add_tecnico"
               >
                 <Button 
                   type="submit" 
@@ -380,7 +380,7 @@ export function CadastroEntregadorAdmin() {
                       Cadastrando...
                     </>
                   ) : (
-                    "Cadastrar Entregador"
+                    "Cadastrar Tecnico"
                   )}
                 </Button>
               </PlanLimitGuard>
@@ -396,7 +396,7 @@ export function CadastroEntregadorAdmin() {
                     Cadastrando...
                   </>
                 ) : (
-                  "Cadastrar Entregador"
+                  "Cadastrar Tecnico"
                 )}
               </Button>
             )}

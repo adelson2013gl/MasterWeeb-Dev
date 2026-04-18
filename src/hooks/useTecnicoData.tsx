@@ -6,20 +6,20 @@ import { getDataAtualFormatada } from "@/lib/utils";
 import { logger } from "@/lib/logger";
 import { safeStatus } from "@/lib/enumSafety";
 
-export function useEntregadorData() {
+export function useTecnicoData() {
   const { user } = useAuth();
-  const [entregador, setEntregador] = useState<any>(null);
+  const [tecnico, setTecnico] = useState<any>(null);
   const [agendamentos, setAgendamentos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchEntregadorData = async () => {
+  const fetchTecnicoData = async () => {
     if (!user?.id) return;
 
     try {
-      logger.info('🔍 Buscando dados do entregador com validação estrutural', { userId: user.id });
+      logger.info('🔍 Buscando dados do tecnico com validação estrutural', { userId: user.id });
 
-      // Buscar dados do entregador INCLUINDO ESTRELAS
-      const { data: entregadorData, error: entregadorError } = await supabase
+      // Buscar dados do tecnico INCLUINDO ESTRELAS
+      const { data: tecnicoData, error: tecnicoError } = await supabase
         .from('tecnicos')
         .select(`
           *,
@@ -31,33 +31,33 @@ export function useEntregadorData() {
         .eq('user_id', user.id)
         .single();
 
-      if (entregadorError) {
-        logger.error('❌ Erro ao buscar entregador', { error: entregadorError });
+      if (tecnicoError) {
+        logger.error('❌ Erro ao buscar tecnico', { error: tecnicoError });
       } else {
-        logger.info('✅ Dados do entregador carregados', { 
-          entregadorId: entregadorData.id,
-          estrelas: entregadorData.estrelas,
-          status: entregadorData.status,
-          empresaId: entregadorData.empresa_id
+        logger.info('✅ Dados do tecnico carregados', { 
+          tecnicoId: tecnicoData.id,
+          estrelas: tecnicoData.estrelas,
+          status: tecnicoData.status,
+          empresaId: tecnicoData.empresa_id
         });
         
         // Validação adequada: verificar se estrelas é um número válido
-        if (entregadorData.estrelas === null || entregadorData.estrelas === undefined) {
-          logger.warn('⚠️ Entregador sem estrelas definidas', {
-            entregadorId: entregadorData.id,
-            nome: entregadorData.nome
+        if (tecnicoData.estrelas === null || tecnicoData.estrelas === undefined) {
+          logger.warn('⚠️ Tecnico sem estrelas definidas', {
+            tecnicoId: tecnicoData.id,
+            nome: tecnicoData.nome
           });
         }
         
-        setEntregador({
-          ...entregadorData,
-          cidade: entregadorData.cidades,
-          estrelas: entregadorData.estrelas
+        setTecnico({
+          ...tecnicoData,
+          cidade: tecnicoData.cidades,
+          estrelas: tecnicoData.estrelas
         });
       }
 
-      if (!entregadorData?.id) {
-        logger.warn('⚠️ Entregador não encontrado, não buscando agendamentos');
+      if (!tecnicoData?.id) {
+        logger.warn('⚠️ Tecnico não encontrado, não buscando agendamentos');
         setLoading(false);
         return;
       }
@@ -65,7 +65,7 @@ export function useEntregadorData() {
       // Buscar agendamentos ATIVOS com validação aprimorada
       const dataAtual = getDataAtualFormatada();
       logger.info('📅 Buscando agendamentos com validação estrutural', { 
-        entregadorId: entregadorData.id,
+        tecnicoId: tecnicoData.id,
         dataAtual 
       });
       
@@ -94,7 +94,7 @@ export function useEntregadorData() {
             )
           )
         `)
-        .eq('tecnico_id', entregadorData.id)
+        .eq('tecnico_id', tecnicoData.id)
         .eq('status', safeStatus('agendado'))
         .eq('agendas.ativo', true)
         .eq('agendas.turnos.ativo', true)
@@ -182,7 +182,7 @@ export function useEntregadorData() {
           totalOriginais: agendamentosData?.length || 0,
           totalValidados: agendamentosValidados.length,
           proximosLimitados: proximosAgendamentos.length,
-          estrelas: entregadorData.estrelas,
+          estrelas: tecnicoData.estrelas,
           descartados: {
             agendaNula: agendamentosData?.filter(ag => !ag.agendas).length || 0,
             agendaInativa: agendamentosData?.filter(ag => ag.agendas && !ag.agendas.ativo).length || 0,
@@ -195,7 +195,7 @@ export function useEntregadorData() {
       }
 
     } catch (error) {
-      logger.error('💥 Erro inesperado na validação estrutural do entregador', { error });
+      logger.error('💥 Erro inesperado na validação estrutural do tecnico', { error });
       setAgendamentos([]);
     } finally {
       setLoading(false);
@@ -203,8 +203,8 @@ export function useEntregadorData() {
   };
 
   useEffect(() => {
-    fetchEntregadorData();
+    fetchTecnicoData();
   }, [user?.id]);
 
-  return { entregador, agendamentos, loading, refetch: fetchEntregadorData };
+  return { tecnico, agendamentos, loading, refetch: fetchTecnicoData };
 }

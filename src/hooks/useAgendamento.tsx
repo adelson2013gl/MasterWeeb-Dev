@@ -8,7 +8,7 @@ import { AgendamentoCompleto, transformAgendamentoFromAPI, isValidAgendamentoRaw
 import { safeStatus, safeTipo } from '@/lib/enumSafety';
 import { verificarDisponibilidade, verificarConflitosHorario } from "@/utils/agendamentoValidation";
 import { 
-  buscarEntregador, 
+  buscarTecnico, 
   buscarAgendamentosConflitantes, 
   buscarEmpresaAgenda, 
   inserirAgendamento 
@@ -37,13 +37,13 @@ export function useAgendamento() {
     queryFn: async () => {
       if (!user?.id) return [];
       
-      const { data: entregador } = await supabase
+      const { data: tecnico } = await supabase
         .from('tecnicos')
         .select('id')
         .eq('user_id', user.id)
         .single();
       
-      if (!entregador) return [];
+      if (!tecnico) return [];
 
       const { data, error } = await supabase
         .from('agendamentos')
@@ -68,7 +68,7 @@ export function useAgendamento() {
             )
           )
         `)
-        .eq('tecnico_id', entregador.id)
+        .eq('tecnico_id', tecnico.id)
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -125,11 +125,11 @@ export function useAgendamento() {
           userId: user.id
         });
 
-        // 1. Buscar o entregador
-        const entregadorData = await buscarEntregador(user.id);
+        // 1. Buscar o tecnico
+        const tecnicoData = await buscarTecnico(user.id);
 
         // 2. FASE 1: VERIFICAÇÃO COM VALIDAÇÃO TEMPORAL
-        const agendaData = await verificarDisponibilidade(agendaId, entregadorData.id, tipo);
+        const agendaData = await verificarDisponibilidade(agendaId, tecnicoData.id, tipo);
 
         // 3. Validações do sistema
         const validacao = isAgendamentoPermitido(agendaData.data_agenda, agendaData.turnos.hora_inicio);
@@ -139,7 +139,7 @@ export function useAgendamento() {
         }
 
         // 4. Verificar conflitos de horário
-        const agendamentosExistentes = await buscarAgendamentosConflitantes(entregadorData.id, agendaData.data_agenda);
+        const agendamentosExistentes = await buscarAgendamentosConflitantes(tecnicoData.id, agendaData.data_agenda);
 
         // 5. Verificar sobreposição de horários
         if (agendamentosExistentes && agendamentosExistentes.length > 0) {
@@ -171,7 +171,7 @@ export function useAgendamento() {
         
         const payloadFinal: CriarAgendamentoPayload = {
           agenda_id: agendaId,
-          tecnico_id: entregadorData.id,
+          tecnico_id: tecnicoData.id,
           empresa_id: empresaId,
           tipo: tipoValidado,
           status: statusValidado,
@@ -193,7 +193,7 @@ export function useAgendamento() {
         const duration = Date.now() - startTime;
         logger.performance('agendamento_criado_fase1', duration, {
           agendaId,
-          entregadorId: entregadorData.id,
+          tecnicoId: tecnicoData.id,
           tipo: tipoValidado,
           agendamentoId: novoAgendamento.id,
           validacaoTemporal: true

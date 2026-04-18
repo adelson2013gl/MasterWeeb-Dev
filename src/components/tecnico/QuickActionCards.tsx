@@ -55,10 +55,10 @@ export function QuickActionCards({ onNavigate }: QuickActionCardsProps) {
   const preloadComponent = (componentId: string) => {
     switch (componentId) {
       case 'agendar':
-        import("@/components/entregador/AgendamentoCalendar").catch(() => {});
+        import("@/components/tecnico/AgendamentoCalendar").catch(() => {});
         break;
       case 'agendamentos':
-        import("@/components/entregador/MeusAgendamentos").catch(() => {});
+        import("@/components/tecnico/MeusAgendamentos").catch(() => {});
         break;
     }
   };
