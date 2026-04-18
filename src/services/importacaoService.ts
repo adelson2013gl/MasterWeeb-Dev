@@ -11,7 +11,7 @@ export interface EntregadorImport {
   cpf: string;
   cidade: string;
   senha: string; // NOVO: Campo obrigatório para senha
-  perfil?: 'entregador' | 'admin';
+  perfil?: 'tecnico' | 'admin';
   status?: 'pendente' | 'aprovado';
   observacoes?: string;
   linha: number; // Para rastreamento de erros
@@ -130,7 +130,7 @@ class ImportacaoService {
     }
 
     const { data: entregadoresExistentes, error: entregadoresError } = await supabase
-      .from('entregadores')
+      .from('tecnicos')
       .select('id')
       .eq('empresa_id', empresaId);
 
@@ -203,7 +203,7 @@ class ImportacaoService {
 
         // Verificar duplicados por email
         const { data: existente } = await supabase
-          .from('entregadores')
+          .from('tecnicos')
           .select('id, email, nome')
           .eq('email', entregador.email.toLowerCase().trim())
           .maybeSingle();
@@ -566,7 +566,7 @@ class ImportacaoService {
         cpf: processField(row['CPF'] || row['cpf']),
         cidade: processField(row['Cidade'] || row['cidade']),
         senha: processField(row['Senha'] || row['senha']), // NOVO: Processar campo senha
-        perfil: (row['Perfil'] || row['perfil'] || 'entregador') as 'entregador' | 'admin',
+        perfil: (row['Perfil'] || row['perfil'] || 'tecnico') as 'tecnico' | 'admin',
         status: (row['Status'] || row['status'] || 'pendente') as 'pendente' | 'aprovado',
         observacoes: processField(row['Observacoes'] || row['observacoes']),
         linha: index + 2 // +2 porque linha 1 é cabeçalho e queremos 1-indexed

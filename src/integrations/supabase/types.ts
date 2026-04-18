@@ -20,7 +20,7 @@ export type Database = {
           empresa_id: string
           endereco_coleta: string | null
           endereco_entrega: string | null
-          entregador_id: string | null
+          tecnico_id: string | null
           id: string
           motivo_cancelamento: string | null
           observacoes: string | null
@@ -39,7 +39,7 @@ export type Database = {
           empresa_id?: string
           endereco_coleta?: string | null
           endereco_entrega?: string | null
-          entregador_id?: string | null
+          tecnico_id?: string | null
           id?: string
           motivo_cancelamento?: string | null
           observacoes?: string | null
@@ -58,7 +58,7 @@ export type Database = {
           empresa_id?: string
           endereco_coleta?: string | null
           endereco_entrega?: string | null
-          entregador_id?: string | null
+          tecnico_id?: string | null
           id?: string
           motivo_cancelamento?: string | null
           observacoes?: string | null
@@ -83,10 +83,10 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "agendamentos_entregador_id_fkey"
-            columns: ["entregador_id"]
+            foreignKeyName: "agendamentos_tecnico_id_fkey"
+            columns: ["tecnico_id"]
             isOneToOne: false
-            referencedRelation: "entregadores"
+            referencedRelation: "tecnicos"
             referencedColumns: ["id"]
           },
         ]
@@ -616,7 +616,7 @@ export type Database = {
         }
         Relationships: []
       }
-      entregadores: {
+      tecnicos: {
         Row: {
           ativo: boolean | null
           cidade_id: string | null
@@ -630,7 +630,7 @@ export type Database = {
           nome: string
           perfil: Database["public"]["Enums"]["perfil_usuario"] | null
           placa: string | null
-          status: Database["public"]["Enums"]["status_entregador"]
+          status: Database["public"]["Enums"]["status_tecnico"]
           telefone: string | null
           updated_at: string | null
           user_id: string | null
@@ -649,7 +649,7 @@ export type Database = {
           nome: string
           perfil?: Database["public"]["Enums"]["perfil_usuario"] | null
           placa?: string | null
-          status?: Database["public"]["Enums"]["status_entregador"]
+          status?: Database["public"]["Enums"]["status_tecnico"]
           telefone?: string | null
           updated_at?: string | null
           user_id?: string | null
@@ -668,7 +668,7 @@ export type Database = {
           nome?: string
           perfil?: Database["public"]["Enums"]["perfil_usuario"] | null
           placa?: string | null
-          status?: Database["public"]["Enums"]["status_entregador"]
+          status?: Database["public"]["Enums"]["status_tecnico"]
           telefone?: string | null
           updated_at?: string | null
           user_id?: string | null
@@ -676,14 +676,14 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "entregadores_cidade_id_fkey"
+            foreignKeyName: "tecnicos_cidade_id_fkey"
             columns: ["cidade_id"]
             isOneToOne: false
             referencedRelation: "cidades"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "entregadores_empresa_id_fkey"
+            foreignKeyName: "tecnicos_empresa_id_fkey"
             columns: ["empresa_id"]
             isOneToOne: false
             referencedRelation: "empresas"
@@ -851,14 +851,14 @@ export type Database = {
       }
     }
     Enums: {
-      perfil_usuario: "entregador" | "admin"
+      perfil_usuario: "tecnico" | "admin"
       status_agendamento:
         | "agendado"
         | "cancelado"
         | "concluido"
         | "pendente"
         | "confirmada"
-      status_entregador: "pendente" | "aprovado" | "rejeitado" | "suspenso"
+      status_tecnico: "pendente" | "aprovado" | "rejeitado" | "suspenso"
       tipo_agendamento: "vaga" | "reserva"
       tipo_configuracao: "boolean" | "integer" | "string" | "decimal" | "json"
     }
@@ -953,7 +953,7 @@ export type Enums<
 export const Constants = {
   public: {
     Enums: {
-      perfil_usuario: ["entregador", "admin"],
+      perfil_usuario: ["tecnico", "admin"],
       status_agendamento: [
         "agendado",
         "cancelado",
@@ -961,7 +961,7 @@ export const Constants = {
         "pendente",
         "confirmada",
       ],
-      status_entregador: ["pendente", "aprovado", "rejeitado", "suspenso"],
+      status_tecnico: ["pendente", "aprovado", "rejeitado", "suspenso"],
       tipo_agendamento: ["vaga", "reserva"],
       tipo_configuracao: ["boolean", "integer", "string", "decimal", "json"],
     },

@@ -20,10 +20,10 @@ export function useGestaoEntregadores() {
       console.log('Buscando entregadores para empresa:', empresa.id);
       
       let query = supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select(`
           *,
-          cidades!entregadores_cidade_id_fkey(nome, estado)
+          cidades!tecnicos_cidade_id_fkey(nome, estado)
         `)
         .order('created_at', { ascending: false });
 
@@ -69,7 +69,7 @@ export function useGestaoEntregadores() {
       };
 
       const { error } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .update(updateData)
         .eq('id', id);
 
@@ -105,7 +105,7 @@ export function useGestaoEntregadores() {
       };
 
       const { error } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .update(updateData)
         .eq('id', id);
 
@@ -164,7 +164,7 @@ export function useGestaoEntregadores() {
   const updateEstrelas = async (id: string, estrelas: number) => {
     try {
       const { error } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .update({ 
           estrelas,
           updated_at: new Date().toISOString()

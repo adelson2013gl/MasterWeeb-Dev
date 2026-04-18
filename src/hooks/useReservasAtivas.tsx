@@ -75,7 +75,7 @@ export function useReservasAtivas() {
           endereco_coleta,
           endereco_entrega,
           data_agendamento,
-          entregadores!agendamentos_entregador_id_fkey (
+          tecnicos!agendamentos_tecnico_id_fkey (
             nome
           )
         `)
@@ -96,7 +96,7 @@ export function useReservasAtivas() {
         status: item.status as 'pendente' | 'confirmada',
         created_at: item.created_at,
         entregador: {
-          nome: item.entregadores?.nome || 'N/A'
+          nome: item.tecnicos?.nome || 'N/A'
         },
         agenda: {
           data: item.agendas?.data_agenda || '',

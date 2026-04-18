@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 interface UseProtectedRouteOptions {
   redirectToLogin?: boolean;
   showToast?: boolean;
-  requiredRole?: 'admin' | 'entregador' | 'admin_empresa' | 'super_admin';
+  requiredRole?: 'admin' | 'tecnico' | 'admin_empresa' | 'super_admin';
 }
 
 export function useProtectedRoute(options: UseProtectedRouteOptions = {}) {

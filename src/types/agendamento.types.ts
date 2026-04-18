@@ -50,7 +50,7 @@ export interface AgendamentoCompleto {
   // Propriedades básicas do agendamento
   id: string;
   agenda_id: string; // CAMPO RESTAURADO - CHAVE ESTRANGEIRA
-  entregador_id: string;
+  tecnico_id: string;
   status: StatusAgendamento;
   tipo: TipoAgendamento;
   data_agendamento: string;
@@ -86,7 +86,7 @@ export interface AgendamentoCompleto {
 export interface AgendamentoRawFromAPI {
   id: string;
   agenda_id: string; // CAMPO RESTAURADO
-  entregador_id: string;
+  tecnico_id: string;
   status: string;
   tipo: string;
   data_agendamento: string;
@@ -143,7 +143,7 @@ export function isValidAgendamentoRaw(obj: any): obj is AgendamentoRawFromAPI {
     obj &&
     typeof obj.id === 'string' &&
     typeof obj.agenda_id === 'string' &&
-    typeof obj.entregador_id === 'string' &&
+    typeof obj.tecnico_id === 'string' &&
     typeof obj.status === 'string' &&
     typeof obj.tipo === 'string' &&
     typeof obj.data_agendamento === 'string' &&
@@ -189,7 +189,7 @@ export function transformAgendamentoFromAPI(raw: AgendamentoRawFromAPI): Agendam
     // Propriedades básicas do agendamento
     id: raw.id,
     agenda_id: raw.agenda_id, // CAMPO RESTAURADO
-    entregador_id: raw.entregador_id,
+    tecnico_id: raw.tecnico_id,
     status: isValidStatusAgendamento(raw.status) ? raw.status : 'pendente',
     tipo: isValidTipoAgendamento(raw.tipo) ? raw.tipo : 'entrega',
     data_agendamento: raw.data_agendamento,

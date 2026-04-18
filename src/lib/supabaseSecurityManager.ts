@@ -15,7 +15,7 @@ class SupabaseSecurityManager {
       // IDs de empresa, usuário, etc.
       /empresa_id=eq\.[a-f0-9-]+/gi,
       /user_id=eq\.[a-f0-9-]+/gi,
-      /entregador_id=eq\.[a-f0-9-]+/gi,
+      /tecnico_id=eq\.[a-f0-9-]+/gi,
       
       // Códigos de erro HTTP com contexto sensível
       /GET.*supabase\.co.*[0-9]{3}/gi,

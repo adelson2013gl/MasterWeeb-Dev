@@ -227,12 +227,12 @@ const GestaoAdministradores: React.FC = () => {
   const getPerfilBadge = (perfil: string) => {
     const variants = {
       'admin': 'default',
-      'entregador': 'secondary'
+      'tecnico': 'secondary'
     } as const;
     
     const labels = {
       'admin': 'Administrador',
-      'entregador': 'Entregador'
+      'tecnico': 'tecnico'
     };
     
     return (

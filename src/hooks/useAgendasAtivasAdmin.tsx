@@ -82,7 +82,7 @@ export function useAgendasAtivasAdmin(dataInicio?: string, dataFim?: string) {
             id,
             status,
             tipo,
-            entregadores (
+            tecnicos (
               id,
               nome,
               telefone,
@@ -176,11 +176,11 @@ export function useAgendasAtivasAdmin(dataInicio?: string, dataFim?: string) {
             id: ag.id,
             status: ag.status,
             tipo: ag.tipo,
-            entregador: ag.entregadores ? {
-              id: ag.entregadores.id,
-              nome: ag.entregadores.nome,
-              telefone: ag.entregadores.telefone,
-              email: ag.entregadores.email
+            entregador: ag.tecnicos ? {
+              id: ag.tecnicos.id,
+              nome: ag.tecnicos.nome,
+              telefone: ag.tecnicos.telefone,
+              email: ag.tecnicos.email
             } : undefined
           }))
         } as Agenda;
@@ -313,7 +313,7 @@ export function useAgendasAtivasAdmin(dataInicio?: string, dataFim?: string) {
           id,
           status,
           tipo,
-          entregadores!agendamentos_entregador_id_fkey (
+          tecnicos!agendamentos_tecnico_id_fkey (
             id,
             nome,
             telefone,

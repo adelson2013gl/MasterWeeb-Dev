@@ -160,7 +160,7 @@ export function EntregadorDashboard() {
                     </button>
                     <div className="flex-1">
                       <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                        Olá, {entregador?.nome || 'Entregador'}!
+                        Olá, {entregador?.nome || 'tecnico'}!
                       </h1>
                       <div className="flex items-center gap-2 mt-1">
                         <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100 text-xs">

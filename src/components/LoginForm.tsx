@@ -8,7 +8,7 @@ import { UserCheck, Shield } from "lucide-react";
 import { toast } from "sonner";
 
 interface LoginFormProps {
-  onLogin: (type: "admin" | "entregador") => void;
+  onLogin: (type: "admin" | "tecnico") => void;
 }
 
 export function LoginForm({ onLogin }: LoginFormProps) {
@@ -16,14 +16,14 @@ export function LoginForm({ onLogin }: LoginFormProps) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (type: "admin" | "entregador") => {
+  const handleSubmit = async (type: "admin" | "tecnico") => {
     setLoading(true);
     
     // Demo login - em produção, conectar com Supabase
     setTimeout(() => {
       if (
         (type === "admin" && email === "admin@teste.com" && password === "123456") ||
-        (type === "entregador" && email === "entregador@teste.com" && password === "123456")
+        (type === "tecnico" && email === "entregador@teste.com" && password === "123456")
       ) {
         toast.success(`Login realizado como ${type}`);
         onLogin(type);
@@ -35,9 +35,9 @@ export function LoginForm({ onLogin }: LoginFormProps) {
   };
 
   return (
-    <Tabs defaultValue="entregador" className="w-full">
+    <Tabs defaultValue="tecnico" className="w-full">
       <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="entregador">
+        <TabsTrigger value="tecnico">
           <UserCheck className="h-4 w-4 mr-2" />
           Entregador
         </TabsTrigger>
@@ -47,7 +47,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="entregador" className="space-y-4">
+      <TabsContent value="tecnico" className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email-entregador">Email</Label>
           <Input
@@ -70,7 +70,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
         </div>
         <Button 
           className="w-full" 
-          onClick={() => handleSubmit("entregador")}
+          onClick={() => handleSubmit("tecnico")}
           disabled={loading}
         >
           {loading ? "Entrando..." : "Entrar como Entregador"}

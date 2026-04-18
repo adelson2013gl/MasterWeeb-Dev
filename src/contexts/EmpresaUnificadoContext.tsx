@@ -79,7 +79,7 @@ export function EmpresaUnificadoProvider({ children }: { children: ReactNode }) 
 
       // Testar query simples
       const { data: testData, error: testError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('id, nome, empresa_id')
         .eq('user_id', user.id)
         .limit(1);
@@ -118,7 +118,7 @@ export function EmpresaUnificadoProvider({ children }: { children: ReactNode }) 
       // 1. Buscar entregador
       console.log('👤 Buscando entregador...');
       const { data: entregadorData, error: entregadorError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('*')
         .eq('user_id', userId)
         .maybeSingle();
@@ -210,13 +210,13 @@ export function EmpresaUnificadoProvider({ children }: { children: ReactNode }) 
           console.log('✅ Role encontrada para empresa atual:', empresaRole.role);
           const roleTyped: UserRole = {
             ...empresaRole,
-            role: empresaRole.role as 'super_admin' | 'admin_empresa' | 'entregador'
+            role: empresaRole.role as 'super_admin' | 'admin_empresa' | 'tecnico'
           };
           setUserRole(roleTyped);
         } else {
           console.log('⚠️ Role não encontrada, definindo baseado no perfil do entregador');
           // CORREÇÃO DE SEGURANÇA: Não assumir admin automaticamente
-          let roleType: 'super_admin' | 'admin_empresa' | 'entregador' = 'entregador';
+          let roleType: 'super_admin' | 'admin_empresa' | 'tecnico' = 'tecnico';
           
           // Apenas definir como admin_empresa se explicitamente configurado no banco
           // E nunca assumir super_admin automaticamente

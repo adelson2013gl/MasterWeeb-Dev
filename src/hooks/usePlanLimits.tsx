@@ -51,7 +51,7 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
       const [entregadoresResult, agendamentosResult, assinaturaResult] = await Promise.all([
         // Contar entregadores ativos
         supabase
-          .from('entregadores')
+          .from('tecnicos')
           .select('id', { count: 'exact' })
           .eq('empresa_id', empresaId)
           .eq('ativo', true),

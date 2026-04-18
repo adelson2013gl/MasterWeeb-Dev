@@ -75,7 +75,7 @@ export function CadastroEntregadorAdmin() {
     
     try {
       const { data, error } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('id')
         .eq('empresa_id', empresa.id);
 

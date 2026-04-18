@@ -20,7 +20,7 @@ export function useEntregadorData() {
 
       // Buscar dados do entregador INCLUINDO ESTRELAS
       const { data: entregadorData, error: entregadorError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select(`
           *,
           cidades (
@@ -94,7 +94,7 @@ export function useEntregadorData() {
             )
           )
         `)
-        .eq('entregador_id', entregadorData.id)
+        .eq('tecnico_id', entregadorData.id)
         .eq('status', safeStatus('agendado'))
         .eq('agendas.ativo', true)
         .eq('agendas.turnos.ativo', true)

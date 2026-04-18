@@ -21,7 +21,7 @@ export function EditorEstrelas({ entregador, onUpdate }: EditorEstrelasProps) {
     setLoading(true);
     try {
       const { error } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .update({ 
           estrelas: parseInt(estrelas),
           updated_at: new Date().toISOString()

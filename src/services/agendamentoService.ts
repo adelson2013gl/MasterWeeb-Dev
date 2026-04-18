@@ -8,7 +8,7 @@ export const buscarEntregador = async (userId: string) => {
     logger.debug('Buscando dados do entregador', { userId }, 'AGENDAMENTO');
     
     const { data: entregadorData, error: entregadorError } = await supabase
-      .from('entregadores')
+      .from('tecnicos')
       .select('id, estrelas')
       .eq('user_id', userId)
       .eq('status', 'aprovado')
@@ -64,7 +64,7 @@ export const buscarAgendamentosConflitantes = async (entregadorId: string, data:
           )
         )
       `)
-      .eq('entregador_id', entregadorId)
+      .eq('tecnico_id', entregadorId)
       .eq('status', safeStatus('agendado'))
       .eq('agendas.data_agenda', data);
 
@@ -130,7 +130,7 @@ export const inserirAgendamento = async (payload: any) => {
   try {
     logger.info('Iniciando criação de agendamento', { 
       agendaId: payload.agenda_id,
-      entregadorId: payload.entregador_id 
+      entregadorId: payload.tecnico_id 
     }, 'AGENDAMENTO');
     
     const { data: novoAgendamento, error: insertError } = await supabase
@@ -159,7 +159,7 @@ export const inserirAgendamento = async (payload: any) => {
     logger.performance('agendamento_criado', duration, {
       agendamentoId: novoAgendamento.id,
       agendaId: payload.agenda_id,
-      entregadorId: payload.entregador_id
+      entregadorId: payload.tecnico_id
     });
 
     logger.info('Agendamento criado com sucesso', { 

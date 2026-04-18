@@ -29,7 +29,7 @@ export function useAgendaDetalhes() {
           status,
           data_agendamento,
           observacoes,
-          entregadores!agendamentos_entregador_id_fkey (
+          tecnicos!agendamentos_tecnico_id_fkey (
             id,
             nome,
             telefone,
@@ -46,9 +46,9 @@ export function useAgendaDetalhes() {
 
       const entregadoresFormatados = data?.map((agendamento: any) => ({
         id: agendamento.id,
-        nome: agendamento.entregadores.nome,
-        telefone: agendamento.entregadores.telefone,
-        email: agendamento.entregadores.email,
+        nome: agendamento.tecnicos.nome,
+        telefone: agendamento.tecnicos.telefone,
+        email: agendamento.tecnicos.email,
         status: agendamento.status,
         data_agendamento: agendamento.data_agendamento,
         observacoes: agendamento.observacoes

@@ -49,7 +49,7 @@ export function useUserPermissions() {
 
       // Verificar dados do entregador para fallback
       const { data: entregadorData, error: entregadorError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('id, empresa_id, perfil, status')
         .eq('user_id', user.id)
         .single();
@@ -78,7 +78,7 @@ export function useUserPermissions() {
       if (userRoles && userRoles.length > 0) {
         const adminRole = userRoles.find(r => r.role === 'admin_empresa');
         const superAdminRole = userRoles.find(r => r.role === 'super_admin');
-        const entregadorRole = userRoles.find(r => r.role === 'entregador');
+        const entregadorRole = userRoles.find(r => r.role === 'tecnico');
 
         if (superAdminRole) {
           finalPermissions = {
@@ -101,7 +101,7 @@ export function useUserPermissions() {
             hasValidRole: true,
             isAdminEmpresa: false,
             empresaId: entregadorRole.empresa_id,
-            roleType: 'entregador',
+            roleType: 'tecnico',
             canAccessSystem: true
           };
         }
@@ -118,7 +118,7 @@ export function useUserPermissions() {
           hasValidRole: true,
           isAdminEmpresa: entregadorData.perfil === 'admin',
           empresaId: entregadorData.empresa_id,
-          roleType: entregadorData.perfil === 'admin' ? 'admin_empresa' : 'entregador',
+          roleType: entregadorData.perfil === 'admin' ? 'admin_empresa' : 'tecnico',
           canAccessSystem: true
         };
       }

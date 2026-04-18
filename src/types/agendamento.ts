@@ -19,7 +19,7 @@ export type TipoAgendamento = "vaga" | "entrega" | "reserva" | "especial";
 // Interface para criação de agendamento
 export interface CriarAgendamentoPayload {
   agenda_id: string;
-  entregador_id: string;
+  tecnico_id: string;
   empresa_id: string;
   tipo: TipoAgendamento;
   status: StatusAgendamento;

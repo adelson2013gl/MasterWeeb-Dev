@@ -38,7 +38,7 @@ export function useAgendamento() {
       if (!user?.id) return [];
       
       const { data: entregador } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('id')
         .eq('user_id', user.id)
         .single();
@@ -68,7 +68,7 @@ export function useAgendamento() {
             )
           )
         `)
-        .eq('entregador_id', entregador.id)
+        .eq('tecnico_id', entregador.id)
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -171,7 +171,7 @@ export function useAgendamento() {
         
         const payloadFinal: CriarAgendamentoPayload = {
           agenda_id: agendaId,
-          entregador_id: entregadorData.id,
+          tecnico_id: entregadorData.id,
           empresa_id: empresaId,
           tipo: tipoValidado,
           status: statusValidado,

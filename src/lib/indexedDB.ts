@@ -47,7 +47,7 @@ export async function initDB(): Promise<IDBDatabase> {
       // Criar stores se não existirem
       if (!db.objectStoreNames.contains(STORES.AGENDAMENTOS)) {
         const agendamentosStore = db.createObjectStore(STORES.AGENDAMENTOS, { keyPath: 'id' });
-        agendamentosStore.createIndex('entregador_id', 'entregador_id', { unique: false });
+        agendamentosStore.createIndex('tecnico_id', 'tecnico_id', { unique: false });
         agendamentosStore.createIndex('status', 'status', { unique: false });
         agendamentosStore.createIndex('data', 'data', { unique: false });
       }

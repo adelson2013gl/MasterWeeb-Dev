@@ -199,8 +199,8 @@ export function useImportacaoEntregadores() {
     try {
       const template = [
         ['Nome', 'Email', 'Telefone', 'CPF', 'Cidade', 'Senha', 'Perfil', 'Status', 'Observacoes'],
-        ['João Silva', 'joao@email.com', '11999999999', '12345678901', 'São Paulo', 'joao123456', 'entregador', 'pendente', 'Entregador experiente'],
-        ['Maria Santos', 'maria@email.com', '11888888888', '98765432109', 'Rio de Janeiro', 'maria654321', 'entregador', 'pendente', '']
+        ['João Silva', 'joao@email.com', '11999999999', '12345678901', 'São Paulo', 'joao123456', 'tecnico', 'pendente', 'Entregador experiente'],
+        ['Maria Santos', 'maria@email.com', '11888888888', '98765432109', 'Rio de Janeiro', 'maria654321', 'tecnico', 'pendente', '']
       ];
 
       const ws = XLSX.utils.aoa_to_sheet(template);

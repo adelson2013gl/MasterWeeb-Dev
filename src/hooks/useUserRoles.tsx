@@ -96,7 +96,7 @@ export function useUserRoles() {
     }
 
     // Prioridade: super_admin > admin_empresa > entregador
-    const rolesPriority = ['super_admin', 'admin_empresa', 'entregador'];
+    const rolesPriority = ['super_admin', 'admin_empresa', 'tecnico'];
 
     // Primeiro, verificar se existe super_admin (independente da empresa)
     const superAdminRole = allRoles.find(role => role.role === 'super_admin');

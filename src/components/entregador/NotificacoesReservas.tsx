@@ -48,7 +48,7 @@ export function NotificacoesReservas() {
       
       // Buscar entregador
       const { data: entregadorData, error: entregadorError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('id')
         .eq('user_id', user.id)
         .single();
@@ -85,7 +85,7 @@ export function NotificacoesReservas() {
             )
           )
         `)
-        .eq('entregador_id', entregadorData.id)
+        .eq('tecnico_id', entregadorData.id)
         .eq('tipo', safeTipo('entrega'))
         .gte('created_at', new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString()) // Últimas 8 horas
         .order('created_at', { ascending: false })

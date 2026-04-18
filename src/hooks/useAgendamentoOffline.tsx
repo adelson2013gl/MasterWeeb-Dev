@@ -95,7 +95,7 @@ export function useAgendamentoOffline() {
               )
             )
           `)
-          .eq('entregador_id', entregadorId)
+          .eq('tecnico_id', entregadorId)
           .eq('status', safeStatus('agendado'))
           .neq('agendas.data_agenda', data);
 
@@ -124,7 +124,7 @@ export function useAgendamentoOffline() {
           .from('agendamentos')
           .insert({
             agenda_id: agendaId,
-            entregador_id: entregadorId,
+            tecnico_id: entregadorId,
             data_agendamento: data,
             status: 'agendado',
             tipo: 'vaga'
@@ -146,7 +146,7 @@ export function useAgendamentoOffline() {
         const offlineAgendamento = {
           id: `offline_${Date.now()}`,
           agenda_id: agendaId,
-          entregador_id: entregadorId,
+          tecnico_id: entregadorId,
           data_agendamento: data,
           status: 'agendado',
           tipo: 'vaga',

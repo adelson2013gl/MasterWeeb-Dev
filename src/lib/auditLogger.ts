@@ -43,7 +43,7 @@ class AuditLogger {
   private async getUserDetails(userId: string) {
     try {
       const { data, error } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('email, empresa_id')
         .eq('user_id', userId) // Corrigido: usar user_id em vez de id
         .single();

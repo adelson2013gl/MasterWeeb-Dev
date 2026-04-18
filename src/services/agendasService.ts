@@ -10,7 +10,7 @@ export const fetchEntregadorData = async (userId: string) => {
     logger.debug('Buscando dados do entregador para agendas', { userId }, 'AGENDAS');
     
     const { data: entregadorData, error: entregadorError } = await supabase
-      .from('entregadores')
+      .from('tecnicos')
       .select('id, estrelas, empresa_id, status, nome')
       .eq('user_id', userId)
       .eq('status', 'aprovado')
@@ -166,7 +166,7 @@ export const fetchAgendamentosExistentes = async (entregadorId: string, dataAtua
     const { data: agendamentosExistentes, error: agendamentosError } = await supabase
       .from('agendamentos')
       .select('agenda_id, status, tipo')
-      .eq('entregador_id', entregadorId)
+      .eq('tecnico_id', entregadorId)
       .in('status', [safeStatus('agendado'), safeStatus('pendente'), safeStatus('em_andamento')])
       .gte('data_agendamento', dataAtual);
 

@@ -28,7 +28,7 @@ export function useMeusAgendamentos() {
       console.log('Buscando todos os agendamentos do entregador...');
       // CORRIGIDO: status do entregador precisa ser 'aprovado' literal, não enum agendamento
       const { data: entregadorData, error: entregadorError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('id')
         .eq('user_id', user.id)
         .eq('status', 'aprovado')
@@ -46,7 +46,7 @@ export function useMeusAgendamentos() {
         .select(`
           id,
           agenda_id,
-          entregador_id,
+          tecnico_id,
           status,
           tipo,
           data_agendamento,
@@ -81,7 +81,7 @@ export function useMeusAgendamentos() {
             )
           )
         `)
-        .eq('entregador_id', entregadorData.id)
+        .eq('tecnico_id', entregadorData.id)
         .order('data_agendamento', { ascending: false });
 
       if (error) {

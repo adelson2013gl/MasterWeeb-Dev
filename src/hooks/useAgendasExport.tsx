@@ -40,7 +40,7 @@ export function useAgendasExport() {
           ),
           agendamentos!agendamentos_agenda_id_fkey (
             status,
-            entregadores!agendamentos_entregador_id_fkey (
+            tecnicos!agendamentos_tecnico_id_fkey (
               cpf,
               nome
             )
@@ -93,8 +93,8 @@ export function useAgendasExport() {
               cidade: agenda.regioes.cidades.nome,
               regiao: agenda.regioes.nome,
               turno: agenda.turnos.nome,
-              cpf_entregador: agendamento.entregadores.cpf,
-              nome_entregador: agendamento.entregadores.nome
+              cpf_entregador: agendamento.tecnicos.cpf,
+              nome_entregador: agendamento.tecnicos.nome
             });
           });
         }

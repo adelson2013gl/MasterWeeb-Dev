@@ -61,7 +61,7 @@ export function DashboardPrioridades() {
 
     try {
       const { data, error } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select(`
           id,
           nome,

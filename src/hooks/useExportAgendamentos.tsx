@@ -120,10 +120,10 @@ const criarDadosFormatoEspecifico = (agendas: any[], agendamentos: any[]): Expor
     } else {
       // Com agendamentos confirmados - agrupar CPFs e nomes
       const cpfs = agendamentosAgenda
-        .map(a => a.entregadores?.cpf)
+        .map(a => a.tecnicos?.cpf)
         .filter(Boolean);
       const nomes = agendamentosAgenda
-        .map(a => a.entregadores?.nome)
+        .map(a => a.tecnicos?.nome)
         .filter(Boolean);
       
       dadosFormatados.push({
@@ -215,7 +215,7 @@ export function useExportAgendamentos() {
           status,
           data_agendamento,
           created_at,
-          entregadores!agendamentos_entregador_id_fkey (
+          tecnicos!agendamentos_tecnico_id_fkey (
             nome,
             cpf,
             telefone,
@@ -246,7 +246,7 @@ export function useExportAgendamentos() {
           status,
           data_agendamento,
           created_at,
-          entregadores!agendamentos_entregador_id_fkey (
+          tecnicos!agendamentos_tecnico_id_fkey (
             nome,
             cpf,
             telefone,
@@ -312,17 +312,17 @@ export function useExportAgendamentos() {
       // Processar dados para o Excel (agendamentos confirmados) - nova ordem das colunas
       const dadosExcelConfirmados = agendamentosConfirmados?.map(item => {
         const agenda = agendas.find(a => a.id === item.agenda_id);
-        const cpfComVirgula = item.entregadores?.cpf ? item.entregadores.cpf + ',' : EXPORT_CONFIG.LABELS.NOT_AVAILABLE;
+        const cpfComVirgula = item.tecnicos?.cpf ? item.tecnicos.cpf + ',' : EXPORT_CONFIG.LABELS.NOT_AVAILABLE;
         
         return {
           'Data e Hora do Agendamento': formatSafeDate(item.data_agendamento, EXPORT_CONFIG.FORMATS.DATETIME),
           Cidade: agenda?.regioes?.cidades?.nome || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
           Região: agenda?.regioes?.nome || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
           CPF: cpfComVirgula,
-          Nome: item.entregadores?.nome || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
+          Nome: item.tecnicos?.nome || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
           ID: item.id,
-          Telefone: item.entregadores?.telefone || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
-          Email: item.entregadores?.email || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
+          Telefone: item.tecnicos?.telefone || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
+          Email: item.tecnicos?.email || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
           Data: formatSafeDate(agenda?.data),
           'Hora Início': agenda?.turnos?.hora_inicio || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
           'Hora Fim': agenda?.turnos?.hora_fim || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
@@ -336,11 +336,11 @@ export function useExportAgendamentos() {
         const agenda = agendas.find(a => a.id === item.agenda_id);
         return {
           Posição: index + 1,
-          Nome: item.entregadores?.nome || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
-          CPF: item.entregadores?.cpf || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
-          Telefone: item.entregadores?.telefone || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
-          Email: item.entregadores?.email || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
-          Estrelas: item.entregadores?.estrelas,
+          Nome: item.tecnicos?.nome || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
+          CPF: item.tecnicos?.cpf || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
+          Telefone: item.tecnicos?.telefone || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
+          Email: item.tecnicos?.email || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
+          Estrelas: item.tecnicos?.estrelas,
           Data: formatSafeDate(agenda?.data),
           'Hora Início': agenda?.turnos?.hora_inicio || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,
           'Hora Fim': agenda?.turnos?.hora_fim || EXPORT_CONFIG.LABELS.NOT_AVAILABLE,

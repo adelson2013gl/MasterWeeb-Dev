@@ -47,7 +47,7 @@ export function StatusReservas() {
 
       // CORRIGIDO: status do entregador precisa ser 'aprovado' literal
       const { data: entregadorData, error: entregadorError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('id')
         .eq('user_id', user.id)
         .eq('status', 'aprovado')
@@ -86,7 +86,7 @@ export function StatusReservas() {
             )
           )
         `)
-        .eq('entregador_id', entregadorData.id)
+        .eq('tecnico_id', entregadorData.id)
         .eq('tipo', safeTipo('entrega'))
         .in('status', statusReservasValidos)
         .gte('agendas.data_agenda', new Date().toISOString().split('T')[0])

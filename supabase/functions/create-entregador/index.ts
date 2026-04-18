@@ -21,7 +21,7 @@ interface CreateEntregadorResponse {
   success: boolean;
   message: string;
   data?: {
-    entregador_id: string;
+    tecnico_id: string;
     user_id: string;
     nome: string;
     email: string;
@@ -144,7 +144,7 @@ serve(async (req) => {
     console.log("📧 EDGE_FUNCTION: Verificando email duplicado:", email);
     
     const { data: existingEntregador, error: checkError } = await supabaseAdmin
-      .from("entregadores")
+      .from("tecnicos")
       .select("id, email")
       .eq("email", email.toLowerCase())
       .maybeSingle();
@@ -170,7 +170,7 @@ serve(async (req) => {
       email_confirm: true,
       user_metadata: {
         nome: nome.trim(),
-        tipo_usuario: "entregador",
+        tipo_usuario: "tecnico",
         empresa_id: empresa_id,
         created_via: "importacao_massa"
       }
@@ -202,7 +202,7 @@ serve(async (req) => {
       cpf: cpf.trim(),
       cidade_id: cidade_id,
       empresa_id: empresa_id,
-      perfil: "entregador",
+      perfil: "tecnico",
       status: "aprovado", // Aprovado automaticamente
       estrelas: 5
     };
@@ -213,7 +213,7 @@ serve(async (req) => {
     });
 
     const { data: entregador, error: insertError } = await supabaseAdmin
-      .from("entregadores")
+      .from("tecnicos")
       .insert(entregadorData)
       .select("id, nome, email, user_id, status")
       .single();
@@ -244,7 +244,7 @@ serve(async (req) => {
       success: true,
       message: "Entregador criado com sucesso! Podera fazer login com a senha fornecida.",
       data: {
-        entregador_id: entregador.id,
+        tecnico_id: entregador.id,
         user_id: entregador.user_id,
         nome: entregador.nome,
         email: entregador.email

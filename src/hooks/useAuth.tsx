@@ -160,12 +160,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         cpf: userData.cpf,
         cidade_id: userData.cidade_id,
         empresa_id: empresaId, // Usar o empresa_id correto
-        perfil: 'entregador' as const,
+        perfil: 'tecnico' as const,
         status: 'pendente' as const,
       };
 
       const { error: entregadorError, data: entregadorCreated } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .insert(entregadorData)
         .select()
         .single();
@@ -186,7 +186,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .insert({
           user_id: authData.user.id,
           empresa_id: empresaId, // Usar o empresa_id correto aqui também
-          role: 'entregador'
+          role: 'tecnico'
         });
 
       if (roleError) {

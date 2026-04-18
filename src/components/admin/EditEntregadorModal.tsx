@@ -173,7 +173,7 @@ export function EditEntregadorModal({ entregador, open, onOpenChange, onEntregad
 
       // Construir query com filtros de segurança
       let updateQuery = supabase
-        .from('entregadores')
+        .from('tecnicos')
         .update(updateData)
         .eq('id', entregador.id);
 
@@ -196,10 +196,10 @@ export function EditEntregadorModal({ entregador, open, onOpenChange, onEntregad
 
       // Buscar os dados atualizados com filtros de segurança
       let fetchQuery = supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select(`
           *,
-          cidades!entregadores_cidade_id_fkey(nome, estado)
+          cidades!tecnicos_cidade_id_fkey(nome, estado)
         `)
         .eq('id', entregador.id);
 

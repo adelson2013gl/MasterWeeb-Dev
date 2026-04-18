@@ -29,7 +29,7 @@ export function useEntregadorContext() {
       logger.info('Buscando dados do entregador', { userId });
 
       const { data: entregadorData, error: entregadorError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('*')
         .eq('user_id', userId)
         .maybeSingle();
@@ -132,7 +132,7 @@ export function useEntregadorContext() {
       logger.info('Atualizando dados do entregador', { entregadorId, updates });
 
       const { error } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .update(updates)
         .eq('id', entregadorId);
 
@@ -189,7 +189,7 @@ export function useEntregadorContext() {
 
       // Testar query simples
       const { data: testData, error: testError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('id, nome, empresa_id, status, perfil')
         .eq('user_id', userId)
         .limit(1);

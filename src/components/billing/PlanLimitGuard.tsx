@@ -234,7 +234,7 @@ export function PlanLimitAlert({
   const getMessage = () => {
     switch (action) {
       case 'add_entregador':
-        return `Você está usando ${usagePercentage}% do limite de entregadores (${data.entregadoresAtuais}/${data.limites.max_entregadores}).`;
+        return `Você está usando ${usagePercentage}% do limite de tecnicos (${data.entregadoresAtuais}/${data.limites.max_entregadores}).`;
       case 'add_agendamento':
         return `Você está usando ${usagePercentage}% do limite de agendamentos mensais (${data.agendamentosNoMes}/${data.limites.max_agendas_mes}).`;
       default:

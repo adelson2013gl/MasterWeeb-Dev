@@ -276,7 +276,7 @@ serve(async (req) => {
     });
 
     const { data: entregador, error: entregadorError } = await supabaseAdmin
-      .from('entregadores')
+      .from('tecnicos')
       .insert(entregadorData)
       .select()
       .single()
@@ -321,7 +321,7 @@ serve(async (req) => {
     // Log de auditoria final
     console.log('🎉 Cadastro concluído com sucesso:', {
       user_id: authUser.user.id,
-      entregador_id: entregador.id,
+      tecnico_id: entregador.id,
       empresa: empresa.nome,
       origem
     })
@@ -333,7 +333,7 @@ serve(async (req) => {
         admin_id: entregador.id,
         data: {
           user_id: authUser.user.id,
-          entregador_id: entregador.id,
+          tecnico_id: entregador.id,
           empresa: empresa.nome
         }
       }),

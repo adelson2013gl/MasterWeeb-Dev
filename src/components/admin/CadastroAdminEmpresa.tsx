@@ -88,7 +88,7 @@ export function CadastroAdminEmpresa() {
       console.log('📧 Verificando email na tabela entregadores:', email);
       
       const { data, error } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('id, email, perfil')
         .eq('email', email.toLowerCase().trim())
         .maybeSingle();

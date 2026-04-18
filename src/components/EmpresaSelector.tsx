@@ -110,8 +110,8 @@ export function EmpresaSelector() {
         return 'Super Admin';
       case 'admin_empresa':
         return 'Admin';
-      case 'entregador':
-        return 'Entregador';
+      case 'tecnico':
+        return 'tecnico';
       default:
         return role;
     }

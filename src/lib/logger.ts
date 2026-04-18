@@ -108,7 +108,7 @@ class Logger {
       'cep', 'zip_code', 'postal_code',
       
       // IDs sensíveis
-      'user_id', 'empresa_id', 'entregador_id', 'admin_id',
+      'user_id', 'empresa_id', 'tecnico_id', 'admin_id',
       'client_id', 'customer_id', 'subscription_id',
       
       // Dados financeiros

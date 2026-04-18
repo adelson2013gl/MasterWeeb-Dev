@@ -2,7 +2,7 @@
 export type Database = {
   public: {
     Tables: {
-      entregadores: {
+      tecnicos: {
         Row: {
           id: string;
           nome: string;
@@ -16,7 +16,7 @@ export type Database = {
           estrelas?: number;
           cidade_id?: string;
           data_cadastro?: string;
-          perfil?: 'entregador' | 'admin';
+          perfil?: 'tecnico' | 'admin';
           user_id?: string;
         };
         Insert: {
@@ -32,7 +32,7 @@ export type Database = {
           estrelas?: number;
           cidade_id?: string;
           data_cadastro?: string;
-          perfil?: 'entregador' | 'admin';
+          perfil?: 'tecnico' | 'admin';
           user_id?: string;
         };
         Update: {
@@ -48,7 +48,7 @@ export type Database = {
           estrelas?: number;
           cidade_id?: string;
           data_cadastro?: string;
-          perfil?: 'entregador' | 'admin';
+          perfil?: 'tecnico' | 'admin';
           user_id?: string;
         };
       };

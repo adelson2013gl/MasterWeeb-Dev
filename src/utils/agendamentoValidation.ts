@@ -58,7 +58,7 @@ export const verificarDisponibilidade = async (agendaId: string, entregadorId: s
     .from('agendamentos')
     .select('id, tipo, status')
     .eq('agenda_id', agendaId)
-    .eq('entregador_id', entregadorId)
+    .eq('tecnico_id', entregadorId)
     .in('status', [safeStatus('agendado'), safeStatus('pendente')])
     .maybeSingle();
 

@@ -124,7 +124,7 @@ class AdminManagementService {
       }
 
       logger.info('✅ ADMIN_SERVICE: Entregador criado com sucesso', {
-        entregador_id: result.data?.entregador_id,
+        tecnico_id: result.data?.tecnico_id,
         user_id: result.data?.user_id,
         nome: result.data?.nome,
         email: result.data?.email
@@ -163,7 +163,7 @@ class AdminManagementService {
 
       // Verificar se o email já existe
       const { data: existingUser, error: checkError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('email')
         .eq('email', data.email.toLowerCase().trim())
         .single();
@@ -197,7 +197,7 @@ class AdminManagementService {
 
       // Inserir administrador na tabela entregadores
       const { data: adminData, error: adminError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .insert({
           user_id: authData.user.id,
           nome: data.nome.trim(),
@@ -279,7 +279,7 @@ class AdminManagementService {
       });
 
       let query = supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select(`
           *,
           empresas!inner(nome)
@@ -383,7 +383,7 @@ class AdminManagementService {
 
       // Verificar se o administrador existe e pertence a uma empresa permitida
       const { data: existingAdmin, error: checkError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('empresa_id, perfil')
         .eq('id', adminId)
         .eq('perfil', 'admin')
@@ -399,7 +399,7 @@ class AdminManagementService {
 
       // Atualizar dados
       const { data, error } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .update(updateData)
         .eq('id', adminId)
         .select()
@@ -437,7 +437,7 @@ class AdminManagementService {
 
       // Verificar se o administrador existe e pertence a uma empresa permitida
       const { data: existingAdmin, error: checkError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .select('empresa_id, perfil, user_id')
         .eq('id', adminId)
         .eq('perfil', 'admin')
@@ -453,7 +453,7 @@ class AdminManagementService {
 
       // Excluir da tabela entregadores
       const { error: deleteError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .delete()
         .eq('id', adminId);
 
@@ -504,7 +504,7 @@ class AdminManagementService {
         email_confirm: true, // Confirmar email automaticamente
         user_metadata: {
           nome: data.nome,
-          perfil: 'entregador'
+          perfil: 'tecnico'
         }
       });
 
@@ -520,7 +520,7 @@ class AdminManagementService {
 
       // 2. Criar entregador na tabela
       const { data: entregadorData, error: entregadorError } = await supabase
-        .from('entregadores')
+        .from('tecnicos')
         .insert({
           user_id: authData.user.id,
           nome: data.nome,
@@ -529,7 +529,7 @@ class AdminManagementService {
           cpf: data.cpf,
           cidade_id: data.cidade_id,
           empresa_id: data.empresa_id,
-          perfil: 'entregador',
+          perfil: 'tecnico',
           status: 'pendente',
           estrelas: 5 // Padrão para novos entregadores
         })
@@ -555,7 +555,7 @@ class AdminManagementService {
         .insert({
           user_id: authData.user.id,
           empresa_id: data.empresa_id,
-          role: 'entregador'
+          role: 'tecnico'
         });
 
       if (roleError) {
@@ -563,7 +563,7 @@ class AdminManagementService {
       }
 
       logger.info('✅ ADMIN_SERVICE: Entregador criado com sucesso via método direto', {
-        entregador_id: entregadorData.id,
+        tecnico_id: entregadorData.id,
         user_id: authData.user.id,
         nome: entregadorData.nome,
         empresa_id: entregadorData.empresa_id
@@ -573,7 +573,7 @@ class AdminManagementService {
         success: true,
         message: 'Entregador criado com sucesso',
         data: {
-          entregador_id: entregadorData.id,
+          tecnico_id: entregadorData.id,
           user_id: authData.user.id,
           nome: entregadorData.nome,
           email: entregadorData.email
