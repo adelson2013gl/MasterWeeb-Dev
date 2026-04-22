@@ -40,7 +40,7 @@ interface CreateTecnicoData {
   email: string;
   telefone: string;
   cpf: string;
-  cidade_id: string;
+  setor_id: string;
   empresa_id: string;
   senha: string;
 }
@@ -54,7 +54,7 @@ class AdminManagementService {
         email: data.email,
         telefone: data.telefone,
         cpf: data.cpf,
-        cidade_id: data.cidade_id,
+        setor_id: data.setor_id,
         empresa_id: data.empresa_id,
         allowedEmpresaIds: allowedEmpresaIds.length
       });
@@ -72,7 +72,7 @@ class AdminManagementService {
         email: data.email.toLowerCase().trim(),
         telefone: data.telefone.trim(),
         cpf: data.cpf.replace(/\D/g, ''),
-        cidade_id: data.cidade_id,
+        setor_id: data.setor_id,
         empresa_id: data.empresa_id,
         senha: data.senha
       };
@@ -83,46 +83,17 @@ class AdminManagementService {
           email: requestData.email,
           telefone: requestData.telefone,
           cpf: `${requestData.cpf.substring(0, 3)}***`,
-          cidade_id: requestData.cidade_id,
+          setor_id: requestData.setor_id,
           empresa_id: requestData.empresa_id,
           temSenha: !!requestData.senha
         }
       });
 
-      // Tentar Edge Function primeiro, se falhar usar método direto
-      let result, error;
+      // Usar método direto (bypass Edge Function devido a CORS)
+      logger.info('🚀 ADMIN_SERVICE: Usando método direto para criar técnico');
       
-      try {
-        const edgeResponse = await supabase.functions.invoke('create-tecnico', {
-          body: requestData
-        });
-        result = edgeResponse.data;
-        error = edgeResponse.error;
-      } catch (edgeError) {
-        logger.warn('⚠️ ADMIN_SERVICE: Edge Function falhou, usando método direto', {
-          edgeError: edgeError.message
-        });
-        
-        // FALLBACK: Criar tecnico diretamente
-        return await this.createTecnicoDirect(requestData);
-      }
-
-      if (error) {
-        logger.error('❌ ADMIN_SERVICE: Erro na Edge Function', {
-          error: error.message,
-          details: error
-        });
-        throw error;
-      }
-
-      if (!result?.success) {
-        logger.error('❌ ADMIN_SERVICE: Edge Function retornou erro', {
-          result,
-          message: result?.error || result?.message
-        });
-        throw new Error(result?.error || result?.message || 'Erro desconhecido');
-      }
-
+      const result = await this.createTecnicoDirect(requestData);
+      
       logger.info('✅ ADMIN_SERVICE: Tecnico criado com sucesso', {
         tecnico_id: result.data?.tecnico_id,
         user_id: result.data?.user_id,
@@ -497,37 +468,43 @@ class AdminManagementService {
         email: data.email
       });
 
-      // 1. Criar usuário na Auth
-      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-        email: data.email,
-        password: data.senha,
-        email_confirm: true, // Confirmar email automaticamente
-        user_metadata: {
-          nome: data.nome,
-          perfil: 'tecnico'
-        }
-      });
+      // 1. Criar usuário na Auth usando RPC (roda com privilégios de service role)
+      const { data: rpcData, error: rpcError } = await (supabase as any)
+        .rpc('admin_create_user', {
+          p_email: data.email,
+          p_password: data.senha,
+          p_user_metadata: {
+            nome: data.nome,
+            perfil: 'tecnico'
+          }
+        });
 
-      if (authError) {
-        logger.error('❌ ADMIN_SERVICE: Erro ao criar usuário Auth', authError);
-        throw new Error(`Erro ao criar usuário: ${authError.message}`);
+      if (rpcError) {
+        logger.error('❌ ADMIN_SERVICE: Erro ao criar usuário Auth via RPC', rpcError);
+        throw new Error(`Erro ao criar usuário: ${rpcError.message}`);
       }
 
-      logger.info('✅ ADMIN_SERVICE: Usuário Auth criado', { 
-        user_id: authData.user.id,
-        email: authData.user.email 
+      const userId = rpcData[0]?.user_id;
+      
+      if (!userId) {
+        throw new Error('Erro ao criar usuário: ID não retornado');
+      }
+
+      logger.info('✅ ADMIN_SERVICE: Usuário Auth criado via RPC', { 
+        user_id: userId,
+        email: data.email 
       });
 
       // 2. Criar tecnico na tabela
       const { data: tecnicoData, error: tecnicoError } = await supabase
         .from('tecnicos')
         .insert({
-          user_id: authData.user.id,
+          user_id: userId,
           nome: data.nome,
           email: data.email,
           telefone: data.telefone,
           cpf: data.cpf,
-          cidade_id: data.cidade_id,
+          setor_id: data.setor_id,
           empresa_id: data.empresa_id,
           perfil: 'tecnico',
           status: 'pendente',
@@ -538,14 +515,6 @@ class AdminManagementService {
 
       if (tecnicoError) {
         logger.error('❌ ADMIN_SERVICE: Erro ao criar tecnico', tecnicoError);
-        
-        // Limpar usuário Auth criado
-        try {
-          await supabase.auth.admin.deleteUser(authData.user.id);
-        } catch (cleanupError) {
-          logger.error('❌ ADMIN_SERVICE: Erro ao limpar usuário Auth', cleanupError);
-        }
-        
         throw new Error(`Erro ao criar tecnico: ${tecnicoError.message}`);
       }
 
@@ -553,7 +522,7 @@ class AdminManagementService {
       const { error: roleError } = await supabase
         .from('user_roles')
         .insert({
-          user_id: authData.user.id,
+          user_id: userId,
           empresa_id: data.empresa_id,
           role: 'tecnico'
         });
@@ -564,7 +533,7 @@ class AdminManagementService {
 
       logger.info('✅ ADMIN_SERVICE: Tecnico criado com sucesso via método direto', {
         tecnico_id: tecnicoData.id,
-        user_id: authData.user.id,
+        user_id: userId,
         nome: tecnicoData.nome,
         empresa_id: tecnicoData.empresa_id
       });
@@ -574,7 +543,7 @@ class AdminManagementService {
         message: 'Tecnico criado com sucesso',
         data: {
           tecnico_id: tecnicoData.id,
-          user_id: authData.user.id,
+          user_id: userId,
           nome: tecnicoData.nome,
           email: tecnicoData.email
         }

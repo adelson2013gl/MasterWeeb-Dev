@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,13 +7,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { supabase } from "@/integrations/supabase/client";
 import { adminManagementService } from "@/services/adminManagementService";
 import { toast } from "sonner";
-import { Loader2, UserPlus, Users, AlertTriangle } from "lucide-react";
+import { Loader2, UserPlus, Users } from "lucide-react";
 import { useEmpresaUnificado } from "@/contexts/EmpresaUnificadoContext";
 import { Database } from "@/integrations/supabase/types";
-import { PlanLimitGuard, PlanLimitAlert } from "@/components/billing/PlanLimitGuard";
-import { safeStringToPlanoType } from "@/lib/typeGuards";
 
-type Cidade = Database['public']['Tables']['cidades']['Row'];
+type Setor = Database['public']['Tables']['setores']['Row'];
 
 export function CadastroTecnicoAdmin() {
   const [formData, setFormData] = useState({
@@ -22,51 +19,50 @@ export function CadastroTecnicoAdmin() {
     email: "",
     telefone: "",
     cpf: "",
-    cidade_id: "",
+    setor_id: "",
     password: "",
     confirmPassword: "",
   });
   
-  const [cidades, setCidades] = useState<Cidade[]>([]);
+  const [setores, setSetores] = useState<Setor[]>([]);
   const [loading, setLoading] = useState(false);
-  const [loadingCidades, setLoadingCidades] = useState(true);
-  const [stats, setStats] = useState({ total: 0, limite: 0 });
+  const [loadingSetores, setLoadingSetores] = useState(true);
+  const [stats, setStats] = useState({ total: 0 });
   
-  // CORREÇÃO: Mover useEmpresaUnificado para o nível superior
   const { empresa, empresasDisponiveis } = useEmpresaUnificado();
 
   useEffect(() => {
     if (empresa) {
-      fetchCidades();
+      fetchSetores();
       fetchStats();
     }
   }, [empresa]);
 
-  const fetchCidades = async () => {
+  const fetchSetores = async () => {
     if (!empresa) return;
     
     try {
-      console.log('CadastroTecnicoAdmin: Carregando cidades da empresa:', empresa.id);
+      console.log('CadastroTecnicoAdmin: Carregando setores da empresa:', empresa.id);
       
-      const { data, error } = await supabase
-        .from('cidades')
+      const { data, error } = await (supabase as any)
+        .from('setores')
         .select('*')
         .eq('ativo', true)
         .eq('empresa_id', empresa.id)
         .order('nome');
 
       if (error) {
-        console.error('CadastroTecnicoAdmin: Erro ao carregar cidades:', error);
+        console.error('CadastroTecnicoAdmin: Erro ao carregar setores:', error);
         throw error;
       }
       
-      console.log('CadastroTecnicoAdmin: Cidades carregadas:', data?.length);
-      setCidades(data || []);
+      console.log('CadastroTecnicoAdmin: Setores carregados:', data?.length);
+      setSetores(data || []);
     } catch (error) {
-      console.error('CadastroTecnicoAdmin: Erro ao carregar cidades:', error);
-      toast.error("Não foi possível carregar as cidades");
+      console.error('CadastroTecnicoAdmin: Erro ao carregar setores:', error);
+      toast.error("Não foi possível carregar os setores");
     } finally {
-      setLoadingCidades(false);
+      setLoadingSetores(false);
     }
   };
 
@@ -74,7 +70,7 @@ export function CadastroTecnicoAdmin() {
     if (!empresa) return;
     
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('tecnicos')
         .select('id')
         .eq('empresa_id', empresa.id);
@@ -82,8 +78,7 @@ export function CadastroTecnicoAdmin() {
       if (error) throw error;
       
       setStats({
-        total: data?.length || 0,
-        limite: empresa.max_entregadores || 0
+        total: data?.length || 0
       });
     } catch (error) {
       console.error('Erro ao carregar estatísticas:', error);
@@ -111,8 +106,8 @@ export function CadastroTecnicoAdmin() {
       return false;
     }
 
-    if (!formData.cidade_id) {
-      toast.error("Selecione uma cidade");
+    if (!formData.setor_id) {
+      toast.error("Selecione um setor");
       return false;
     }
 
@@ -136,12 +131,6 @@ export function CadastroTecnicoAdmin() {
       return;
     }
 
-    // Verificar limite de tecnicos
-    if (stats.limite > 0 && stats.total >= stats.limite) {
-      toast.error(`Limite de ${stats.limite} tecnicos atingido para esta empresa`);
-      return;
-    }
-
     if (!empresa) {
       toast.error("Empresa não identificada. Tente recarregar a página.");
       return;
@@ -153,7 +142,6 @@ export function CadastroTecnicoAdmin() {
       console.log('CadastroTecnicoAdmin: Iniciando cadastro para:', formData.email);
       console.log('CadastroTecnicoAdmin: Empresa atual:', empresa.id, empresa.nome);
       
-      // CORREÇÃO: Usar empresasDisponiveis da variável extraída no início
       const allowedEmpresaIds = empresasDisponiveis.map(emp => emp.id);
       
       const result = await adminManagementService.createTecnico({
@@ -161,7 +149,7 @@ export function CadastroTecnicoAdmin() {
         email: formData.email,
         telefone: formData.telefone,
         cpf: formData.cpf,
-        cidade_id: formData.cidade_id,
+        setor_id: formData.setor_id,
         empresa_id: empresa.id,
         senha: formData.password
       }, allowedEmpresaIds);
@@ -175,12 +163,12 @@ export function CadastroTecnicoAdmin() {
           email: "",
           telefone: "",
           cpf: "",
-          cidade_id: "",
+          setor_id: "",
           password: "",
           confirmPassword: "",
         });
         
-        fetchStats(); // Atualizar estatísticas
+        fetchStats();
       }
     } catch (error) {
       console.error('CadastroTecnicoAdmin: Erro no cadastro:', error);
@@ -193,7 +181,7 @@ export function CadastroTecnicoAdmin() {
         } else if (error.message.includes("duplicate key")) {
           errorMessage = "Já existe um cadastro com esses dados";
         } else if (error.message.includes("foreign key")) {
-          errorMessage = "Erro na seleção da cidade. Tente novamente.";
+          errorMessage = "Erro na seleção do setor. Tente novamente.";
         } else {
           errorMessage = error.message;
         }
@@ -212,42 +200,27 @@ export function CadastroTecnicoAdmin() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Cadastro de Tecnicos</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Cadastro de Técnicos</h2>
         <p className="text-gray-600">
-          Cadastre novos tecnicos para {empresa?.nome}
+          Cadastre novos técnicos para {empresa?.nome}
         </p>
       </div>
-
-      {/* Alerta de limite próximo */}
-      {empresa && (
-        <PlanLimitAlert
-          empresaId={empresa.id}
-          plano={safeStringToPlanoType(empresa.plano || 'basico')}
-          action="add_tecnico"
-          threshold={80}
-        />
-      )}
 
       {/* Estatísticas */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            Estatísticas de Tecnicos
+            Estatísticas de Técnicos
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-4">
             <div className="text-sm">
-              <span className="font-medium">Total de tecnicos:</span>{' '}
+              <span className="font-medium">Total de técnicos:</span>{' '}
               <span className="text-green-600">
                 {stats.total}
               </span>
-              {stats.limite > 0 && (
-                <span className="text-gray-500">
-                  {' '}/ {stats.limite}
-                </span>
-              )}
             </div>
           </div>
         </CardContent>
@@ -258,10 +231,10 @@ export function CadastroTecnicoAdmin() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <UserPlus className="h-5 w-5" />
-            Novo Tecnico
+            Novo Técnico
           </CardTitle>
           <CardDescription>
-            Preencha os dados do novo tecnico
+            Preencha os dados do novo técnico
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -275,7 +248,7 @@ export function CadastroTecnicoAdmin() {
                   onChange={(e) => handleInputChange('nome', e.target.value)}
                   required
                   disabled={loading}
-                  placeholder="Nome completo do tecnico"
+                  placeholder="Nome completo do técnico"
                 />
               </div>
 
@@ -317,19 +290,19 @@ export function CadastroTecnicoAdmin() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="cidade">Cidade</Label>
+                <Label htmlFor="setor">Setor</Label>
                 <Select 
-                  value={formData.cidade_id} 
-                  onValueChange={(value) => handleInputChange('cidade_id', value)}
-                  disabled={loading || loadingCidades}
+                  value={formData.setor_id} 
+                  onValueChange={(value) => handleInputChange('setor_id', value)}
+                  disabled={loading || loadingSetores}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Selecione a cidade" />
+                    <SelectValue placeholder="Selecione o setor" />
                   </SelectTrigger>
                   <SelectContent>
-                    {cidades.map((cidade) => (
-                      <SelectItem key={cidade.id} value={cidade.id}>
-                        {cidade.nome}
+                    {setores.map((setor) => (
+                      <SelectItem key={setor.id} value={setor.id}>
+                        {setor.nome}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -363,43 +336,20 @@ export function CadastroTecnicoAdmin() {
               </div>
             </div>
             
-            {empresa ? (
-              <PlanLimitGuard
-                empresaId={empresa.id}
-                plano={safeStringToPlanoType(empresa.plano || 'basico')}
-                action="add_tecnico"
-              >
-                <Button 
-                  type="submit" 
-                  className="w-full" 
-                  disabled={loading || loadingCidades}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Cadastrando...
-                    </>
-                  ) : (
-                    "Cadastrar Tecnico"
-                  )}
-                </Button>
-              </PlanLimitGuard>
-            ) : (
-              <Button 
-                type="submit" 
-                className="w-full" 
-                disabled={loading || loadingCidades}
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Cadastrando...
-                  </>
-                ) : (
-                  "Cadastrar Tecnico"
-                )}
-              </Button>
-            )}
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={loading || loadingSetores}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Cadastrando...
+                </>
+              ) : (
+                "Cadastrar Técnico"
+              )}
+            </Button>
           </form>
         </CardContent>
       </Card>

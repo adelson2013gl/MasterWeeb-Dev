@@ -6,12 +6,8 @@ import { useEmpresaUnificado } from "@/contexts/EmpresaUnificadoContext";
 interface DashboardStats {
   tecnicosPendentes: number;
   tecnicosAtivos: number;
-  agendasHoje: number;
-  ocupacaoMedia: number;
-  cidadesAtivas: number;
-  turnosAtivos: number;
-  totalAgendamentos: number;
-  agendamentosHoje: number;
+  setores: number;
+  ordensServico: number;
 }
 
 export function useDashboardStats() {
@@ -19,12 +15,8 @@ export function useDashboardStats() {
   const [stats, setStats] = useState<DashboardStats>({
     tecnicosPendentes: 0,
     tecnicosAtivos: 0,
-    agendasHoje: 0,
-    ocupacaoMedia: 0,
-    cidadesAtivas: 0,
-    turnosAtivos: 0,
-    totalAgendamentos: 0,
-    agendamentosHoje: 0
+    setores: 0,
+    ordensServico: 0
   });
   const [loading, setLoading] = useState(true);
 
@@ -35,34 +27,43 @@ export function useDashboardStats() {
     }
 
     try {
-      console.log('🔍 Buscando estatísticas otimizadas para empresa:', empresa.nome);
+      console.log('🔍 Buscando estatísticas para empresa:', empresa.nome);
       
-      // Usar a nova função SQL otimizada que faz tudo em uma query
-      const { data, error } = await supabase.rpc('get_dashboard_stats', {
-        target_empresa_id: empresa.id
-      });
+      // Buscar estatísticas manualmente
+      const [tecnicosPendentes, tecnicosAtivos, setores, ordensServico] = await Promise.all([
+        // Técnicos pendentes
+        (supabase as any)
+          .from('tecnicos')
+          .select('*', { count: 'exact', head: true })
+          .eq('empresa_id', empresa.id)
+          .eq('status_cadastro', 'pendente'),
+        // Técnicos ativos
+        (supabase as any)
+          .from('tecnicos')
+          .select('*', { count: 'exact', head: true })
+          .eq('empresa_id', empresa.id)
+          .eq('status_cadastro', 'ativo'),
+        // Setores
+        (supabase as any)
+          .from('setores')
+          .select('*', { count: 'exact', head: true })
+          .eq('empresa_id', empresa.id),
+        // Ordens de serviço
+        (supabase as any)
+          .from('ordens_servico')
+          .select('*', { count: 'exact', head: true })
+          .eq('empresa_id', empresa.id)
+      ]);
 
-      if (error) {
-        console.error('❌ Erro ao buscar estatísticas:', error);
-        throw error;
-      }
+      const newStats: DashboardStats = {
+        tecnicosPendentes: tecnicosPendentes.count || 0,
+        tecnicosAtivos: tecnicosAtivos.count || 0,
+        setores: setores.count || 0,
+        ordensServico: ordensServico.count || 0
+      };
 
-      if (data && data.length > 0) {
-        const statsData = data[0];
-        const newStats: DashboardStats = {
-          tecnicosPendentes: Number(statsData.entregadores_pendentes) || 0,
-          tecnicosAtivos: Number(statsData.entregadores_ativos) || 0,
-          agendasHoje: Number(statsData.agendas_hoje) || 0,
-          ocupacaoMedia: Number(statsData.ocupacao_media) || 0,
-          cidadesAtivas: Number(statsData.cidades_ativas) || 0,
-          turnosAtivos: Number(statsData.turnos_ativos) || 0,
-          totalAgendamentos: Number(statsData.total_agendamentos) || 0,
-          agendamentosHoje: Number(statsData.agendamentos_hoje) || 0
-        };
-
-        setStats(newStats);
-        console.log('✅ Estatísticas carregadas com nova função otimizada:', newStats);
-      }
+      setStats(newStats);
+      console.log('✅ Estatísticas carregadas:', newStats);
 
     } catch (error) {
       console.error('💥 Erro ao buscar estatísticas:', error);

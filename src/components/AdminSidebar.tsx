@@ -2,9 +2,6 @@ import React from "react";
 import { 
   LayoutDashboard, 
   Users, 
-  Calendar,
-  MapPin,
-  Clock,
   Building2,
   Settings,
   Star,
@@ -12,7 +9,9 @@ import {
   CreditCard,
   CalendarClock,
   UserCog,
-  Shield
+  Shield,
+  Wrench,
+  ClipboardList
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -41,10 +40,8 @@ export function AdminSidebar({ onMenuClick, activeMenu }: AdminSidebarProps) {
     ...(isSuperAdmin ? [
       { id: 'administradores', icon: UserCog, label: 'Administradores', badge: null }
     ] : []),
-    { id: 'agendas-ativas', icon: Calendar, label: 'Agendas Ativas', badge: null },
-    { id: 'criar-agendas', icon: Calendar, label: 'Criar Agendas', badge: null },
-    { id: 'cidades', icon: MapPin, label: 'Cidades & Regiões', badge: null },
-    { id: 'turnos', icon: Clock, label: 'Turnos', badge: null },
+    { id: 'setores', icon: Wrench, label: 'Setores', badge: null },
+    { id: 'ordens-servico', icon: ClipboardList, label: 'Ordens de Serviço', badge: null },
     ...(isSuperAdmin ? [
       { id: 'empresas', icon: Building2, label: 'Empresas', badge: null }
     ] : []),

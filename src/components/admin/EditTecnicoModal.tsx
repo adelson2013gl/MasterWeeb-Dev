@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   Dialog,
@@ -25,7 +24,7 @@ import { EditorEstrelas } from "./gestao-tecnicos/EditorEstrelas";
 import { Tecnico } from "./gestao-tecnicos/types";
 import { useEmpresaUnificado } from "@/contexts/EmpresaUnificadoContext";
 
-type Cidade = Database['public']['Tables']['cidades']['Row'];
+type Setor = Database['public']['Tables']['setores']['Row'];
 
 interface EditTecnicoModalProps {
   tecnico: Tecnico;
@@ -41,39 +40,39 @@ export function EditTecnicoModal({ tecnico, open, onOpenChange, onTecnicoUpdated
     email: tecnico.email,
     telefone: tecnico.telefone,
     cpf: tecnico.cpf,
-    cidade_id: tecnico.cidade_id,
+    setor_id: tecnico.setor_id || '',
     status: tecnico.status,
     estrelas: tecnico.estrelas || 1,
   });
-  const [cidades, setCidades] = useState<Cidade[]>([]);
+  const [setores, setSetores] = useState<Setor[]>([]);
   const [loading, setLoading] = useState(false);
-  const [loadingCidades, setLoadingCidades] = useState(true);
+  const [loadingSetores, setLoadingSetores] = useState(true);
 
   useEffect(() => {
     if (open) {
-      fetchCidades();
+      fetchSetores();
       setFormData({
         nome: tecnico.nome,
         email: tecnico.email,
         telefone: tecnico.telefone,
         cpf: tecnico.cpf,
-        cidade_id: tecnico.cidade_id,
+        setor_id: tecnico.setor_id || '',
         status: tecnico.status,
         estrelas: tecnico.estrelas || 1,
       });
     }
   }, [open, tecnico]);
 
-  const fetchCidades = async () => {
+  const fetchSetores = async () => {
     if (!empresa) {
       toast.error('Empresa não identificada');
-      setLoadingCidades(false);
+      setLoadingSetores(false);
       return;
     }
 
     try {
-      let query = supabase
-        .from('cidades')
+      let query = (supabase as any)
+        .from('setores')
         .select('*')
         .eq('ativo', true)
         .order('nome');
@@ -86,17 +85,17 @@ export function EditTecnicoModal({ tecnico, open, onOpenChange, onTecnicoUpdated
       const { data, error } = await query;
 
       if (error) {
-        console.error('Erro ao buscar cidades:', error);
-        toast.error('Erro ao carregar cidades');
+        console.error('Erro ao buscar setores:', error);
+        toast.error('Erro ao carregar setores');
         return;
       }
 
-      setCidades(data || []);
+      setSetores(data || []);
     } catch (error) {
       console.error('Erro inesperado:', error);
-      toast.error('Erro inesperado ao carregar cidades');
+      toast.error('Erro inesperado ao carregar setores');
     } finally {
-      setLoadingCidades(false);
+      setLoadingSetores(false);
     }
   };
 
@@ -166,13 +165,13 @@ export function EditTecnicoModal({ tecnico, open, onOpenChange, onTecnicoUpdated
         email: formData.email.trim(),
         telefone: formData.telefone.replace(/\D/g, ''),
         cpf: formData.cpf.replace(/\D/g, ''),
-        cidade_id: formData.cidade_id,
+        setor_id: formData.setor_id || null,
         status: formData.status,
         updated_at: new Date().toISOString(),
       };
 
       // Construir query com filtros de segurança
-      let updateQuery = supabase
+      let updateQuery = (supabase as any)
         .from('tecnicos')
         .update(updateData)
         .eq('id', tecnico.id);
@@ -195,12 +194,9 @@ export function EditTecnicoModal({ tecnico, open, onOpenChange, onTecnicoUpdated
       }
 
       // Buscar os dados atualizados com filtros de segurança
-      let fetchQuery = supabase
+      let fetchQuery = (supabase as any)
         .from('tecnicos')
-        .select(`
-          *,
-          cidades!tecnicos_cidade_id_fkey(nome, estado)
-        `)
+        .select(`*`)
         .eq('id', tecnico.id);
 
       // Se não é Super Admin, adicionar filtro por empresa
@@ -214,14 +210,7 @@ export function EditTecnicoModal({ tecnico, open, onOpenChange, onTecnicoUpdated
         console.error('EditTecnicoModal: Erro ao buscar dados atualizados:', fetchError);
         toast.error('Erro ao buscar dados atualizados');
       } else if (updatedData) {
-        const updatedTecnico = {
-          ...updatedData,
-          cidade: updatedData.cidades ? {
-            nome: updatedData.cidades.nome,
-            estado: updatedData.cidades.estado
-          } : undefined
-        };
-        onTecnicoUpdated(updatedTecnico);
+        onTecnicoUpdated(updatedData);
       }
 
       console.log('EditTecnicoModal: Tecnico atualizado com sucesso');
@@ -306,19 +295,19 @@ export function EditTecnicoModal({ tecnico, open, onOpenChange, onTecnicoUpdated
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="cidade">Cidade</Label>
+            <Label htmlFor="setor">Setor</Label>
             <Select
-              value={formData.cidade_id}
-              onValueChange={(value) => handleInputChange('cidade_id', value)}
-              disabled={loading || loadingCidades}
+              value={formData.setor_id}
+              onValueChange={(value) => handleInputChange('setor_id', value)}
+              disabled={loading || loadingSetores}
             >
               <SelectTrigger>
-                <SelectValue placeholder={loadingCidades ? "Carregando..." : "Selecione uma cidade"} />
+                <SelectValue placeholder={loadingSetores ? "Carregando..." : "Selecione um setor"} />
               </SelectTrigger>
               <SelectContent>
-                {cidades.map((cidade) => (
-                  <SelectItem key={cidade.id} value={cidade.id}>
-                    {cidade.nome} - {cidade.estado}
+                {setores.map((setor) => (
+                  <SelectItem key={setor.id} value={setor.id}>
+                    {setor.nome} - {setor.descricao || 'Sem descrição'}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -337,9 +326,8 @@ export function EditTecnicoModal({ tecnico, open, onOpenChange, onTecnicoUpdated
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="pendente">Pendente</SelectItem>
-                <SelectItem value="aprovado">Aprovado</SelectItem>
-                <SelectItem value="rejeitado">Rejeitado</SelectItem>
-                <SelectItem value="suspenso">Suspenso</SelectItem>
+                <SelectItem value="ativo">Ativo</SelectItem>
+                <SelectItem value="inativo">Inativo</SelectItem>
               </SelectContent>
             </Select>
           </div>

@@ -4,10 +4,9 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { User, LogOut, Shield, AlertTriangle, Building2, CalendarCheck } from "lucide-react";
+import { User, LogOut, Shield, AlertTriangle, Building2, Wrench } from "lucide-react";
 import { MobileBottomNav } from "@/components/tecnico/MobileBottomNav";
-import { QuickActionCards } from "@/components/tecnico/QuickActionCards";
-import { TimelineAgendamentosWithSuspense, SimpleLoader } from "@/components/LazyComponents";
+import { SimpleLoader } from "@/components/LazyComponents";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTecnicoData } from "@/hooks/useTecnicoData";
@@ -18,12 +17,23 @@ import { SyncStatus } from "@/components/ui/sync-status";
 import { InstallButton } from "@/components/InstallButton";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
-// Lazy loading para componentes pesados com loading otimizado
-const AgendamentoCalendar = lazy(() => import("@/components/tecnico/AgendamentoCalendar").then(module => ({ default: module.AgendamentoCalendar })));
-const MeusAgendamentos = lazy(() => import("@/components/tecnico/MeusAgendamentos").then(module => ({ default: module.MeusAgendamentos })));
-const StatusReservas = lazy(() => import("@/components/tecnico/StatusReservas").then(module => ({ default: module.StatusReservas })));
-const NotificacoesReservas = lazy(() => import("@/components/tecnico/NotificacoesReservas").then(module => ({ default: module.NotificacoesReservas })));
+// Lazy loading para componentes
 const PerfilTecnico = lazy(() => import("@/components/tecnico/PerfilTecnico").then(module => ({ default: module.PerfilTecnico })));
+
+// Placeholder component for MinhasOrdensServico
+function MinhasOrdensServico() {
+  return (
+    <Card className="p-6">
+      <CardHeader>
+        <CardTitle>Minhas Ordens de Serviço</CardTitle>
+        <CardDescription>Em breve: visualização das suas ordens de serviço atribuídas</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="text-gray-600">Funcionalidade em desenvolvimento...</p>
+      </CardContent>
+    </Card>
+  );
+}
 
 // Hook para detectar parâmetros URL dos shortcuts PWA
 const useShortcutNavigation = () => {
@@ -115,28 +125,10 @@ export function TecnicoDashboard() {
             <PerfilTecnico onBack={() => handleTabChange('dashboard')} />
           </Suspense>
         );
-      case "agendar":
+      case "minhas-os":
         return (
-          <Suspense fallback={<SimpleLoader text="Carregando agendas..." />}>
-            <AgendamentoCalendar />
-          </Suspense>
-        );
-      case "meus-agendamentos":
-        return (
-          <Suspense fallback={<SimpleLoader text="Carregando seus agendamentos..." />}>
-            <MeusAgendamentos onNavigate={handleTabChange} />
-          </Suspense>
-        );
-      case "reservas":
-        return (
-          <Suspense fallback={<SimpleLoader text="Carregando reservas..." />}>
-            <StatusReservas />
-          </Suspense>
-        );
-      case "notificacoes":
-        return (
-          <Suspense fallback={<SimpleLoader text="Carregando notificações..." />}>
-            <NotificacoesReservas />
+          <Suspense fallback={<SimpleLoader text="Carregando ordens de serviço..." />}>
+            <MinhasOrdensServico />
           </Suspense>
         );
       default:
@@ -178,31 +170,38 @@ export function TecnicoDashboard() {
               </Card>
             </motion.div>
 
-            {/* Cards de Ação Rápida */}
+            {/* Cards de Ação Rápida - OS */}
             <motion.div variants={itemVariants}>
-              <QuickActionCards onNavigate={handleTabChange} />
+              <div className="grid grid-cols-2 gap-4">
+                <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleTabChange('minhas-os')}>
+                  <CardContent className="p-4 flex flex-col items-center text-center">
+                    <Wrench className="h-8 w-8 text-blue-500 mb-2" />
+                    <h3 className="font-medium">Minhas OS</h3>
+                    <p className="text-xs text-gray-500">Ver ordens de serviço</p>
+                  </CardContent>
+                </Card>
+                <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleTabChange('perfil')}>
+                  <CardContent className="p-4 flex flex-col items-center text-center">
+                    <User className="h-8 w-8 text-purple-500 mb-2" />
+                    <h3 className="font-medium">Meu Perfil</h3>
+                    <p className="text-xs text-gray-500">Ver dados pessoais</p>
+                  </CardContent>
+                </Card>
+              </div>
             </motion.div>
 
-            {/* Timeline de Agendamentos */}
+            {/* Lembrete de Segurança - OS */}
             <motion.div variants={itemVariants}>
-              <TimelineAgendamentosWithSuspense 
-                onViewAll={() => handleTabChange('meus-agendamentos')}
-                fallback={<SimpleLoader text="Carregando timeline..." />}
-              />
-            </motion.div>
-
-            {/* Lembrete de Segurança - Minimalista */}
-            <motion.div variants={itemVariants}>
-              <div className="flex items-center space-x-3 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 p-3 rounded-xl border border-orange-200 dark:border-orange-800">
-                <div className="w-7 h-7 bg-gradient-to-r from-orange-500 to-amber-500 rounded-lg flex items-center justify-center flex-shrink-0">
+              <div className="flex items-center space-x-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-3 rounded-xl border border-blue-200 dark:border-blue-800">
+                <div className="w-7 h-7 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Shield className="h-3.5 w-3.5 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-orange-800 dark:text-orange-200">
-                    🚛 Dirija com segurança!
+                  <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                    ⚙️ Sistema de Ordem de Serviço
                   </p>
-                  <p className="text-xs text-orange-600 dark:text-orange-300">
-                    Sua vida vale mais que qualquer entrega
+                  <p className="text-xs text-blue-600 dark:text-blue-300">
+                    Mantenha seus equipamentos em perfeito funcionamento
                   </p>
                 </div>
               </div>
@@ -267,7 +266,7 @@ export function TecnicoDashboard() {
                 onClick={() => handleTabChange('perfil')}
                 className="bg-gradient-to-r from-blue-600 to-purple-600 p-2.5 rounded-xl shadow-lg hover:scale-105 transition-transform touch-target"
               >
-                <CalendarCheck className="h-6 w-6 text-white" />
+                <Wrench className="h-6 w-6 text-white" />
               </button>
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -299,16 +298,13 @@ export function TecnicoDashboard() {
           <div className="flex space-x-1 glass-card rounded-xl p-1 shadow-lg border-glass">
             {[
               { id: "dashboard", label: "Dashboard" },
-              { id: "agendar", label: "Agendar" },
-              { id: "meus-agendamentos", label: "Agendamentos" },
-              { id: "reservas", label: "Reservas" },
-              { id: "notificacoes", label: "Notificações" }
+              { id: "minhas-os", label: "Minhas OS" },
+              { id: "perfil", label: "Perfil" }
             ].map((tab) => (
               <Button
                 key={tab.id}
                 variant={activeTab === tab.id ? "default" : "ghost"}
                 onClick={() => handleTabChange(tab.id)}
-                onMouseEnter={() => preloadOnHover(tab.id === "meus-agendamentos" ? "agendamentos" : tab.id)}
                 className={`flex-1 text-sm micro-bounce ${activeTab === tab.id 
                     ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white' 
                     : 'hover:glass-card-hover'

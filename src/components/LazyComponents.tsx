@@ -14,6 +14,13 @@ export const ResetPassword = lazy(() => import('@/pages/ResetPassword'));
 export const CadastroAdminEmpresa = lazy(() => import('@/pages/CadastroAdminEmpresa'));
 export const CadastroAdminPublico = lazy(() => import('@/pages/CadastroAdminPublico'));
 
+// Lazy loading dos componentes do tecnico
+const LazyPerfilTecnico = lazy(() => 
+  import("@/components/tecnico/PerfilTecnico").then(module => ({ 
+    default: module.PerfilTecnico 
+  }))
+);
+
 // Fallback de loading otimizado para componentes
 const ComponentSkeleton = ({ title = "Carregando...", compact = false }: { title?: string; compact?: boolean }) => (
   <Card className="glass-card border-glass">
@@ -54,90 +61,15 @@ const SimpleLoader = ({ text = "Carregando..." }: { text?: string }) => (
   </div>
 );
 
-// Lazy loading dos componentes do tecnico
-export const LazyAgendamentoCalendar = lazy(() => 
-  import("@/components/tecnico/AgendamentoCalendar").then(module => ({ 
-    default: module.AgendamentoCalendar 
-  }))
-);
-
-export const LazyMeusAgendamentos = lazy(() => 
-  import("@/components/tecnico/MeusAgendamentos").then(module => ({ 
-    default: module.MeusAgendamentos 
-  }))
-);
-
-export const LazyStatusReservas = lazy(() => 
-  import("@/components/tecnico/StatusReservas").then(module => ({ 
-    default: module.StatusReservas 
-  }))
-);
-
-export const LazyNotificacoesReservas = lazy(() => 
-  import("@/components/tecnico/NotificacoesReservas").then(module => ({ 
-    default: module.NotificacoesReservas 
-  }))
-);
-
-export const LazyTimelineAgendamentos = lazy(() => 
-  import("@/components/tecnico/TimelineAgendamentos").then(module => ({ 
-    default: module.TimelineAgendamentos 
-  }))
-);
-
 // Componentes com LazyWrapper integrado (Suspense + ErrorBoundary)
-export const AgendamentoCalendarWithSuspense = ({ fallback }: { fallback?: React.ReactNode }) => (
+export const PerfilTecnicoWithSuspense = ({ onBack, fallback }: { onBack?: () => void; fallback?: React.ReactNode }) => (
   <LazyWrapper 
-    componentName="Calendário de Agendamento"
-    loadingComponent={fallback || <ComponentSkeleton title="Carregando agendas..." />}
+    componentName="Perfil do Técnico"
+    loadingComponent={fallback || <ComponentSkeleton title="Carregando perfil..." />}
     autoRetry={true}
     maxRetries={3}
   >
-    <LazyAgendamentoCalendar />
-  </LazyWrapper>
-);
-
-export const MeusAgendamentosWithSuspense = ({ onNavigate, fallback }: { onNavigate?: (tab: string) => void; fallback?: React.ReactNode }) => (
-  <LazyWrapper 
-    componentName="Meus Agendamentos"
-    loadingComponent={fallback || <ComponentSkeleton title="Carregando seus agendamentos..." />}
-    autoRetry={true}
-    maxRetries={3}
-  >
-    <LazyMeusAgendamentos onNavigate={onNavigate} />
-  </LazyWrapper>
-);
-
-export const StatusReservasWithSuspense = ({ fallback }: { fallback?: React.ReactNode }) => (
-  <LazyWrapper 
-    componentName="Status das Reservas"
-    loadingComponent={fallback || <ComponentSkeleton title="Carregando reservas..." />}
-    autoRetry={true}
-    maxRetries={3}
-  >
-    <LazyStatusReservas />
-  </LazyWrapper>
-);
-
-export const NotificacoesReservasWithSuspense = ({ fallback }: { fallback?: React.ReactNode }) => (
-  <LazyWrapper 
-    componentName="Notificações de Reservas"
-    loadingComponent={fallback || <ComponentSkeleton title="Carregando notificações..." />}
-    autoRetry={true}
-    maxRetries={3}
-  >
-    <LazyNotificacoesReservas />
-  </LazyWrapper>
-);
-
-export const TimelineAgendamentosWithSuspense = ({ onViewAll, fallback }: { onViewAll?: () => void; fallback?: React.ReactNode }) => (
-  <LazyWrapper 
-    componentName="Timeline de Agendamentos"
-    loadingComponent={fallback || <ComponentSkeleton title="Carregando timeline..." compact />}
-    autoRetry={true}
-    maxRetries={3}
-  >
-    <LazyTimelineAgendamentos onViewAll={onViewAll} />
+    <LazyPerfilTecnico onBack={onBack} />
   </LazyWrapper>
 );
 

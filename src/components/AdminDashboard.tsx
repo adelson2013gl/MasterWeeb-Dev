@@ -1,22 +1,17 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { LogOut, Menu } from "lucide-react";
+import { LogOut, Menu, Wrench, ClipboardList } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import { DashboardContent } from "@/components/DashboardContent";
 import { GestaoTecnicos } from "@/components/admin/GestaoTecnicos";
-import { AgendasAtivas } from "@/components/admin/AgendasAtivas";
-import CriacaoAgendas from "@/components/admin/CriacaoAgendas";
-import { GestaoCidades } from "@/components/admin/GestaoCidades";
-import { GestaoTurnos } from "@/components/admin/GestaoTurnos";
 import { ConfiguracoesSistema } from "@/components/admin/ConfiguracoesSistema";
 import { ConfiguracoesPage } from "@/pages/admin/ConfiguracoesPage";
 import { GestaoEmpresas } from "./admin/GestaoEmpresas";
 import { CadastroTecnicoAdmin } from "./admin/CadastroTecnicoAdmin";
 import { DashboardPrioridades } from "./admin/DashboardPrioridades";
 import GestaoAdministradores from "./admin/GestaoAdministradores";
-import { ExportAgendasButton } from "./admin/ExportAgendasButton";
 import { BillingDashboard } from "./billing/BillingDashboard";
 import { AdminMobileBottomNav } from "./admin/AdminMobileBottomNav";
 import { EmpresaSelector } from "./EmpresaSelector";
@@ -27,6 +22,17 @@ import { DatabaseExpiryStatus } from "./admin/DatabaseExpiryStatus";
 import { useEmpresaUnificado } from "@/contexts/EmpresaUnificadoContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
+
+import { GestaoSetores } from "./admin/GestaoSetores";
+
+function GestaoOrdensServico() {
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-gray-900">Ordens de Serviço</h2>
+      <p className="text-gray-600">Em breve: abertura e acompanhamento de ordens de serviço.</p>
+    </div>
+  );
+}
 
 function AdminDashboardContent() {
   const { signOut } = useAuth();
@@ -71,14 +77,10 @@ function AdminDashboardContent() {
         return <GestaoTecnicos />;
       case 'administradores':
         return <GestaoAdministradores />;
-      case 'agendas-ativas':
-        return <AgendasAtivas />;
-      case 'criar-agendas':
-        return <CriacaoAgendas />;
-      case 'cidades':
-        return <GestaoCidades />;
-      case 'turnos':
-        return <GestaoTurnos />;
+      case 'setores':
+        return <GestaoSetores />;
+      case 'ordens-servico':
+        return <GestaoOrdensServico />;
       case 'empresas':
         return <GestaoEmpresas />;
       case 'configuracoes':
@@ -167,8 +169,6 @@ function AdminDashboardContent() {
                 
                 {/* Mostrar apenas em telas médias e grandes */}
                 <div className="hidden md:flex items-center gap-2">
-                  {/* CORREÇÃO DE SEGURANÇA: Mostrar ExportAgendasButton apenas para admins */}
-                  {(isSuperAdmin || isAdminEmpresa) && <ExportAgendasButton />}
                   <EmpresaSelector />
                 </div>
                 

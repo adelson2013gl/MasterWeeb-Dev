@@ -1,8 +1,8 @@
 import { Database } from "@/types/database";
 
 export type Tecnico = Database['public']['Tables']['tecnicos']['Row'] & {
-  cidade?: {
+  setor?: {
     nome: string;
-    estado: string;
+    descricao: string;
   };
 };

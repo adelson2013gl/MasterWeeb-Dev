@@ -5,7 +5,6 @@ import { useEmpresaUnificado } from '@/contexts/EmpresaUnificadoContext';
 import { useConfiguracoesCore } from './useConfiguracoesCore';
 import { useConfiguracoesLoader } from './useConfiguracoesLoader';
 import { useConfiguracoesSaver } from './useConfiguracoesSaver';
-import { useHorariosValidation } from './useHorariosValidation';
 import { logger } from '@/lib/logger';
 
 export function useConfiguracoesSistema() {
@@ -52,10 +51,9 @@ export function useConfiguracoesSistema() {
     loadConfiguracoes
   });
 
-  // Validation functionality
-  const { podeVerAgendaPorHorario, isAgendamentoPermitido } = useHorariosValidation({
-    configs
-  });
+  // Validation functionality - placeholder para sistema OS
+  const podeVerAgendaPorHorario = () => true;
+  const isAgendamentoPermitido = () => true;
 
   // CORREÇÃO CRÍTICA: Carregar configurações automaticamente
   useEffect(() => {

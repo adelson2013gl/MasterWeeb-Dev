@@ -5,7 +5,6 @@ import { useToast } from '@/hooks/use-toast';
 import { 
   getPlanoConfig, 
   podeAdicionarTecnico, 
-  podeAdicionarAgendamento,
   type PlanoType,
   type LimitesPlano 
 } from '@/types/subscription';
@@ -18,11 +17,11 @@ interface UsePlanLimitsProps {
 interface PlanLimitsData {
   limites: LimitesPlano;
   tecnicosAtuais: number;
-  agendamentosNoMes: number;
+  ordensServicoNoMes: number;
   podeAdicionarTecnico: boolean;
-  podeAdicionarAgendamento: boolean;
+  podeAdicionarOrdemServico: boolean;
   percentualUsoTecnicos: number;
-  percentualUsoAgendamentos: number;
+  percentualUsoOrdensServico: number;
   proximoVencimento?: string;
   diasParaVencimento?: number;
   assinaturaAtiva: boolean;
@@ -48,24 +47,24 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
       const planoConfig = getPlanoConfig(plano);
       
       // Buscar dados atuais da empresa
-      const [tecnicosResult, agendamentosResult, assinaturaResult] = await Promise.all([
+      const [tecnicosResult, ordensResult, assinaturaResult] = await Promise.all([
         // Contar tecnicos ativos
-        supabase
+        (supabase as any)
           .from('tecnicos')
           .select('id', { count: 'exact' })
           .eq('empresa_id', empresaId)
-          .eq('ativo', true),
+          .eq('status_cadastro', 'ativo'),
         
-        // Contar agendamentos do mês atual
-        supabase
-          .from('agendamentos')
+        // Contar ordens de serviço do mês atual
+        (supabase as any)
+          .from('ordens_servico')
           .select('id', { count: 'exact' })
           .eq('empresa_id', empresaId)
-          .gte('data_agendamento', getInicioMesAtual())
-          .lt('data_agendamento', getInicioProximoMes()),
+          .gte('data_abertura', getInicioMesAtual())
+          .lt('data_abertura', getInicioProximoMes()),
         
         // Buscar assinatura ativa
-        supabase
+        (supabase as any)
           .from('assinaturas')
           .select('*')
           .eq('empresa_id', empresaId)
@@ -77,25 +76,25 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
         console.error('Erro ao buscar tecnicos:', tecnicosResult.error);
       }
 
-      if (agendamentosResult.error) {
-        console.error('Erro ao buscar agendamentos:', agendamentosResult.error);
+      if (ordensResult.error) {
+        console.error('Erro ao buscar ordens de serviço:', ordensResult.error);
       }
 
       const tecnicosAtuais = tecnicosResult.count || 0;
-      const agendamentosNoMes = agendamentosResult.count || 0;
+      const ordensServicoNoMes = ordensResult.count || 0;
       const assinatura = assinaturaResult.data;
 
       // Verificar limites personalizados no metadata
       const metadata = (assinatura?.metadata as any) || {};
-      const limiteTecnicos = metadata.limite_entregadores || planoConfig.max_entregadores;
-      const limiteAgendamentos = metadata.limite_agendamentos_mes || planoConfig.max_agendas_mes;
+      const limiteTecnicos = metadata.limite_tecnicos || planoConfig.max_entregadores || 10;
+      const limiteOrdens = metadata.limite_ordens_mes || planoConfig.max_agendas_mes || 100;
 
       // Calcular percentuais de uso com limites personalizados
       const percentualUsoTecnicos = Math.round(
         (tecnicosAtuais / limiteTecnicos) * 100
       );
-      const percentualUsoAgendamentos = Math.round(
-        (agendamentosNoMes / limiteAgendamentos) * 100
+      const percentualUsoOrdensServico = Math.round(
+        (ordensServicoNoMes / limiteOrdens) * 100
       );
 
       // Calcular dias para vencimento
@@ -109,15 +108,15 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
       const planLimitsData: PlanLimitsData = {
         limites: {
           max_entregadores: limiteTecnicos,
-          max_agendas_mes: limiteAgendamentos,
+          max_agendas_mes: limiteOrdens,
           recursos_disponivel: planoConfig.recursos
         },
         tecnicosAtuais,
-        agendamentosNoMes,
+        ordensServicoNoMes,
         podeAdicionarTecnico: tecnicosAtuais < limiteTecnicos,
-        podeAdicionarAgendamento: agendamentosNoMes < limiteAgendamentos,
+        podeAdicionarOrdemServico: ordensServicoNoMes < limiteOrdens,
         percentualUsoTecnicos,
-        percentualUsoAgendamentos,
+        percentualUsoOrdensServico,
         proximoVencimento: assinatura?.data_proximo_pagamento,
         diasParaVencimento,
         assinaturaAtiva: !!assinatura
@@ -140,17 +139,17 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
     // Alerta de limite de tecnicos
     if (planData.percentualUsoTecnicos >= 90) {
       toast({
-        title: 'Limite de tecnicos quase atingido',
-        description: `Você está usando ${planData.percentualUsoTecnicos}% do limite de tecnicos.`,
+        title: 'Limite de técnicos quase atingido',
+        description: `Você está usando ${planData.percentualUsoTecnicos}% do limite de técnicos.`,
         variant: 'destructive'
       });
     }
 
-    // Alerta de limite de agendamentos
-    if (planData.percentualUsoAgendamentos >= 90) {
+    // Alerta de limite de ordens de serviço
+    if (planData.percentualUsoOrdensServico >= 90) {
       toast({
-        title: 'Limite de agendamentos quase atingido',
-        description: `Você está usando ${planData.percentualUsoAgendamentos}% do limite de agendamentos deste mês.`,
+        title: 'Limite de ordens quase atingido',
+        description: `Você está usando ${planData.percentualUsoOrdensServico}% do limite de ordens deste mês.`,
         variant: 'destructive'
       });
     }
@@ -180,7 +179,7 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
     if (!data.podeAdicionarTecnico) {
       toast({
         title: 'Limite atingido',
-        description: `Você atingiu o limite de ${data.limites.max_entregadores} tecnicos do seu plano. Faça upgrade para adicionar mais.`,
+        description: `Você atingiu o limite de ${data.limites.max_entregadores} técnicos do seu plano. Faça upgrade para adicionar mais.`,
         variant: 'destructive'
       });
       return false;
@@ -189,13 +188,13 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
     return true;
   };
 
-  const verificarLimiteAgendamento = (): boolean => {
+  const verificarLimiteOrdemServico = (): boolean => {
     if (!data) return false;
     
-    if (!data.podeAdicionarAgendamento) {
+    if (!data.podeAdicionarOrdemServico) {
       toast({
         title: 'Limite atingido',
-        description: `Você atingiu o limite de ${data.limites.max_agendas_mes} agendamentos deste mês. Faça upgrade para adicionar mais.`,
+        description: `Você atingiu o limite de ${data.limites.max_agendas_mes} ordens deste mês. Faça upgrade para adicionar mais.`,
         variant: 'destructive'
       });
       return false;
@@ -239,7 +238,7 @@ export function usePlanLimits({ empresaId, plano }: UsePlanLimitsProps) {
     error,
     refetch,
     verificarLimiteTecnico,
-    verificarLimiteAgendamento,
+    verificarLimiteOrdemServico,
     verificarAssinaturaAtiva
   };
 }

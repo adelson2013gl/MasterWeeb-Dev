@@ -9,81 +9,87 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      agendamentos: {
+      ordens_servico: {
         Row: {
-          agenda_id: string | null
-          cliente_nome: string | null
-          cliente_telefone: string | null
-          created_at: string | null
-          data_agendamento: string | null
+          created_at: string
+          data_abertura: string
           data_cancelamento: string | null
+          data_conclusao: string | null
+          data_inicio_execucao: string | null
+          descricao_problema: string
+          descricao_solucao: string | null
           empresa_id: string
-          endereco_coleta: string | null
-          endereco_entrega: string | null
-          tecnico_id: string | null
+          equipamento: string | null
           id: string
           motivo_cancelamento: string | null
+          numero_os: number
           observacoes: string | null
-          status: Database["public"]["Enums"]["status_agendamento"] | null
-          tipo: Database["public"]["Enums"]["tipo_agendamento"] | null
-          updated_at: string | null
-          valor: number | null
+          prioridade: Database["public"]["Enums"]["prioridade_os"]
+          setor_id: string | null
+          status: Database["public"]["Enums"]["status_os"]
+          tecnico_id: string | null
+          titulo: string
+          updated_at: string
         }
         Insert: {
-          agenda_id?: string | null
-          cliente_nome?: string | null
-          cliente_telefone?: string | null
-          created_at?: string | null
-          data_agendamento?: string | null
+          created_at?: string
+          data_abertura?: string
           data_cancelamento?: string | null
-          empresa_id?: string
-          endereco_coleta?: string | null
-          endereco_entrega?: string | null
-          tecnico_id?: string | null
+          data_conclusao?: string | null
+          data_inicio_execucao?: string | null
+          descricao_problema: string
+          descricao_solucao?: string | null
+          empresa_id: string
+          equipamento?: string | null
           id?: string
           motivo_cancelamento?: string | null
+          numero_os?: number
           observacoes?: string | null
-          status?: Database["public"]["Enums"]["status_agendamento"] | null
-          tipo?: Database["public"]["Enums"]["tipo_agendamento"] | null
-          updated_at?: string | null
-          valor?: number | null
+          prioridade?: Database["public"]["Enums"]["prioridade_os"]
+          setor_id?: string | null
+          status?: Database["public"]["Enums"]["status_os"]
+          tecnico_id?: string | null
+          titulo: string
+          updated_at?: string
         }
         Update: {
-          agenda_id?: string | null
-          cliente_nome?: string | null
-          cliente_telefone?: string | null
-          created_at?: string | null
-          data_agendamento?: string | null
+          created_at?: string
+          data_abertura?: string
           data_cancelamento?: string | null
+          data_conclusao?: string | null
+          data_inicio_execucao?: string | null
+          descricao_problema?: string
+          descricao_solucao?: string | null
           empresa_id?: string
-          endereco_coleta?: string | null
-          endereco_entrega?: string | null
-          tecnico_id?: string | null
+          equipamento?: string | null
           id?: string
           motivo_cancelamento?: string | null
+          numero_os?: number
           observacoes?: string | null
-          status?: Database["public"]["Enums"]["status_agendamento"] | null
-          tipo?: Database["public"]["Enums"]["tipo_agendamento"] | null
-          updated_at?: string | null
-          valor?: number | null
+          prioridade?: Database["public"]["Enums"]["prioridade_os"]
+          setor_id?: string | null
+          status?: Database["public"]["Enums"]["status_os"]
+          tecnico_id?: string | null
+          titulo?: string
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "agendamentos_agenda_id_fkey"
-            columns: ["agenda_id"]
-            isOneToOne: false
-            referencedRelation: "agendas"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "agendamentos_empresa_id_fkey"
+            foreignKeyName: "ordens_servico_empresa_id_fkey"
             columns: ["empresa_id"]
             isOneToOne: false
             referencedRelation: "empresas"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "agendamentos_tecnico_id_fkey"
+            foreignKeyName: "ordens_servico_setor_id_fkey"
+            columns: ["setor_id"]
+            isOneToOne: false
+            referencedRelation: "setores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ordens_servico_tecnico_id_fkey"
             columns: ["tecnico_id"]
             isOneToOne: false
             referencedRelation: "tecnicos"
@@ -91,69 +97,40 @@ export type Database = {
           },
         ]
       }
-      agendas: {
+      setores: {
         Row: {
-          ativo: boolean | null
-          created_at: string | null
-          created_by: string | null
-          data: string
+          ativo: boolean
+          created_at: string
+          descricao: string | null
           empresa_id: string
           id: string
-          permite_reserva: boolean | null
-          regiao_id: string | null
-          turno_id: string | null
-          updated_at: string | null
-          vagas_disponiveis: number
-          vagas_ocupadas: number | null
+          nome: string
+          updated_at: string
         }
         Insert: {
-          ativo?: boolean | null
-          created_at?: string | null
-          created_by?: string | null
-          data: string
-          empresa_id?: string
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          empresa_id: string
           id?: string
-          permite_reserva?: boolean | null
-          regiao_id?: string | null
-          turno_id?: string | null
-          updated_at?: string | null
-          vagas_disponiveis: number
-          vagas_ocupadas?: number | null
+          nome: string
+          updated_at?: string
         }
         Update: {
-          ativo?: boolean | null
-          created_at?: string | null
-          created_by?: string | null
-          data?: string
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
           empresa_id?: string
           id?: string
-          permite_reserva?: boolean | null
-          regiao_id?: string | null
-          turno_id?: string | null
-          updated_at?: string | null
-          vagas_disponiveis?: number
-          vagas_ocupadas?: number | null
+          nome?: string
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "agendas_empresa_id_fkey"
+            foreignKeyName: "setores_empresa_id_fkey"
             columns: ["empresa_id"]
             isOneToOne: false
             referencedRelation: "empresas"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "agendas_regiao_id_fkey"
-            columns: ["regiao_id"]
-            isOneToOne: false
-            referencedRelation: "regioes"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "agendas_turno_id_fkey"
-            columns: ["turno_id"]
-            isOneToOne: false
-            referencedRelation: "turnos"
             referencedColumns: ["id"]
           },
         ]
@@ -489,38 +466,6 @@ export type Database = {
         }
         Relationships: []
       }
-      cidades: {
-        Row: {
-          created_at: string | null
-          empresa_id: string
-          id: string
-          nome: string
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          empresa_id?: string
-          id?: string
-          nome: string
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          empresa_id?: string
-          id?: string
-          nome?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "cidades_empresa_id_fkey"
-            columns: ["empresa_id"]
-            isOneToOne: false
-            referencedRelation: "empresas"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       configuracoes: {
         Row: {
           categoria: string | null
@@ -619,18 +564,16 @@ export type Database = {
       tecnicos: {
         Row: {
           ativo: boolean | null
-          cidade_id: string | null
-          cpf: string
+          cpf: string | null
           created_at: string | null
-          data_cadastro: string | null
           email: string
           empresa_id: string
-          estrelas: number
+          estrelas: number | null
           id: string
           nome: string
           perfil: Database["public"]["Enums"]["perfil_usuario"] | null
           placa: string | null
-          status: Database["public"]["Enums"]["status_tecnico"]
+          status: Database["public"]["Enums"]["status_tecnico"] | null
           telefone: string | null
           updated_at: string | null
           user_id: string | null
@@ -638,18 +581,16 @@ export type Database = {
         }
         Insert: {
           ativo?: boolean | null
-          cidade_id?: string | null
-          cpf: string
+          cpf?: string | null
           created_at?: string | null
-          data_cadastro?: string | null
           email: string
-          empresa_id?: string
-          estrelas?: number
+          empresa_id: string
+          estrelas?: number | null
           id?: string
           nome: string
           perfil?: Database["public"]["Enums"]["perfil_usuario"] | null
           placa?: string | null
-          status?: Database["public"]["Enums"]["status_tecnico"]
+          status?: Database["public"]["Enums"]["status_tecnico"] | null
           telefone?: string | null
           updated_at?: string | null
           user_id?: string | null
@@ -657,18 +598,16 @@ export type Database = {
         }
         Update: {
           ativo?: boolean | null
-          cidade_id?: string | null
-          cpf?: string
+          cpf?: string | null
           created_at?: string | null
-          data_cadastro?: string | null
           email?: string
           empresa_id?: string
-          estrelas?: number
+          estrelas?: number | null
           id?: string
           nome?: string
           perfil?: Database["public"]["Enums"]["perfil_usuario"] | null
           placa?: string | null
-          status?: Database["public"]["Enums"]["status_tecnico"]
+          status?: Database["public"]["Enums"]["status_tecnico"] | null
           telefone?: string | null
           updated_at?: string | null
           user_id?: string | null
@@ -676,46 +615,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "tecnicos_cidade_id_fkey"
-            columns: ["cidade_id"]
-            isOneToOne: false
-            referencedRelation: "cidades"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "tecnicos_empresa_id_fkey"
-            columns: ["empresa_id"]
-            isOneToOne: false
-            referencedRelation: "empresas"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      regioes: {
-        Row: {
-          created_at: string | null
-          empresa_id: string
-          id: string
-          nome: string
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          empresa_id?: string
-          id?: string
-          nome: string
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          empresa_id?: string
-          id?: string
-          nome?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "regioes_empresa_id_fkey"
             columns: ["empresa_id"]
             isOneToOne: false
             referencedRelation: "empresas"
@@ -757,44 +657,6 @@ export type Database = {
             columns: ["assinatura_id"]
             isOneToOne: false
             referencedRelation: "assinaturas"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      turnos: {
-        Row: {
-          created_at: string | null
-          empresa_id: string
-          fim: string
-          id: string
-          inicio: string
-          nome: string
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          empresa_id?: string
-          fim: string
-          id?: string
-          inicio: string
-          nome: string
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          empresa_id?: string
-          fim?: string
-          id?: string
-          inicio?: string
-          nome?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "turnos_empresa_id_fkey"
-            columns: ["empresa_id"]
-            isOneToOne: false
-            referencedRelation: "empresas"
             referencedColumns: ["id"]
           },
         ]
@@ -852,14 +714,9 @@ export type Database = {
     }
     Enums: {
       perfil_usuario: "tecnico" | "admin"
-      status_agendamento:
-        | "agendado"
-        | "cancelado"
-        | "concluido"
-        | "pendente"
-        | "confirmada"
+      prioridade_os: "baixa" | "media" | "alta" | "urgente"
+      status_os: "aberta" | "em_andamento" | "finalizada" | "cancelada"
       status_tecnico: "pendente" | "aprovado" | "rejeitado" | "suspenso"
-      tipo_agendamento: "vaga" | "reserva"
       tipo_configuracao: "boolean" | "integer" | "string" | "decimal" | "json"
     }
     CompositeTypes: {
@@ -954,15 +811,9 @@ export const Constants = {
   public: {
     Enums: {
       perfil_usuario: ["tecnico", "admin"],
-      status_agendamento: [
-        "agendado",
-        "cancelado",
-        "concluido",
-        "pendente",
-        "confirmada",
-      ],
+      prioridade_os: ["baixa", "media", "alta", "urgente"],
+      status_os: ["aberta", "em_andamento", "finalizada", "cancelada"],
       status_tecnico: ["pendente", "aprovado", "rejeitado", "suspenso"],
-      tipo_agendamento: ["vaga", "reserva"],
       tipo_configuracao: ["boolean", "integer", "string", "decimal", "json"],
     },
   },

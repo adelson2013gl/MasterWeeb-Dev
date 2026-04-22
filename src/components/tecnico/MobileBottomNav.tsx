@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Calendar, CalendarCheck, LayoutDashboard, Bell } from "lucide-react";
+import { LayoutDashboard, Wrench, User, ClipboardList } from "lucide-react";
 
 interface MobileBottomNavProps {
   activeTab: string;
@@ -11,14 +11,11 @@ interface MobileBottomNavProps {
 // Função para precarregar componentes
 const preloadComponent = (tabId: string) => {
   switch (tabId) {
-    case 'agendar':
-      import("@/components/tecnico/AgendamentoCalendar").catch(() => {});
+    case 'minhas-os':
+      // Componente já está inline, não precisa precarregar
       break;
-    case 'meus-agendamentos':
-      import("@/components/tecnico/MeusAgendamentos").catch(() => {});
-      break;
-    case 'notificacoes':
-      import("@/components/tecnico/NotificacoesReservas").catch(() => {});
+    case 'perfil':
+      import("@/components/tecnico/PerfilTecnico").catch(() => {});
       break;
   }
 };
@@ -32,9 +29,8 @@ export function MobileBottomNav({ activeTab, onTabChange, notificationsCount = 0
 
   const navItems = [
     { id: "dashboard", label: "Início", icon: LayoutDashboard },
-    { id: "agendar", label: "Agendar", icon: Calendar },
-    { id: "meus-agendamentos", label: "Agendamentos", icon: CalendarCheck },
-    { id: "notificacoes", label: "Alertas", icon: Bell, badge: notificationsCount }
+    { id: "minhas-os", label: "Minhas OS", icon: ClipboardList },
+    { id: "perfil", label: "Perfil", icon: User }
   ];
 
   if (!mounted) return null;
@@ -46,7 +42,7 @@ export function MobileBottomNav({ activeTab, onTabChange, notificationsCount = 0
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
-      <div className="grid grid-cols-4 h-16">
+      <div className="grid grid-cols-3 h-16">
         {navItems.map((item) => (
           <motion.button
             key={item.id}
@@ -70,12 +66,6 @@ export function MobileBottomNav({ activeTab, onTabChange, notificationsCount = 0
               }`} />
             </div>
             <span className="text-xs mt-1">{item.label}</span>
-            
-            {item.badge && item.badge > 0 && (
-              <span className="absolute top-0 right-1/4 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white font-medium">
-                {item.badge > 9 ? '9+' : item.badge}
-              </span>
-            )}
           </motion.button>
         ))}
       </div>
